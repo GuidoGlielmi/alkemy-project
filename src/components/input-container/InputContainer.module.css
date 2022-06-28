@@ -1,0 +1,9 @@
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 3px 0;
+}
+.error {
+  color: rgb(243, 73, 73);
+  text-shadow: 0.5px 0.5px 1px rgb(61, 18, 18);
+}

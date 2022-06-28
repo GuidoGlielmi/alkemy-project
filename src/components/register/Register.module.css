@@ -1,0 +1,28 @@
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form h1 {
+  margin: 10px 0;
+  text-align: center;
+}
+.form form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 30px 0;
+  padding: 5%;
+  border-radius: 10px;
+  color: white;
+  background: linear-gradient(to bottom right, rgb(24, 47, 68), rgb(57, 80, 102), rgb(20, 20, 20));
+  box-shadow: 1px 1px 10px black;
+}
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+.form button {
+  align-self: center;
+}
