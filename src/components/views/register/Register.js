@@ -1,27 +1,25 @@
 // import { useState, useEffect } from 'react';
-import InputContainer from '../input-container/InputContainer';
+import InputContainer from '../../input-container/InputContainer';
 import { Formik, Form, Field } from 'formik';
-import Button from '../button/Button';
+import Button from '../../button/Button';
 import styles from './Register.module.css';
-import Select from '../input-container/Select';
+import Select from '../../input-container/Select';
 
 function isValidEmail(email) {
-  let error;
-  if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) error = 'Ingrese un email válido';
-  return error;
+  return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
+    ? undefined
+    : 'Ingrese un email válido';
 }
 function isValidPassword(password) {
-  let error;
-  if (!/^[a-zA-Z]{5,}$/.test(password)) {
-    error = 'La contraseña debe tener una letra minúscula, una mayúscula, un número y un símbolo';
-  }
-  return error;
+  return /^[a-zA-Z]{5,}$/.test(password)
+    ? undefined
+    : 'La contraseña debe tener una letra minúscula, una mayúscula, un número y un símbolo';
 }
 const hasSelection = (value) => (!value ? 'Seleccione una opción' : undefined);
 
 export default function Register() {
-  function onSubmit() {
-    console.log(28736428746);
+  function onSubmit(values) {
+    console.log(values);
   }
   const initialValues = {
     username: '',
@@ -71,7 +69,7 @@ export default function Register() {
           <Field
             name='email'
             component={InputContainer}
-            validate={isValidPassword}
+            validate={isValidEmail}
             placeholder='Ingrese su email'
             type='email'
           >

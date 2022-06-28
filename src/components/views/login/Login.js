@@ -1,9 +1,9 @@
 // import { useState, useEffect } from 'react';
-import InputContainer from '../input-container/InputContainer';
+import InputContainer from '../../input-container/InputContainer';
 import { Formik, Form, Field } from 'formik';
-import Button from '../button/Button';
+import Button from '../../button/Button';
 import styles from './Login.module.css';
-
+import { useNavigate } from 'react-router-dom';
 function isValidEmail(email) {
   let error;
   if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) error = 'Ingrese un email válido';
@@ -18,8 +18,11 @@ function isValidPassword(password) {
 }
 
 export default function Login() {
+  const navigate = useNavigate();
+
   function onSubmit() {
-    console.log(28736428746);
+    localStorage.setItem('logged', 'yes');
+    navigate('/', { replace: true });
   }
   return (
     <div className={styles.form}>
