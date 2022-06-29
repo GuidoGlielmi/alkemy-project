@@ -1,9 +1,10 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, Fragment } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Login from './components/views/login/Login';
 import Register from './components/views/register/Register';
 import Tasks from './components/views/tasks/Tasks.js';
 import { AnimatePresence, motion } from 'framer-motion';
+import Header from 'components/header/Header';
 
 const RequireAuth = ({ children }) => {
   return localStorage.getItem('logged') ? children : <Navigate to='/login' /* replace */ />;
@@ -35,7 +36,18 @@ export default function App() {
       <Routes location={location} key={location.pathname}>
         <Route
           path='/'
-          element={<RequireAuth>{motionWrapper(suspenseWrapper(<Tasks />))}</RequireAuth>}
+          element={
+            <RequireAuth>
+              {motionWrapper(
+                suspenseWrapper(
+                  <>
+                    <Header />
+                    <Tasks />
+                  </>,
+                ),
+              )}
+            </RequireAuth>
+          }
         />
         <Route path='/login' element={motionWrapper(<Login />)} />
         <Route path='/register' element={motionWrapper(<Register />)} />

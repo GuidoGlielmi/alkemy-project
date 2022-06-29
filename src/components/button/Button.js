@@ -7,9 +7,16 @@ export default function Button({
   size = 'medium',
   disabled = false,
   children,
+  marginX,
+  marginY,
 }) {
+  const margins = {
+    ...(marginX && { marginX: '0 10px' }),
+    ...(marginY && { marginY: '10px 0' }),
+  };
   return (
     <button
+      style={{ margin: margins['marginX'] || margins['marginY'] || 0 }}
       onClick={action}
       type={type}
       disabled={disabled}

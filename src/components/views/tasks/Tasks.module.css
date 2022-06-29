@@ -1,0 +1,37 @@
+.tasksContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 5%;
+}
+.tasksContainer h2 {
+  align-self: flex-start;
+  position: relative;
+  margin-bottom: 5%;
+  padding-top: 4px;
+  background: -webkit-linear-gradient(45deg, #7517b4, #b61f59 80%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+.tasksContainer h2:before {
+  content: '';
+  position: absolute;
+  width: 110%;
+  left: -20%;
+  top: 0;
+  border-top: 2px solid #4e005e;
+}
+.tasks {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .tasks {
+    align-self: stretch;
+    flex-direction: column;
+  }
+}
