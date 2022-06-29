@@ -2,8 +2,18 @@
   display: flex;
   flex-direction: column;
   margin: 3px 0;
+  font-size: var(--global-font-medium); /* the global variable changes at breakpoints */
+}
+.inputContainer label {
+  font-size: 1.2em; /* font-size as 1.2 times its parent's */
 }
 .error {
+  /* same font-size as its parent */
   color: rgb(243, 73, 73);
   text-shadow: 0.5px 0.5px 1px rgb(61, 18, 18);
+}
+@media (max-width: 768px) {
+  .inputContainer label {
+    align-self: center;
+  }
 }

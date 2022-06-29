@@ -12,9 +12,8 @@ export default function Button({
     <button
       onClick={action}
       type={type}
-      style={{ fontSize: size }}
       disabled={disabled}
-      className={styles.button}
+      className={`${styles.button} ${styles[size]}`}
     >
       {children}
     </button>

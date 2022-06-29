@@ -1,0 +1,11 @@
+.header {
+  display: flex;
+  justify-content: center;
+  padding: 12px 15px;
+}
+.header img {
+  width: 90px;
+}
+.header > div {
+  cursor: pointer;
+}
