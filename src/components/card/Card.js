@@ -7,6 +7,7 @@ function formatDate(date) {
 }
 export default function Card({
   task: {
+    _id,
     title,
     status,
     importance,
@@ -14,10 +15,10 @@ export default function Card({
     modifiedAt,
     deletedAt,
     deleted,
-    teamId,
     description,
     user,
   },
+  deleteTask,
 }) {
   const [isLongDescriptionShown, setIsLongDescriptionShown] = useState(false);
   const formattedCreationTime = useMemo(() => formatDate(createdAt), [createdAt]);
@@ -26,12 +27,6 @@ export default function Card({
   return (
     <div className={styles.card}>
       <h3>{title}</h3>
-      <h4>
-        <b>Status: {status}</b>
-      </h4>
-      <h4>
-        <b>Priority: {importance}</b>
-      </h4>
       <time dateTime={formattedCreationTime}>
         <u>Creado</u>: {formattedCreationTime}
       </time>
@@ -40,8 +35,8 @@ export default function Card({
       </time>
       <h5>{user.username}</h5>
       <div>
-        <Button size='small'>Nueva</Button>
-        <Button size='small'>Alta</Button>
+        <Button size='small'>{status}</Button>
+        <Button size='small'>{importance}</Button>
       </div>
       <p
         onClick={() => description.length > 100 && setIsLongDescriptionShown((ps) => !ps)}
@@ -51,7 +46,7 @@ export default function Card({
           ? description
           : description.slice(0, 99) + '...'}
       </p>
-      <div>X</div>
+      <div onClick={() => deleteTask(_id)}>X</div>
     </div>
   );
 }

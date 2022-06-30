@@ -1,6 +1,9 @@
 .formContainer {
   font-size: var(--global-font-medium);
 }
+.formContainer h2 {
+  font-size: 2em;
+}
 .formContainer h2:before {
   content: '';
   position: absolute;
@@ -27,4 +30,9 @@
 }
 .form > :last-child {
   align-self: center;
+}
+@media (max-width: 768px) {
+  .form {
+    width: 100%;
+  }
 }

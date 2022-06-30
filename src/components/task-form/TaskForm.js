@@ -5,8 +5,9 @@ import * as yup from 'yup';
 import styles from './TaskForm.module.css';
 import Button from 'components/button/Button';
 import { api } from 'components/auth-context/AuthContext';
-
-export default function TaskForm({ statuses, priorities, setTasks }) {
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+export default function TaskForm({ statuses, priorities, addTask }) {
   const initialValues = {
     title: '',
     status: '',
@@ -23,19 +24,18 @@ export default function TaskForm({ statuses, priorities, setTasks }) {
       description: yup.string().required(REQUIRED_MSG),
     });
 
-  function onSubmit(values, { resetForm }) {
+  async function onSubmit(values, { resetForm }) {
     try {
-      api.post('/task', { task: { ...values } }).then(
-        ({
-          data: {
-            result: { task: createdTask },
-          },
-        }) => {
-          setTasks((pt) => [...pt, createdTask]);
-          resetForm();
+      const {
+        data: {
+          result: { task: createdTask },
         },
-      );
+      } = await api.post('/task', { task: { ...values } });
+      addTask(createdTask);
+      resetForm();
+      toast('Tarea creada satisfactoriamente');
     } catch (err) {
+      toast.error('No se ha podido crear la tarea');
       console.log(err);
     }
   }
