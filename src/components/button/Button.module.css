@@ -12,10 +12,12 @@
   box-shadow: 0 0 3px black;
   transition: all 0.2s ease;
 }
+.button:hover {
+  opacity: 0.85;
+}
 .button:active {
   box-shadow: 0 0 5px black inset;
   transform: scale(0.98);
-  opacity: 0.9;
 }
 .small {
   font-size: var(--global-font-small);

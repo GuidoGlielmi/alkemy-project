@@ -14,8 +14,13 @@ export default function InputContainer({
   return (
     <div className={className}>
       <label htmlFor={field.name}>{children}</label>
-      <input type={type} {...field} {...props} className={styles.input} />
-      <span className={styles.error}>{touched && errMsg}&nbsp;</span>
+      <input
+        type={type}
+        {...field}
+        {...props}
+        className={`${styles.input} ${touched && errMsg && styles.error}`}
+      />
+      <span className={styles.errorMsg}>{touched && errMsg}&nbsp;</span>
     </div>
   );
 }

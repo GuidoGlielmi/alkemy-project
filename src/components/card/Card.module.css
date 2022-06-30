@@ -1,32 +1,31 @@
 .card {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  position: relative;
   margin: 2.5% 0;
-  padding: 1.5em;
+  padding: 1.2em;
   border-radius: 9px 5px 9px 5px;
   border: 4px solid transparent;
   box-shadow: 1px 1px 3px black;
   color: white;
-  width: 30vw;
+  max-width: min(500px, 25%);
+  min-width: 210px;
 }
-.cardContent {
-  display: flex;
-  flex-direction: column;
-  margin-right: 1em;
-}
-.cardContent > * {
+.card > * {
   margin-bottom: 10px;
 }
-.cardContent > div {
+.card > div {
   display: flex;
   gap: 20px;
 }
 .card > :last-child {
-  align-self: flex-start;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-shrink: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1em;
   width: var(--global-font-doubleMedium);
   height: var(--global-font-doubleMedium);
   font-size: var(--global-font-medium);
@@ -43,4 +42,9 @@
 .card > :last-child:active {
   transform: scale(0.95);
   opacity: 0.9;
+}
+@media (max-width: 768px) {
+  .card {
+    max-width: unset;
+  }
 }

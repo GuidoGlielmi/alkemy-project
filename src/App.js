@@ -1,13 +1,13 @@
-import { lazy, Suspense, Fragment } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
 import Login from './components/views/login/Login';
 import Register from './components/views/register/Register';
 import Tasks from './components/views/tasks/Tasks.js';
 import { AnimatePresence, motion } from 'framer-motion';
 import Header from 'components/header/Header';
 
-const RequireAuth = ({ children }) => {
-  return localStorage.getItem('logged') ? children : <Navigate to='/login' /* replace */ />;
+const RequireAuth = () => {
+  return localStorage.getItem('token') ? <Outlet /> : <Navigate to='/login' /* replace */ />;
 };
 
 const Error404 = lazy(() => import('./components/views/error404/Error404'));
@@ -21,37 +21,37 @@ const pageTransition = {
   },
 };
 
-const motionWrapper = (component) => (
+const MotionWrapper = () => (
   <motion.div className='page' initial='out' animate='in' exit='out' variants={pageTransition}>
-    {component}
+    <Outlet />
   </motion.div>
 );
 
-const suspenseWrapper = (component) => <Suspense fallback={<>...</>}>{component}</Suspense>;
+const SuspenseWrapper = () => (
+  <Suspense fallback={<>...</>}>
+    <Outlet />
+  </Suspense>
+);
 
 export default function App() {
   const location = useLocation();
   return (
     <AnimatePresence>
       <Routes location={location} key={location.pathname}>
-        <Route
-          path='/'
-          element={
-            <RequireAuth>
-              {motionWrapper(
-                suspenseWrapper(
-                  <>
-                    <Header />
-                    <Tasks />
-                  </>,
-                ),
-              )}
-            </RequireAuth>
-          }
-        />
-        <Route path='/login' element={motionWrapper(<Login />)} />
-        <Route path='/register' element={motionWrapper(<Register />)} />
-        <Route path='*' element={motionWrapper(suspenseWrapper(<Error404 />))} />
+        <Route element={<MotionWrapper />}>
+          <Route element={<RequireAuth />}>
+            <Route element={<SuspenseWrapper />}>
+              <Route element={<Header />}>
+                <Route path='/' element={<Tasks />} />
+              </Route>
+            </Route>
+          </Route>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route element={<SuspenseWrapper />}>
+            <Route path='*' element={<Error404 />} />
+          </Route>
+        </Route>
       </Routes>
     </AnimatePresence>
   );

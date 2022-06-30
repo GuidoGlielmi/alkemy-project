@@ -18,6 +18,35 @@ input {
   border: none;
   padding: 4px;
 }
+a {
+  position: relative;
+  color: #eee6ee;
+  text-decoration: none;
+  text-shadow: 0 0 6px black;
+  transition: all 0.1s ease;
+  width: max-content;
+  margin: 10px 0;
+}
+a:visited {
+  color: unset;
+}
+a:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+  text-shadow: 0 0 2px black;
+  color: unset;
+}
+a::before {
+  content: '';
+  position: absolute;
+  right: -10px;
+  bottom: -2px;
+  width: 110%;
+  height: 100%;
+  border-radius: 5px;
+  border-right: 3px solid #a0a0a0;
+  border-bottom: 1px solid #8b8b8b;
+}
 body {
   --global-secondary-color: linear-gradient(#43c6ac, #191654);
   margin: 0;

@@ -1,9 +1,12 @@
-// import { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import InputContainer from '../../input-container/InputContainer';
 import { Formik, Form, Field } from 'formik';
 import Button from '../../button/Button';
 import styles from './Login.module.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { api } from 'components/auth-context/AuthContext';
+
+import { authContext } from 'components/auth-context/AuthContext';
 function isValidEmail(email) {
   let error;
   if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) error = 'Ingrese un email válido';
@@ -18,23 +21,33 @@ function isValidPassword(password) {
 }
 
 export default function Login() {
+  const { setToken } = useContext(authContext);
   const navigate = useNavigate();
 
-  function onSubmit() {
-    localStorage.setItem('logged', 'yes');
-    navigate('/', { replace: true });
+  async function onSubmit(values) {
+    try {
+      const {
+        data: {
+          result: { token },
+        },
+      } = await api.post('/auth/login', values);
+      setToken(token);
+      navigate('/', { replace: true });
+    } catch (err) {
+      console.log(err);
+    }
   }
   return (
     <div className={styles.form}>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ userName: '', password: '' }}
         validateOnChange={false}
         onSubmit={onSubmit}
       >
         <Form>
           <h1>Iniciar sesión</h1>
           <Field
-            name='email'
+            name='userName'
             component={InputContainer}
             validate={isValidEmail}
             placeholder='Ingrese su email'
@@ -52,6 +65,7 @@ export default function Login() {
             Contraseña
           </Field>
           <Button type='submit'>Enviar</Button>
+          <Link to='/register'>Cree una cuenta</Link>
         </Form>
       </Formik>
     </div>

@@ -11,14 +11,21 @@ export default function Select({
     errors: { [field.name]: errMsg },
   },
   options,
+  placeholder,
   ...props
 }) {
   return (
     <div className={className}>
       <label htmlFor={field.name}>{children}</label>
-      <select type={type} {...field} {...props} defaultValue=''>
+      <select
+        type={type}
+        {...field}
+        {...props}
+        defaultValue=''
+        className={touched && errMsg && styles.error}
+      >
         <option value='' disabled>
-          {children}
+          {placeholder || children}
         </option>
         {options.map(({ title, value }, i) => (
           <option key={i} value={value || title}>
@@ -26,7 +33,7 @@ export default function Select({
           </option>
         ))}
       </select>
-      <span className={styles.error}>{touched && errMsg}&nbsp;</span>
+      <span className={styles.errorMsg}>{touched && errMsg}&nbsp;</span>
     </div>
   );
 }
