@@ -1,30 +1,21 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import InputContainer from '../../input-container/InputContainer';
 import { Formik, Form, Field } from 'formik';
 import Button from '../../button/Button';
 import styles from './Login.module.css';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from 'components/auth-context/AuthContext';
-
 import { authContext } from 'components/auth-context/AuthContext';
-function isValidEmail(email) {
-  let error;
-  if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) error = 'Ingrese un email válido';
-  return error;
-}
-function isValidPassword(password) {
-  let error;
-  if (!/^[a-zA-Z]{5,}$/.test(password)) {
-    error = 'La contraseña debe tener una letra minúscula, una mayúscula, un número y un símbolo';
-  }
-  return error;
-}
-
 export default function Login() {
   const { setToken } = useContext(authContext);
   const navigate = useNavigate();
 
+  const [error, setError] = useState(false);
+
+  const required = (value) => (!value ? '* Campo requerido' : undefined);
+
   async function onSubmit(values) {
+    setError(false);
     try {
       const {
         data: {
@@ -33,8 +24,8 @@ export default function Login() {
       } = await api.post('/auth/login', values);
       setToken(token);
       navigate('/', { replace: true });
-    } catch (err) {
-      console.log(err);
+    } catch ({ response: { status } }) {
+      if (status === 404) setError(true);
     }
   }
   return (
@@ -48,22 +39,22 @@ export default function Login() {
           <h1>Iniciar sesión</h1>
           <Field
             name='userName'
+            validate={required}
             component={InputContainer}
-            validate={isValidEmail}
-            placeholder='Ingrese su email'
-            type='email'
+            placeholder='Ingrese su usuario'
           >
-            Email
+            Usuario
           </Field>
           <Field
             name='password'
             component={InputContainer}
-            validate={isValidPassword}
+            validate={required}
             placeholder='Ingrese su contraseña'
             type='password'
           >
             Contraseña
           </Field>
+          {error && <span className={styles.error}>El usuario o contraseña son incorrectos</span>}
           <Button type='submit'>Enviar</Button>
           <Link to='/register'>Cree una cuenta</Link>
         </Form>

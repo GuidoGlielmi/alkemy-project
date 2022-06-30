@@ -12,7 +12,6 @@ import { api } from 'components/auth-context/AuthContext';
 
 export default function Register() {
   const navigate = useNavigate();
-
   const [roles, setRoles] = useState([]);
   const [continents, setContinents] = useState([]);
   const [regions, setRegions] = useState([]);
@@ -80,8 +79,8 @@ export default function Register() {
       } = await api.post('/auth/register', {
         user,
       });
-      navigate('/');
-      // 9b3a312a-6883-4fad-b0b4-44bea2b66361
+      navigate('/login');
+      // 0ea9502e-43af-4594-b2ea-396b6ea00638 guido1 123456
       console.log(insertedId, createdUser);
     } catch (err) {
       console.log(err);
@@ -95,9 +94,8 @@ export default function Register() {
         validateOnChange={false}
         onSubmit={onSubmit}
       >
-        {({ handleSubmit, values, setFieldValue, errors }) => (
+        {({ handleSubmit, values, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
-            {/* {console.log(errors)} */}
             <h1>Registro</h1>
             <Field
               name='userName'

@@ -6,6 +6,8 @@
   padding: 1.2em;
   border-radius: 9px 5px 9px 5px;
   border: 4px solid transparent;
+  background: linear-gradient(rgb(59, 59, 59), rgb(29, 29, 29)) padding-box,
+    linear-gradient(to right, rgb(223, 86, 139), #928dab) border-box;
   box-shadow: 1px 1px 3px black;
   color: white;
   max-width: min(500px, 25%);
@@ -13,6 +15,9 @@
 }
 .card > * {
   margin-bottom: 10px;
+}
+.card h3 {
+  margin-top: 6px;
 }
 .card > div {
   display: flex;

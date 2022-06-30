@@ -6,14 +6,13 @@ import styles from './TaskForm.module.css';
 import Button from 'components/button/Button';
 import { api } from 'components/auth-context/AuthContext';
 
-export default function TaskForm({ statuses, priorities }) {
+export default function TaskForm({ statuses, priorities, setTasks }) {
   const initialValues = {
     title: '',
     status: '',
     importance: '',
     description: '',
   };
-
   const REQUIRED_MSG = '* Campo obligatorio';
   const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
   const validationSchema = () =>
@@ -24,12 +23,18 @@ export default function TaskForm({ statuses, priorities }) {
       description: yup.string().required(REQUIRED_MSG),
     });
 
-  function onSubmit(values) {
+  function onSubmit(values, { resetForm }) {
     try {
-      const {
-        data: { result },
-      } = api.post('/task', values);
-      console.log(result);
+      api.post('/task', { task: { ...values } }).then(
+        ({
+          data: {
+            result: { task: createdTask },
+          },
+        }) => {
+          setTasks((pt) => [...pt, createdTask]);
+          resetForm();
+        },
+      );
     } catch (err) {
       console.log(err);
     }
@@ -65,15 +70,18 @@ export default function TaskForm({ statuses, priorities }) {
               >
                 Prioridad
               </Field>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <label htmlFor='description'>Descripción</label>
-              <textarea
-                name='description'
-                cols='30'
-                rows='10'
-                placeholder='Ingrese una descripción'
-              />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <label>Descripción</label>
+                <Field
+                  name='description'
+                  as='textarea'
+                  placeholder='Ingrese una descripción'
+                  cols='30'
+                  rows='10'
+                >
+                  Prioridad
+                </Field>
+              </div>
             </div>
             <Button>Enviar</Button>
           </form>

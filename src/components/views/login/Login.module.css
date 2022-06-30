@@ -27,6 +27,14 @@
 .form button {
   align-self: center;
 }
+.error {
+  margin-bottom: 10px;
+  text-align: center;
+  color: red;
+  font-weight: 700;
+  font-size: 1.1em;
+  text-shadow: 0 0 1px rgb(185, 185, 185);
+}
 @media (max-width: 768px) {
   .form form {
     width: 85%;
