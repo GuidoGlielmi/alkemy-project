@@ -48,6 +48,19 @@
   line-height: 50vh;
   font-size: 1.2em;
 }
+.selectPriority {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10vh;
+  text-align: center;
+}
+.selectPriority > div {
+  display: flex;
+  gap: 5vw;
+}
+
 @media (max-width: 768px) {
   .tasks {
     align-self: stretch;

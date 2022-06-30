@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import InputContainer from '../../input-container/InputContainer';
 import { Formik, Field } from 'formik';
 import Button from '../../button/Button';
@@ -9,8 +9,10 @@ import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
 import { Switch, FormControlLabel } from '@mui/material';
 import { api } from 'components/auth-context/AuthContext';
+import { authContext } from 'components/auth-context/AuthContext';
 
 export default function Register() {
+  const { setPassword, setUserName } = useContext(authContext);
   const navigate = useNavigate();
   const [roles, setRoles] = useState([]);
   const [continents, setContinents] = useState([]);
@@ -79,6 +81,8 @@ export default function Register() {
       } = await api.post('/auth/register', {
         user,
       });
+      setPassword(values.password);
+      setUserName(values.username);
       navigate('/login');
       // 0ea9502e-43af-4594-b2ea-396b6ea00638 guido1 123456
       console.log(insertedId, createdUser);

@@ -7,11 +7,37 @@ api.interceptors.request.use((config) => {
   config.headers.Authorization = `Bearer ${interceptorToken || ''}`;
   return config;
 });
+
+function clearStorage(values) {
+  Object.entries(values).forEach(([key, value]) =>
+    value ? localStorage.setItem(key, value) : localStorage.removeItem(key),
+  );
+}
+
 export default function AuthContext({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
+  const [password, setPassword] = useState(localStorage.getItem('password') || '');
+
+  useEffect(() => {
+    clearStorage({ token, userName, password });
+  });
+
   useEffect(() => {
     interceptorToken = token;
-    token ? localStorage.setItem('token', token) : localStorage.removeItem('token');
   }, [token]);
-  return <authContext.Provider value={{ token, setToken }}>{children}</authContext.Provider>;
+
+  function clearLogin() {
+    setToken();
+    setUserName();
+    setPassword();
+  }
+
+  return (
+    <authContext.Provider
+      value={{ token, setToken, userName, setUserName, password, setPassword, clearLogin }}
+    >
+      {children}
+    </authContext.Provider>
+  );
 }

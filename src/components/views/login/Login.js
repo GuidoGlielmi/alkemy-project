@@ -7,7 +7,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { api } from 'components/auth-context/AuthContext';
 import { authContext } from 'components/auth-context/AuthContext';
 export default function Login() {
-  const { setToken } = useContext(authContext);
+  const { setToken, setUserName, setPassword, password, userName } = useContext(authContext);
   const navigate = useNavigate();
 
   const [error, setError] = useState(false);
@@ -23,6 +23,8 @@ export default function Login() {
         },
       } = await api.post('/auth/login', values);
       setToken(token);
+      setUserName(values.userName);
+      setPassword(values.password);
       navigate('/', { replace: true });
     } catch ({ response: { status } }) {
       if (status === 404) setError(true);
@@ -30,11 +32,7 @@ export default function Login() {
   }
   return (
     <div className={styles.form}>
-      <Formik
-        initialValues={{ userName: '', password: '' }}
-        validateOnChange={false}
-        onSubmit={onSubmit}
-      >
+      <Formik initialValues={{ userName, password }} validateOnChange={false} onSubmit={onSubmit}>
         <Form>
           <h1>Iniciar sesión</h1>
           <Field

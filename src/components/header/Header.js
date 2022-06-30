@@ -4,11 +4,11 @@ import styles from './Header.module.css';
 import { Outlet } from 'react-router-dom';
 import { authContext } from 'components/auth-context/AuthContext';
 export default function Header() {
-  const { setToken } = useContext(authContext);
+  const { clearLogin } = useContext(authContext);
   const navigate = useNavigate();
 
   function handleLogout() {
-    setToken();
+    clearLogin();
     navigate('/', { replace: true });
   }
 

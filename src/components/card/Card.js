@@ -6,6 +6,7 @@ function formatDate(date) {
   return newDate.slice(0, newDate.indexOf('('));
 }
 export default function Card({
+  task,
   task: {
     _id,
     title,
@@ -46,7 +47,7 @@ export default function Card({
           ? description
           : description.slice(0, 99) + '...'}
       </p>
-      <div onClick={() => deleteTask(_id)}>X</div>
+      <div onClick={() => deleteTask(task)}>X</div>
     </div>
   );
 }

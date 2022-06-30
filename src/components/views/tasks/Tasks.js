@@ -44,60 +44,65 @@ export default function Tasks() {
   const [statuses, setStatuses] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const [tasksByGroup, setTasksByGroup] = useState([]);
+  const [selectedPriority, setSelectedPriority] = useState('');
   const [teamId, setTeamId] = useState('');
 
-  async function deleteTask(taskId) {
+  async function deleteTask({ _id, status }) {
+    setIsLoading(true);
     try {
-      await api.delete(`/task/${taskId}`);
+      await api.delete(`/task/${_id}`);
       setTasksByGroup((pt) => {
-        for (let [key, group] of Object.entries(pt)) {
-          for (let i = 0; i < group.length; i++) {
-            if (group[i]._id === taskId) {
-              return { ...pt, [key]: group.filter((_, idx) => idx !== i) };
-            }
-          }
-        }
-        return pt;
+        return { ...pt, [status]: pt[status].filter((task) => task._id !== _id) };
       });
       toast('Se ha eliminado la tarea satisfactoriamente');
     } catch (err) {
       toast.error('No se ha podido eliminar la tarea');
     }
+    setIsLoading(false);
   }
 
   function addTask(task) {
     setTasksByGroup((pt) => ({ ...pt, [task.status]: [...pt[task.status], task] }));
   }
+  console.log(selectedPriority);
 
-  console.log(tasksByGroup);
   return (
     <main className={styles.tasksPage}>
       <h3>Team id: {teamId}</h3>
-      <TaskForm
-        statuses={statuses}
-        priorities={priorities}
-        setTasks={setTasksByGroup}
-        addTask={addTask}
-      />
+      <TaskForm statuses={statuses} priorities={priorities} addTask={addTask} />
       <section className={styles.tasksContainer}>
         <h2>Mis Tareas</h2>
+        <fieldset className={styles.selectPriority}>
+          <legend>Seleccionar por prioridad:</legend>
+          <div>
+            {[{ title: '' }, ...priorities].map(({ title }) => (
+              <div key={title || 'ALL'}>
+                <input onChange={() => setSelectedPriority(title)} name='priority' type='radio' />
+                <label>{title || 'ALL'}</label>
+              </div>
+            ))}
+          </div>
+        </fieldset>
         <div className={styles.tasks}>
           {Object.values(tasksByGroup).every((t) => !t.length) ? (
             <span>No se han creado tareas</span>
           ) : (
             Object.entries(tasksByGroup).map(([status, tasks], i) => {
-              return tasks.length ? (
-                <div key={i}>
-                  <h3>{status}</h3>
-                  <div>
-                    {tasks.map((t) => (
-                      <Card key={t._id} task={t} deleteTask={deleteTask} />
-                    ))}
+              const taskComponents = tasks.filter(
+                (t) => !selectedPriority || t.importance === selectedPriority,
+              );
+              return (
+                !!taskComponents.length && (
+                  <div key={i}>
+                    <h3>{status}</h3>
+                    <div>
+                      {taskComponents.map((t) => (
+                        <Card key={t._id} task={t} deleteTask={deleteTask} />
+                      ))}
+                    </div>
+                    <hr />
                   </div>
-                  <hr />
-                </div>
-              ) : (
-                <span key={i}>No se han creado tareas</span>
+                )
               );
             })
           )}
