@@ -8,6 +8,16 @@ import { toast } from 'react-toastify';
 export default function Tasks() {
   const { setIsLoading } = useContext(loadingContext);
 
+  function debounce(func, delay) {
+    let timer;
+    return function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        func();
+      }, delay);
+    };
+  }
+
   useEffect(() => {
     async function getData() {
       // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
@@ -44,8 +54,9 @@ export default function Tasks() {
   const [statuses, setStatuses] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const [tasksByGroup, setTasksByGroup] = useState([]);
-  const [selectedPriority, setSelectedPriority] = useState('');
+  const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [teamId, setTeamId] = useState('');
+  const [searchKey, setSearchKey] = useState('');
 
   async function deleteTask({ _id, status }) {
     setIsLoading(true);
@@ -64,7 +75,15 @@ export default function Tasks() {
   function addTask(task) {
     setTasksByGroup((pt) => ({ ...pt, [task.status]: [...pt[task.status], task] }));
   }
-  console.log(selectedPriority);
+  function filterTasks(tasks) {
+    if (selectedPriority !== 'ALL') {
+      tasks = tasks.filter((t) => t.importance === selectedPriority);
+    }
+    if (searchKey) {
+      tasks = tasks.filter((t) => t.title.includes(searchKey));
+    }
+    return tasks;
+  }
 
   return (
     <main className={styles.tasksPage}>
@@ -72,35 +91,40 @@ export default function Tasks() {
       <TaskForm statuses={statuses} priorities={priorities} addTask={addTask} />
       <section className={styles.tasksContainer}>
         <h2>Mis Tareas</h2>
-        <fieldset className={styles.selectPriority}>
-          <legend>Seleccionar por prioridad:</legend>
+        <div className={styles.filterContainer}>
+          <fieldset className={styles.selectPriority}>
+            <legend>Seleccionar por prioridad:</legend>
+            <div>
+              {[{ title: 'ALL' }, ...priorities].map(({ title }) => (
+                <div key={title}>
+                  <input onChange={() => setSelectedPriority(title)} name='priority' type='radio' />
+                  <label>{title}</label>
+                </div>
+              ))}
+            </div>
+          </fieldset>
           <div>
-            {[{ title: '' }, ...priorities].map(({ title }) => (
-              <div key={title || 'ALL'}>
-                <input onChange={() => setSelectedPriority(title)} name='priority' type='radio' />
-                <label>{title || 'ALL'}</label>
-              </div>
-            ))}
+            <label>Buscar por título</label>
+            <input
+              onChange={({ target: { value } }) => debounce(() => setSearchKey(value), 100)()}
+            />
           </div>
-        </fieldset>
+        </div>
         <div className={styles.tasks}>
           {Object.values(tasksByGroup).every((t) => !t.length) ? (
             <span>No se han creado tareas</span>
           ) : (
             Object.entries(tasksByGroup).map(([status, tasks], i) => {
-              const taskComponents = tasks.filter(
-                (t) => !selectedPriority || t.importance === selectedPriority,
-              );
+              const filteredTasks = filterTasks(tasks);
               return (
-                !!taskComponents.length && (
+                !!filteredTasks.length && (
                   <div key={i}>
                     <h3>{status}</h3>
                     <div>
-                      {taskComponents.map((t) => (
+                      {filteredTasks.map((t) => (
                         <Card key={t._id} task={t} deleteTask={deleteTask} />
                       ))}
                     </div>
-                    <hr />
                   </div>
                 )
               );
@@ -111,3 +135,9 @@ export default function Tasks() {
     </main>
   );
 }
+/* 
+ rgb(223, 86, 139)
+ rgb(134, 246, 239)
+background: `linear-gradient(rgb(59, 59, 59), rgb(29, 29, 29)) padding-box, linear-gradient(to right, #${Math.floor(
+  Math.random() * 16777215,
+  ).toString(16)}, #928dab) border-box`, */

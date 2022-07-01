@@ -55,6 +55,7 @@ a::before {
   border-bottom: 1px solid #8b8b8b;
 }
 hr {
+  margin: 0;
   height: 3px !important;
 }
 body {

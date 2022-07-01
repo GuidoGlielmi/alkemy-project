@@ -33,6 +33,31 @@
 .tasks > div {
   display: flex;
   flex-direction: column;
+  position: relative;
+  margin-top: 5vh;
+  padding-top: 40px;
+}
+.tasks > div:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 20%;
+  top: 0;
+  border: 3px solid;
+  border-image: linear-gradient(45deg, black, rgb(135, 135, 135) 95%, black) 1;
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+}
+.tasks > div:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 20%;
+  bottom: 0;
+  border: 3px solid;
+  border-image: linear-gradient(-45deg, black, rgb(135, 135, 135) 75%, black) 1;
+  border-top: none;
+  border-radius: 0 0 20px 20px;
 }
 
 .tasks > div > div {
@@ -47,6 +72,23 @@
 .tasks span {
   line-height: 50vh;
   font-size: 1.2em;
+}
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3%;
+  border-radius: 20px 9px 20px 9px;
+  border: 4px solid transparent;
+  background: linear-gradient(rgb(59, 59, 59), rgb(29, 29, 29)) padding-box,
+    linear-gradient(to right, rgb(108, 64, 133), #928dab) border-box;
+  color: whitesmoke;
+  box-shadow: 0 0 20px rgba(54, 54, 54, 0.493);
+}
+.filterContainer > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .selectPriority {
   align-self: center;
