@@ -20,6 +20,8 @@ export default function Card({
     user,
   },
   deleteTask,
+  updateStatus,
+  updatePriority,
 }) {
   const [isLongDescriptionShown, setIsLongDescriptionShown] = useState(false);
   const formattedCreationTime = useMemo(() => formatDate(createdAt), [createdAt]);
@@ -36,8 +38,12 @@ export default function Card({
       </time>
       <h5>{user.username}</h5>
       <div>
-        <Button size='small'>{status}</Button>
-        <Button size='small'>{importance}</Button>
+        <Button size='small' action={() => updateStatus(task)}>
+          {status}
+        </Button>
+        <Button size='small' action={() => updatePriority(task)}>
+          {importance}
+        </Button>
       </div>
       <p
         onClick={() => description.length > 100 && setIsLongDescriptionShown((ps) => !ps)}

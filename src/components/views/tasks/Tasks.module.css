@@ -98,9 +98,10 @@
   margin-bottom: 10vh;
   text-align: center;
 }
-.selectPriority > div {
+.selectPriority div {
   display: flex;
-  gap: 5vw;
+  align-items: center;
+  gap: 2vw;
 }
 
 @media (max-width: 768px) {

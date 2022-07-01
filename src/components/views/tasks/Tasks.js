@@ -58,6 +58,52 @@ export default function Tasks() {
   const [teamId, setTeamId] = useState('');
   const [searchKey, setSearchKey] = useState('');
 
+  function addTask(task) {
+    setTasksByGroup((pt) => ({ ...pt, [task.status]: [...pt[task.status], task] }));
+  }
+
+  async function updateStatus({ _id, status }) {
+    setIsLoading(true);
+    const currentIndex = statuses.findIndex(({ title }) => title === status);
+    const newStatus =
+      currentIndex + 1 === statuses.length ? statuses[0].title : statuses[currentIndex + 1].title;
+    try {
+      await api.patch(`/task/${_id}`, { task: { status: newStatus } });
+      setTasksByGroup((pt) => {
+        // seems like strictMode doesn't like impure functions directly modifying state, so methods like splice or push are discouraged. This is checked by running the setState's callback argument twice.
+        let foundElement;
+        const filteredGroup = pt[status].filter(
+          (t) => t._id !== _id || !(foundElement = { ...t, status: newStatus }),
+        );
+        return { ...pt, [status]: filteredGroup, [newStatus]: [...pt[newStatus], foundElement] };
+      });
+    } catch (err) {
+      toast.error('No se ha podido eliminar la tarea');
+    }
+    setIsLoading(false);
+  }
+  console.log(tasksByGroup);
+  async function updatePriority({ _id, status, importance }) {
+    setIsLoading(true);
+    const currentIndex = priorities.findIndex(({ title }) => title === importance);
+    const newPriority =
+      currentIndex + 1 === priorities.length
+        ? priorities[0].title
+        : priorities[currentIndex + 1].title;
+    try {
+      await api.patch(`/task/${_id}`, { task: { importance: newPriority } });
+      setTasksByGroup((pt) => {
+        return {
+          ...pt,
+          [status]: pt[status].map((t) => (t._id === _id ? { ...t, importance: newPriority } : t)),
+        };
+      });
+    } catch (err) {
+      toast.error('No se ha podido eliminar la tarea');
+    }
+    setIsLoading(false);
+  }
+
   async function deleteTask({ _id, status }) {
     setIsLoading(true);
     try {
@@ -72,9 +118,6 @@ export default function Tasks() {
     setIsLoading(false);
   }
 
-  function addTask(task) {
-    setTasksByGroup((pt) => ({ ...pt, [task.status]: [...pt[task.status], task] }));
-  }
   function filterTasks(tasks) {
     if (selectedPriority !== 'ALL') {
       tasks = tasks.filter((t) => t.importance === selectedPriority);
@@ -122,7 +165,13 @@ export default function Tasks() {
                     <h3>{status}</h3>
                     <div>
                       {filteredTasks.map((t) => (
-                        <Card key={t._id} task={t} deleteTask={deleteTask} />
+                        <Card
+                          key={t._id}
+                          task={t}
+                          deleteTask={deleteTask}
+                          updateStatus={updateStatus}
+                          updatePriority={updatePriority}
+                        />
                       ))}
                     </div>
                   </div>
