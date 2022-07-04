@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './InputContainer.module.css';
+
 export default function Select({
   children,
   type = 'text',
@@ -21,14 +22,15 @@ export default function Select({
         type={type}
         {...field}
         {...props}
+        id={field.name}
         defaultValue=''
         className={touched && errMsg && styles.error}
       >
         <option value='' disabled>
           {placeholder || children}
         </option>
-        {options.map(({ title, value }, i) => (
-          <option key={i} value={value || title}>
+        {options.map(({ title, value }) => (
+          <option key={value || title} value={value || title}>
             {title}
           </option>
         ))}

@@ -1,6 +1,7 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useMemo } from 'react';
 import { CircularProgress } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
+
 export const loadingContext = createContext('');
 
 const backgroundStyle = {
@@ -16,9 +17,10 @@ const backgroundStyle = {
 
 export default function LoadingContext({ children }) {
   const [isLoading, setIsLoading] = useState(false);
-
+  const loadingObject = useMemo(() => ({ isLoading, setIsLoading }));
+  // { isLoading, setIsLoading } is recreated on each render
   return (
-    <loadingContext.Provider value={{ isLoading, setIsLoading }}>
+    <loadingContext.Provider value={loadingObject}>
       <>
         {isLoading && (
           <div style={backgroundStyle}>

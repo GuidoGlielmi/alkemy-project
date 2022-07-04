@@ -1,0 +1,41 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb", "prettier", "plugin:cypress/recommended"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {},
+  "overrides": [
+    {
+      "files": ["*"],
+      "env": {
+        "jest": true
+      },
+      "rules": {
+        "import/no-unresolved": "off",
+        "react/prop-types": "off",
+        "react/jsx-filename-extension": "off",
+        "react/react-in-jsx-scope": "off",
+        "no-return-assign": "off",
+        "no-underscore-dangle": "off",
+        "no-param-reassign": "off",
+        "no-console": "off",
+        "no-shadow": "off",
+        "react/jsx-no-bind": "off",
+        "react/jsx-props-no-spreading": "off",
+        "no-irregular-whitespace": "off",
+        "react/function-component-definition": "off",
+        "react/jsx-no-constructed-context-values": "off",
+        "react/button-has-type": "off"
+      }
+    }
+  ]
+}

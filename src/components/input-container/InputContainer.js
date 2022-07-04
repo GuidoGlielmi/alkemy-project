@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './InputContainer.module.css';
+
 export default function InputContainer({
   children,
   type = 'text',
@@ -18,6 +19,7 @@ export default function InputContainer({
         type={type}
         {...field}
         {...props}
+        id={field.name}
         className={`${styles.input} ${touched && errMsg && styles.error}`}
       />
       <span className={styles.errorMsg}>{touched && errMsg}&nbsp;</span>

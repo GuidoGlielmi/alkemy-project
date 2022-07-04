@@ -58,6 +58,12 @@ hr {
   margin: 0;
   height: 3px !important;
 }
+button {
+  cursor: default;
+  background: transparent;
+  border: none;
+  color: inherit;
+}
 body {
   --global-secondary-color: linear-gradient(#43c6ac, #191654);
   margin: 0;

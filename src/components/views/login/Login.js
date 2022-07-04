@@ -1,11 +1,11 @@
 import { useState, useContext } from 'react';
-import InputContainer from '../../input-container/InputContainer';
+import { authContext, api } from 'components/auth-context/AuthContext';
 import { Formik, Form, Field } from 'formik';
-import Button from '../../button/Button';
-import styles from './Login.module.css';
 import { useNavigate, Link } from 'react-router-dom';
-import { api } from 'components/auth-context/AuthContext';
-import { authContext } from 'components/auth-context/AuthContext';
+import Button from '../../button/Button';
+import InputContainer from '../../input-container/InputContainer';
+import styles from './Login.module.css';
+
 export default function Login() {
   const { setToken, setUserName, setPassword, password, userName } = useContext(authContext);
   const navigate = useNavigate();

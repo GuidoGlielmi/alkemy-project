@@ -3,7 +3,7 @@ import styles from './Button.module.css';
 
 export default function Button({
   action = () => {},
-  type = '',
+  type = 'button',
   size = 'medium',
   disabled = false,
   children,

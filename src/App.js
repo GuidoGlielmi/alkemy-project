@@ -1,11 +1,12 @@
-import { lazy, Suspense, useContext } from 'react';
+import { lazy, Suspense, useContext, useCallback } from 'react';
 import { Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
-import Login from './components/views/login/Login';
-import Register from './components/views/register/Register';
-import Tasks from './components/views/tasks/Tasks.js';
 import { AnimatePresence, motion } from 'framer-motion';
-import Header from 'components/header/Header';
 import { authContext } from 'components/auth-context/AuthContext';
+import Header from 'components/header/Header';
+import Login from 'components/views/login/Login';
+import Register from 'components/views/register/Register';
+import Tasks from 'components/views/tasks/Tasks';
+
 // import { validate } from 'uuid';
 
 const Error404 = lazy(() => import('./components/views/error404/Error404'));
@@ -33,9 +34,7 @@ const SuspenseWrapper = () => (
 
 export default function App() {
   const { token } = useContext(authContext);
-  const RequireAuth = () => {
-    return token ? <Outlet /> : <Navigate to='/login' /* replace */ />;
-  };
+  const RequireAuth = useCallback(() => (token ? <Outlet /> : <Navigate to='/login' />), []);
   const location = useLocation();
   return (
     <AnimatePresence>

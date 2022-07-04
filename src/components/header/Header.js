@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './Header.module.css';
-import { Outlet } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { authContext } from 'components/auth-context/AuthContext';
+import styles from './Header.module.css';
+
 export default function Header() {
   const { clearLogin } = useContext(authContext);
   const navigate = useNavigate();
@@ -16,7 +16,9 @@ export default function Header() {
     <>
       <header className={styles.header}>
         <span className={styles.logo}>Go Scrum</span>
-        <div onClick={handleLogout}>X</div>
+        <button type='button' onClick={handleLogout}>
+          X
+        </button>
       </header>
       <Outlet />
     </>

@@ -1,0 +1,11 @@
+npm install --save-dev cypress @testing-library/cypress
+
+npx crypress run
+
+add to .eslint.json file to "extends" option: plugin:cypress/recommended"
+
+add a base url  in the e2e object in cypress.config.json
+baseUrl: 'http://localhost:3000',
+
+If ESLint is installed globally, then make sure eslint-plugin-cypress is also installed globally. A globally-installed ESLint cannot find a locally-installed plugin.
+the best option is to install it locally

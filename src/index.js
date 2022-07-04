@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import './index.css';
 import AuthContext from 'components/auth-context/AuthContext';
 import LoadingContext from 'components/loading-context/LoadingContext';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthContext>
       <BrowserRouter>
+        {/* to use BrowserRouter in github pages, it is necessary to use HashRouter because on every refresh, it will try to access the exact path we are in, and given React builds SPA, it wont work  */}
         <LoadingContext>
           <App />
         </LoadingContext>

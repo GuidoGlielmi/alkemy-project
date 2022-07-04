@@ -1,15 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
-import InputContainer from '../../input-container/InputContainer';
+import { Switch, FormControlLabel } from '@mui/material';
 import { Formik, Field } from 'formik';
-import Button from '../../button/Button';
-import styles from './Register.module.css';
-import Select from '../../input-container/Select';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
-import { Switch, FormControlLabel } from '@mui/material';
-import { api } from 'components/auth-context/AuthContext';
-import { authContext } from 'components/auth-context/AuthContext';
+import { authContext, api } from 'components/auth-context/AuthContext';
+import InputContainer from '../../input-container/InputContainer';
+import Button from '../../button/Button';
+import styles from './Register.module.css';
+import Select from '../../input-container/Select';
 
 export default function Register() {
   const { setPassword, setUserName } = useContext(authContext);
@@ -43,8 +42,8 @@ export default function Register() {
   const REQUIRED_MSG = '* Campo obligatorio';
   const EMAIL_MSG = 'Ingrese un email válido';
   const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
-  const validationSchema = () => {
-    return yup.object().shape({
+  const validationSchema = () =>
+    yup.object().shape({
       userName: yup.string().min(4, getMinLengthMsg(6)).required(REQUIRED_MSG),
       password: yup.string().min(6, getMinLengthMsg(6)).required(REQUIRED_MSG),
       email: yup.string().email(EMAIL_MSG).required(REQUIRED_MSG),
@@ -62,7 +61,6 @@ export default function Register() {
         otherwise: yup.string(),
       }),
     });
-  };
 
   async function onSubmit(values) {
     console.log(values);
@@ -90,6 +88,7 @@ export default function Register() {
       console.log(err);
     }
   }
+
   return (
     <div className={styles.formContainer}>
       <Formik

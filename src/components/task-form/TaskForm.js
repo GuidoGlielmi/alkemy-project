@@ -2,12 +2,13 @@ import InputContainer from 'components/input-container/InputContainer';
 import Select from 'components/input-container/Select';
 import { Formik, Field } from 'formik';
 import * as yup from 'yup';
-import styles from './TaskForm.module.css';
 import Button from 'components/button/Button';
 import { api } from 'components/auth-context/AuthContext';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
-export default function TaskForm({ statuses, priorities, addTask }) {
+import styles from './TaskForm.module.css';
+
+export default function TaskForm({ statuses, priorities, setTasks }) {
   const initialValues = {
     title: '',
     status: '',
@@ -31,7 +32,7 @@ export default function TaskForm({ statuses, priorities, addTask }) {
           result: { task: createdTask },
         },
       } = await api.post('/task', { task: { ...values } });
-      addTask(createdTask);
+      setTasks((pt) => [...pt, createdTask]);
       resetForm();
       toast('Tarea creada satisfactoriamente');
     } catch (err) {
@@ -46,10 +47,12 @@ export default function TaskForm({ statuses, priorities, addTask }) {
         initialValues={initialValues}
         validationSchema={validationSchema}
         validateOnChange={false}
+        // eslint-disable-next-line react/jsx-no-bind
         onSubmit={onSubmit}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, errors }) => (
           <form onSubmit={handleSubmit} className={styles.form}>
+            {console.log(errors)}
             <div>
               <Field name='title' component={InputContainer} placeholder='Ingrese el título'>
                 Título
@@ -71,19 +74,21 @@ export default function TaskForm({ statuses, priorities, addTask }) {
                 Prioridad
               </Field>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <label>Descripción</label>
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                <label htmlFor='description'>Descripción</label>
                 <Field
                   name='description'
                   as='textarea'
                   placeholder='Ingrese una descripción'
                   cols='30'
                   rows='10'
+                  id='description'
                 >
                   Prioridad
                 </Field>
               </div>
             </div>
-            <Button>Enviar</Button>
+            <Button type='submit'>Enviar</Button>
           </form>
         )}
       </Formik>

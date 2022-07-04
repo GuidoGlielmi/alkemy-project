@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+
 export const authContext = createContext('');
 export const api = axios.create({ baseURL: 'https://goscrum-api.alkemy.org' });
 let interceptorToken = '';

@@ -1,0 +1,17 @@
+npm install -g eslint
+npx eslint --init || npm init @eslint/config
+
+# To create global overrides
+"overrides": [
+    {
+      "files": ["*"],
+      "rules": {
+        "import/no-unresolved": "off",
+        ...
+      }
+    }
+]
+
+# to work with prettier
+npm install --save-dev eslint-config-prettier
+"extends": [ ... , "prettier"],
