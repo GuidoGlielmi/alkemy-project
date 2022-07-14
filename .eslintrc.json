@@ -34,7 +34,8 @@
         "no-irregular-whitespace": "off",
         "react/function-component-definition": "off",
         "react/jsx-no-constructed-context-values": "off",
-        "react/button-has-type": "off"
+        "react/button-has-type": "off",
+        "no-use-before-define": "off"
       }
     }
   ]

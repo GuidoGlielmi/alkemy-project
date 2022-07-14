@@ -1,17 +1,17 @@
-import { useState, useEffect, useContext } from 'react';
-import { Switch, FormControlLabel } from '@mui/material';
-import { Formik, Field } from 'formik';
-import { Link, useNavigate } from 'react-router-dom';
+import {useState, useEffect, useContext} from 'react';
+import {Switch, FormControlLabel} from '@mui/material';
+import {Formik, Field} from 'formik';
+import {Link, useNavigate} from 'react-router-dom';
 import * as yup from 'yup';
-import { v4 as uuid } from 'uuid';
-import { authContext, api } from 'components/auth-context/AuthContext';
-import InputContainer from '../../input-container/InputContainer';
-import Button from '../../button/Button';
+import {v4 as uuid} from 'uuid';
+import {authContext, api} from 'components/auth-context/AuthContext';
+import InputContainer from 'components/input-container/InputContainer';
+import Button from 'components/button/Button';
+import Select from 'components/input-container/Select';
 import styles from './Register.module.css';
-import Select from '../../input-container/Select';
 
 export default function Register() {
-  const { setPassword, setUserName } = useContext(authContext);
+  const {setPassword, setUserName} = useContext(authContext);
   const navigate = useNavigate();
   const [roles, setRoles] = useState([]);
   const [continents, setContinents] = useState([]);
@@ -20,12 +20,12 @@ export default function Register() {
     api.get('/auth/data').then(
       ({
         data: {
-          result: { Rol, continente, region },
+          result: {Rol, continente, region},
         },
       }) => {
-        setRoles(Rol.map((r) => ({ title: r })));
-        setContinents(continente.map((c) => ({ title: c })));
-        setRegions(region.filter((r) => r !== 'Otro').map((r) => ({ title: r })));
+        setRoles(Rol.map((r) => ({title: r})));
+        setContinents(continente.map((c) => ({title: c})));
+        setRegions(region.filter((r) => r !== 'Otro').map((r) => ({title: r})));
       },
     );
   }, []);
@@ -74,7 +74,7 @@ export default function Register() {
     try {
       const {
         data: {
-          result: { insertedId, user: createdUser },
+          result: {insertedId, user: createdUser},
         },
       } = await api.post('/auth/register', {
         user,
@@ -97,7 +97,7 @@ export default function Register() {
         validateOnChange={false}
         onSubmit={onSubmit}
       >
-        {({ handleSubmit, values, setFieldValue }) => (
+        {({handleSubmit, values, setFieldValue}) => (
           <form onSubmit={handleSubmit}>
             <h1>Registro</h1>
             <Field

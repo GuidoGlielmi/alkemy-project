@@ -1,15 +1,15 @@
-import { lazy, Suspense, useContext, useCallback } from 'react';
-import { Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import { authContext } from 'components/auth-context/AuthContext';
+import {lazy, Suspense, useContext, useCallback} from 'react';
+import {Routes, Route, Navigate, useLocation, Outlet} from 'react-router-dom';
+import {AnimatePresence, motion} from 'framer-motion';
+import {authContext} from 'components/auth-context/AuthContext';
 import Header from 'components/header/Header';
-import Login from 'components/views/login/Login';
-import Register from 'components/views/register/Register';
-import Tasks from 'components/views/tasks/Tasks';
+import Login from 'views/login/Login';
+import Register from 'views/register/Register';
+import Tasks from 'views/tasks/Tasks';
 
 // import { validate } from 'uuid';
 
-const Error404 = lazy(() => import('./components/views/error404/Error404'));
+const Error404 = lazy(() => import('./views/error404/Error404'));
 
 const pageTransition = {
   in: {
@@ -33,7 +33,7 @@ const SuspenseWrapper = () => (
 );
 
 export default function App() {
-  const { token } = useContext(authContext);
+  const {token} = useContext(authContext);
   const RequireAuth = useCallback(() => (token ? <Outlet /> : <Navigate to='/login' />), []);
   const location = useLocation();
   return (
