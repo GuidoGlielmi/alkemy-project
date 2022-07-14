@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import TaskForm from 'components/task-form/TaskForm';
 import {useState, useEffect, useContext} from 'react';
 import {useSelector, useDispatch} from 'react-redux/es/exports';
@@ -46,7 +47,7 @@ export default function Tasks() {
       (p, c) => ({...p, [c.status]: [...(p[c.status] || []), c]}),
       {},
     ); // if empty, returns the initial value
-    return Object.keys(groupedTasks).sort(([{status1}], [{status2}]) => status1 < status2);
+    return Object.entries(groupedTasks).sort(([[status1]], [[status2]]) => status1 < status2);
   }
 
   function filterTasks(tasks) {
@@ -85,9 +86,10 @@ export default function Tasks() {
         </div>
         <div className={styles.tasks}>
           {!tasks.length && <span>No se han creado tareas</span>}
-          {Object.entries(groupByStatus(filterTasks(tasks))).map(([status, tasks]) => (
-            <TaskGroup key={status} tasks={tasks} setTasks={setTasks} />
-          ))}
+          {groupByStatus(filterTasks(tasks)).map(([status, tasks]) => {
+            console.log(status, tasks);
+            return <TaskGroup key={status} status={status} tasks={tasks} setTasks={setTasks} />;
+          })}
         </div>
       </section>
     </main>

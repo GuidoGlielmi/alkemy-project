@@ -1,10 +1,23 @@
 import {api} from 'components/auth-context/AuthContext';
+import login from 'services/login';
 
-import {TASKS_REQUEST, TASKS_SUCCESS, TASKS_FAILURE} from './types';
+import {REQUEST_PENDING, FETCHING_ERROR, TASKS_SUCCESS, LOGIN_SUCCESS, LOGOUT} from './types';
 // import { createStore } from 'redux';
-export const tasksRequest = () => ({type: TASKS_REQUEST});
+export const loginRequest = (values) => async (dispatch) => {
+  dispatch(fetchingData());
+  try {
+    const token = await login(values);
+    localStorage.setItem('token', token);
+    dispatch(loginSuccess());
+  } catch (err) {
+    dispatch(fetchingError(err));
+  }
+};
+export const fetchingData = () => ({type: REQUEST_PENDING});
+export const fetchingError = (err) => ({type: FETCHING_ERROR, payload: err});
+export const loginSuccess = () => ({type: LOGIN_SUCCESS});
+export const logout = () => ({type: LOGOUT});
 export const tasksSuccess = (data) => ({type: TASKS_SUCCESS, payload: data});
-export const tasksFailure = (err) => ({type: TASKS_FAILURE, payload: err});
 export const getTasks = () => async (dispatch) => {
   // redux calls getTasks with the dispatch function as the first argument
 
@@ -15,11 +28,11 @@ export const getTasks = () => async (dispatch) => {
   dispatch(getTasks())
   */
 
-  dispatch(tasksRequest()); // siempre se pasa la acción en sí, no la funcion
+  dispatch(fetchingData()); // siempre se pasa la acción en sí, no la funcion
   try {
     const {data} = await api.get();
     dispatch(tasksSuccess(data));
   } catch (err) {
-    dispatch(tasksFailure(err));
+    // dispatch(tasksFailure(err));
   }
 };

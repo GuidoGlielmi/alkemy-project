@@ -40,13 +40,13 @@ export default function App() {
     <AnimatePresence>
       <Routes location={location} key={location.pathname}>
         <Route element={<MotionWrapper />}>
-          <Route element={<RequireAuth />}>
-            <Route element={<SuspenseWrapper />}>
-              <Route element={<Header />}>
-                <Route path='/' element={<Tasks />} />
-              </Route>
+          {/* <Route element={<RequireAuth />}> */}
+          <Route element={<SuspenseWrapper />}>
+            <Route element={<Header />}>
+              <Route path='/' element={<Tasks />} />
             </Route>
           </Route>
+          {/* </Route> */}
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route element={<SuspenseWrapper />}>

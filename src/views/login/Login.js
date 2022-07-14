@@ -1,12 +1,17 @@
+/* eslint-disable no-unused-vars */
 import {useState, useContext} from 'react';
 import {authContext, api} from 'components/auth-context/AuthContext';
 import {Formik, Form, Field} from 'formik';
 import {useNavigate, Link} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
 import Button from 'components/button/Button';
 import InputContainer from 'components/input-container/InputContainer';
+import {loginRequest} from 'redux/actions/tasksActions';
 import styles from './Login.module.css';
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const loggedIn = useSelector(({loggedIn}) => loggedIn);
   const {setToken, setUserName, setPassword, password, userName} = useContext(authContext);
   const navigate = useNavigate();
 
@@ -15,7 +20,8 @@ export default function Login() {
   const required = (value) => (!value ? '* Campo requerido' : undefined);
 
   async function onSubmit(values) {
-    setError(false);
+    dispatch(loginRequest(values));
+    /* setError(false);
     try {
       const {
         data: {
@@ -28,8 +34,11 @@ export default function Login() {
       navigate('/', {replace: true});
     } catch ({response: {status}}) {
       if (status === 404) setError(true);
-    }
+    } */
   }
+
+  if (loggedIn) navigate('/' /* {replace: true} */);
+
   return (
     <div className={styles.form}>
       <Formik initialValues={{userName, password}} validateOnChange={false} onSubmit={onSubmit}>

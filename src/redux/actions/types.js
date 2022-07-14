@@ -1,5 +1,5 @@
+export const REQUEST_PENDING = 'REQUEST_PENDING';
+export const FETCHING_ERROR = 'FETCHING_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_FAILURE = 'LOGIN_FAILURE';
-export const TASKS_REQUEST = 'TASKS_REQUEST';
+export const LOGOUT = 'LOGOUT';
 export const TASKS_SUCCESS = 'TASKS_SUCCESS';
-export const TASKS_FAILURE = 'TASKS_FAILURE';

@@ -35,7 +35,8 @@
         "react/function-component-definition": "off",
         "react/jsx-no-constructed-context-values": "off",
         "react/button-has-type": "off",
-        "no-use-before-define": "off"
+        "no-use-before-define": "off",
+        "no-unused-vars": "off"
       }
     }
   ]
