@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
-import {useState, useContext} from 'react';
-import {authContext, api} from 'components/auth-context/AuthContext';
+import {useState} from 'react';
+// import {authContext, api} from 'components/auth-context/AuthContext';
 import {Formik, Form, Field} from 'formik';
-import {useNavigate, Link} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import Button from 'components/button/Button';
 import InputContainer from 'components/input-container/InputContainer';
@@ -11,9 +10,7 @@ import styles from './Login.module.css';
 
 export default function Login() {
   const dispatch = useDispatch();
-  const loggedIn = useSelector(({loggedIn}) => loggedIn);
-  const {setToken, setUserName, setPassword, password, userName} = useContext(authContext);
-  const navigate = useNavigate();
+  const {loggedIn, username} = useSelector((state) => state);
 
   const [error, setError] = useState(false);
 
@@ -21,27 +18,17 @@ export default function Login() {
 
   async function onSubmit(values) {
     dispatch(loginRequest(values));
-    /* setError(false);
-    try {
-      const {
-        data: {
-          result: {token},
-        },
-      } = await api.post('/auth/login', values);
-      setToken(token);
-      setUserName(values.userName);
-      setPassword(values.password);
-      navigate('/', {replace: true});
-    } catch ({response: {status}}) {
-      if (status === 404) setError(true);
-    } */
   }
 
-  if (loggedIn) navigate('/' /* {replace: true} */);
+  if (loggedIn) return <Navigate to='/' />;
 
   return (
     <div className={styles.form}>
-      <Formik initialValues={{userName, password}} validateOnChange={false} onSubmit={onSubmit}>
+      <Formik
+        initialValues={{userName: username, password: ''}}
+        validateOnChange={false}
+        onSubmit={onSubmit}
+      >
         <Form>
           <h1>Iniciar sesión</h1>
           <Field

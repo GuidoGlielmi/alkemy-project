@@ -36,7 +36,10 @@
         "react/jsx-no-constructed-context-values": "off",
         "react/button-has-type": "off",
         "no-use-before-define": "off",
-        "no-unused-vars": "off"
+        "no-void": "off",
+        "no-unused-vars": "off",
+        "arrow-body-style": "off",
+        "default-param-last": "off"
       }
     }
   ]

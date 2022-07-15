@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import TaskForm from 'components/task-form/TaskForm';
 import {useState, useEffect, useContext} from 'react';
 import {useSelector, useDispatch} from 'react-redux/es/exports';
@@ -11,6 +10,8 @@ import styles from './Tasks.module.css';
 
 export default function Tasks() {
   const {setIsLoading} = useContext(loadingContext);
+
+  // const loggedIn = useSelector(({loggedIn}) => loggedIn);
 
   const [statuses, setStatuses] = useState([]);
   const [priorities, setPriorities] = useState([]);
@@ -100,34 +101,18 @@ export default function Tasks() {
  rgb(134, 246, 239)
 background: `linear-gradient(rgb(59, 59, 59), rgb(29, 29, 29)) padding-box, linear-gradient(to right, #${Math.floor(
   Math.random() * 16777215,
-  ).toString(16)}, #928dab) border-box`, */
-
-// eslint-disable-next-line no-unused-vars
-function asd() {
-  /*
-    the value passed to useSelector is an object as the combination of all reducers
-    combineReducers({ taskReducer }); -> useSelector(({ tasksReducer }) => tasksReducer)
-  
-    Remember that tasksReducer returns an object with the entire app state
-    function useSelector(reducerCb) {
-      const combinedReducersObj = combineReducers({ taskReducer })
-      const tasksReducer = reducerCb(combinedReducersObj)
-      return tasksReducer(state, { type, payload })
-    }
-    const globalState = useSelector(({ tasksReducer }) => tasksReducer)
-  
-    because we combined several reducers, we need to call useSelector with a callback that returns the desired reducer, so redux can know which reducer you want to use.
-    */
-  // eslint-disable-next-line no-unused-vars
-  const {loading, errors, tasks} = useSelector(({tasksReducer}) => tasksReducer);
-  const dispatch = useDispatch();
-  dispatch(getTasks());
-}
+  ).toString(16)}, #928dab) border-box`,
+*/
 
 function debounce(fn, delay) {
   let timer;
+  let active = false;
   return () => {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(fn, delay);
+    if (active) clearTimeout(timer);
+    timer = setTimeout(() => {
+      active = false;
+      fn();
+    }, delay);
+    active = true;
   };
 }

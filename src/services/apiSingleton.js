@@ -7,7 +7,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export function setToken(token) {
-  interceptorToken = token;
-}
+export const setToken = (token) => (interceptorToken = token);
+
 export default api;
