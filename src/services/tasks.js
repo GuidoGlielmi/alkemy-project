@@ -6,7 +6,7 @@ export const taskDataService = async () => {
 };
 export const getTasksService = async () => (await api.get('/task/me'))?.data?.result;
 
-export const addTaskService = async (task) => api.post('/task', {task});
+export const addTaskService = async (task) => (await api.post('/task', {task})).data?.result?.task;
 
 export const deleteTaskService = async (id) => api.delete(`/task/${id}`);
 

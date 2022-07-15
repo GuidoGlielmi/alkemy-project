@@ -49,7 +49,9 @@ export default (state = initialState, action) => {
     [ADD_TASK_SUCCESS]: {...state, tasks: [...state.tasks, action.payload], isLoading: false},
     [UPDATE_TASK_SUCCESS]: {
       ...state,
-      tasks: state.tasks.map((t) => (t._id === action.payload._id ? action.payload : t)),
+      tasks: state.tasks.map((t) =>
+        t._id === action.payload?.id ? {...t, ...action.payload?.task} : t,
+      ),
       isLoading: false,
     },
     [DELETE_TASK_SUCCESS]: {

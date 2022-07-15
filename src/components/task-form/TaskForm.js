@@ -3,24 +3,27 @@ import Select from 'components/input-container/Select';
 import {Formik, Field} from 'formik';
 import * as yup from 'yup';
 import Button from 'components/button/Button';
-import {api} from 'components/auth-context/AuthContext';
+// import {api} from 'components/auth-context/AuthContext';
 import 'react-toastify/dist/ReactToastify.css';
-import {toast} from 'react-toastify';
+// import {toast} from 'react-toastify';
 import {useDispatch, useSelector} from 'react-redux';
 import {addTask} from 'redux/actions/tasksActions';
 import styles from './TaskForm.module.css';
 
-export default function TaskForm({setTasks}) {
+const REQUIRED_MSG = '* Campo obligatorio';
+const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
+
+export default function TaskForm() {
   const dispatch = useDispatch();
   const {statuses, priorities} = useSelector((state) => state);
+
   const initialValues = {
     title: '',
     status: '',
     importance: '',
     description: '',
   };
-  const REQUIRED_MSG = '* Campo obligatorio';
-  const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
+
   const validationSchema = () =>
     yup.object().shape({
       title: yup.string().min(6, getMinLengthMsg(6)).required(REQUIRED_MSG),
@@ -32,6 +35,7 @@ export default function TaskForm({setTasks}) {
   async function onSubmit(values, {resetForm}) {
     dispatch(addTask(values, resetForm));
   }
+
   return (
     <section className={styles.formContainer}>
       <h2>Crear tarea</h2>

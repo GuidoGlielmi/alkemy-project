@@ -81,19 +81,19 @@ export const taskDataSuccess = (payload) => ({type: TASK_DATA_SUCCESS, payload})
 export const addTask = (task, resetForm) => async (dispatch) => {
   dispatch(requestPending());
   try {
-    await addTaskService(task);
+    const createdTask = await addTaskService(task);
     resetForm();
-    dispatch(addTaskSuccess(task));
+    dispatch(addTaskSuccess(createdTask));
   } catch (err) {
     errorHandler(err, dispatch);
   }
 };
 export const addTaskSuccess = (payload) => ({type: ADD_TASK_SUCCESS, payload});
-export const updateTask = (task) => async (dispatch) => {
+export const updateTask = (id, task) => async (dispatch) => {
   dispatch(requestPending());
   try {
-    await updateTaskService(task);
-    dispatch(updateTaskSuccess(task));
+    await updateTaskService(id, task);
+    dispatch(updateTaskSuccess({id, task}));
   } catch (err) {
     errorHandler(err, dispatch);
   }

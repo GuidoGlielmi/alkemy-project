@@ -31,17 +31,17 @@ export default function Card({
   const formattedModificationTime = useMemo(() => formatDate(modifiedAt), [modifiedAt]);
 
   async function updatePriority() {
-    const currentIndex = priorities.findIndex(({title}) => title === importance);
+    const currentIndex = priorities.indexOf(importance);
     const newPriority =
       currentIndex + 1 === priorities.length ? priorities[0] : priorities[currentIndex + 1];
-    dispatch(updateTask({...task, importance: newPriority}));
+    dispatch(updateTask(_id, {importance: newPriority}));
   }
 
   async function updateStatus() {
-    const currentIndex = priorities.findIndex(({title}) => title === importance);
+    const currentIndex = statuses.indexOf(status);
     const newStatus =
-      currentIndex + 1 === priorities.length ? statuses[0] : statuses[currentIndex + 1];
-    dispatch(updateTask({...task, importance: newStatus}));
+      currentIndex + 1 === statuses.length ? statuses[0] : statuses[currentIndex + 1];
+    dispatch(updateTask(_id, {status: newStatus}));
     /*
     seems like strictMode doesn't like impure functions directly modifying state, so methods like splice or push are discouraged. This is checked by running the setState's callback argument twice. 
     */
