@@ -1,12 +1,15 @@
 import Button from 'components/button/Button';
-import { useState, useMemo, useContext } from 'react';
-import { loadingContext } from 'components/loading-context/LoadingContext';
-import { api } from 'components/auth-context/AuthContext';
-import { toast } from 'react-toastify';
+import {useState, useMemo, useContext} from 'react';
+// import {loadingContext} from 'components/loading-context/LoadingContext';
+// import {toast} from 'react-toastify';
+import {useDispatch, useSelector} from 'react-redux';
+// import {api} from 'components/auth-context/AuthContext';
+import {deleteTask, updateTask} from 'redux/actions/tasksActions';
 import styles from './Card.module.css';
 
 const formatDate = (date) => new Date().toString(date).split('(')[0];
 export default function Card({
+  task,
   task: {
     _id,
     title,
@@ -19,57 +22,29 @@ export default function Card({
     description,
     user,
   },
-  priorities,
-  statuses,
-  setTasks,
 }) {
-  const { setIsLoading } = useContext(loadingContext);
+  const dispatch = useDispatch();
+  const {statuses, priorities} = useSelector((state) => state);
 
   const [isLongDescriptionShown, setIsLongDescriptionShown] = useState(false);
   const formattedCreationTime = useMemo(() => formatDate(createdAt), [createdAt]);
   const formattedModificationTime = useMemo(() => formatDate(modifiedAt), [modifiedAt]);
 
-  async function deleteTask() {
-    setIsLoading(true);
-    try {
-      await api.delete(`/task/${_id}`);
-      setTasks((pt) => pt.filter((t) => t._id !== _id));
-      toast('Se ha eliminado la tarea satisfactoriamente');
-    } catch (err) {
-      toast.error('No se ha podido eliminar la tarea');
-    }
-    setIsLoading(false);
-  }
-
   async function updatePriority() {
-    setIsLoading(true);
-    const currentIndex = priorities.findIndex(({ title }) => title === importance);
+    const currentIndex = priorities.findIndex(({title}) => title === importance);
     const newPriority =
-      currentIndex + 1 === priorities.length
-        ? priorities[0].title
-        : priorities[currentIndex + 1].title;
-    try {
-      await api.patch(`/task/${_id}`, { task: { importance: newPriority } });
-      setTasks((pt) => pt.map((t) => (t._id === _id ? { ...t, importance: newPriority } : t)));
-    } catch (err) {
-      toast.error('No se ha podido actualizar la tarea');
-    }
-    setIsLoading(false);
+      currentIndex + 1 === priorities.length ? priorities[0] : priorities[currentIndex + 1];
+    dispatch(updateTask({...task, importance: newPriority}));
   }
 
   async function updateStatus() {
-    setIsLoading(true);
-    const currentIndex = statuses.findIndex(({ title }) => title === status);
+    const currentIndex = priorities.findIndex(({title}) => title === importance);
     const newStatus =
-      currentIndex + 1 === statuses.length ? statuses[0].title : statuses[currentIndex + 1].title;
-    try {
-      await api.patch(`/task/${_id}`, { task: { status: newStatus } });
-      // seems like strictMode doesn't like impure functions directly modifying state, so methods like splice or push are discouraged. This is checked by running the setState's callback argument twice.
-      setTasks((pt) => pt.map((t) => (t._id === _id ? { ...t, status: newStatus } : t)));
-    } catch (err) {
-      toast.error('No se ha podido actualizar la tarea');
-    }
-    setIsLoading(false);
+      currentIndex + 1 === priorities.length ? statuses[0] : statuses[currentIndex + 1];
+    dispatch(updateTask({...task, importance: newStatus}));
+    /*
+    seems like strictMode doesn't like impure functions directly modifying state, so methods like splice or push are discouraged. This is checked by running the setState's callback argument twice. 
+    */
   }
 
   return (
@@ -93,13 +68,13 @@ export default function Card({
       <button
         type='button'
         onClick={() => description.length > 100 && setIsLongDescriptionShown((ps) => !ps)}
-        style={{ cursor: description.length > 100 ? 'pointer' : 'default' }}
+        style={{cursor: description.length > 100 ? 'pointer' : 'default'}}
       >
         {description.length < 100 || isLongDescriptionShown
           ? description
           : `${description.slice(0, 99)}...`}
       </button>
-      <button id='delete' type='button' onClick={deleteTask}>
+      <button id='delete' type='button' onClick={() => dispatch(deleteTask(_id))}>
         X
       </button>
     </div>

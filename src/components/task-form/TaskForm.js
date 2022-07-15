@@ -1,14 +1,18 @@
 import InputContainer from 'components/input-container/InputContainer';
 import Select from 'components/input-container/Select';
-import { Formik, Field } from 'formik';
+import {Formik, Field} from 'formik';
 import * as yup from 'yup';
 import Button from 'components/button/Button';
-import { api } from 'components/auth-context/AuthContext';
+import {api} from 'components/auth-context/AuthContext';
 import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
+import {useDispatch, useSelector} from 'react-redux';
+import {addTask} from 'redux/actions/tasksActions';
 import styles from './TaskForm.module.css';
 
-export default function TaskForm({ statuses, priorities, setTasks }) {
+export default function TaskForm({setTasks}) {
+  const dispatch = useDispatch();
+  const {statuses, priorities} = useSelector((state) => state);
   const initialValues = {
     title: '',
     status: '',
@@ -25,20 +29,8 @@ export default function TaskForm({ statuses, priorities, setTasks }) {
       description: yup.string().required(REQUIRED_MSG),
     });
 
-  async function onSubmit(values, { resetForm }) {
-    try {
-      const {
-        data: {
-          result: { task: createdTask },
-        },
-      } = await api.post('/task', { task: { ...values } });
-      setTasks((pt) => [...pt, createdTask]);
-      resetForm();
-      toast('Tarea creada satisfactoriamente');
-    } catch (err) {
-      toast.error('No se ha podido crear la tarea');
-      console.log(err);
-    }
+  async function onSubmit(values, {resetForm}) {
+    dispatch(addTask(values, resetForm));
   }
   return (
     <section className={styles.formContainer}>
@@ -50,9 +42,9 @@ export default function TaskForm({ statuses, priorities, setTasks }) {
         // eslint-disable-next-line react/jsx-no-bind
         onSubmit={onSubmit}
       >
-        {({ handleSubmit, errors }) => (
+        {({handleSubmit, errors}) => (
           <form onSubmit={handleSubmit} className={styles.form}>
-            {console.log(errors)}
+            {/* {console.log(errors)} */}
             <div>
               <Field name='title' component={InputContainer} placeholder='Ingrese el título'>
                 Título
@@ -73,7 +65,7 @@ export default function TaskForm({ statuses, priorities, setTasks }) {
               >
                 Prioridad
               </Field>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{display: 'flex', flexDirection: 'column'}}>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor='description'>Descripción</label>
                 <Field

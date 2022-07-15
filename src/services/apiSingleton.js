@@ -1,12 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({baseURL: 'https://goscrum-api.alkemy.org'});
-let interceptorToken = '';
 api.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${interceptorToken || ''}`;
+  config.headers.Authorization = `Bearer ${localStorage.getItem('token') || ''}`;
   return config;
 });
-
-export const setToken = (token) => (interceptorToken = token);
 
 export default api;

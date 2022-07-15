@@ -1,46 +1,27 @@
 import TaskForm from 'components/task-form/TaskForm';
 import {useState, useEffect, useContext} from 'react';
 import {useSelector, useDispatch} from 'react-redux/es/exports';
+import {Navigate} from 'react-router-dom';
 import {getTasks} from 'redux/actions/tasksActions';
-import {api} from 'components/auth-context/AuthContext';
 import {loadingContext} from 'components/loading-context/LoadingContext';
-import {toast} from 'react-toastify';
+// import {toast} from 'react-toastify';
 import TaskGroup from 'components/task-group/TaskGroup';
 import styles from './Tasks.module.css';
 
 export default function Tasks() {
   const {setIsLoading} = useContext(loadingContext);
 
-  // const loggedIn = useSelector(({loggedIn}) => loggedIn);
+  const dispatch = useDispatch();
+  const {loggedIn, tasks, statuses, priorities} = useSelector((state) => state);
 
-  const [statuses, setStatuses] = useState([]);
-  const [priorities, setPriorities] = useState([]);
-  const [tasks, setTasks] = useState([]);
   const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [searchKey, setSearchKey] = useState('');
 
   useEffect(() => {
     // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
-    setIsLoading(true);
-
-    const p1 = api.get('/task/data');
-    p1.then(
-      ({
-        data: {
-          result: {status, importance},
-        },
-      }) => {
-        setStatuses(status.map((s) => ({title: s})));
-        setPriorities(importance.map((i) => ({title: i})));
-      },
-    );
-
-    const p2 = api.get('/task/me');
-    p2.then(({data: {result}}) => setTasks(result));
-
-    Promise.all([p1, p2])
-      .then(() => setIsLoading(false))
-      .catch(() => toast.error('No se han podido cargar las tareas'));
+    dispatch(getTasks());
+    /* 
+    toast.error('No se han podido cargar las tareas')); */
   }, [setIsLoading]);
 
   function groupByStatus(arr) {
@@ -62,20 +43,26 @@ export default function Tasks() {
     return filteredTasks;
   }
 
+  if (!loggedIn) return <Navigate to='/login' />;
+
   return (
     <main className={styles.tasksPage}>
       <h3>Team id: {tasks[0]?.user?.teamId}</h3>
-      <TaskForm statuses={statuses} priorities={priorities} setTasks={setTasks} />
+      <TaskForm />
       <section className={styles.tasksContainer}>
         <h2>Mis Tareas</h2>
         <div className={styles.filterContainer}>
           <fieldset className={styles.selectPriority}>
             <legend>Seleccionar por prioridad:</legend>
             <div>
-              {[{title: 'ALL'}, ...priorities].map(({title}) => (
-                <div key={title}>
-                  <input onChange={() => setSelectedPriority(title)} name='priority' type='radio' />
-                  <span>{title}</span>
+              {['ALL', ...priorities].map((priority) => (
+                <div key={priority}>
+                  <input
+                    onChange={() => setSelectedPriority(priority)}
+                    name='priority'
+                    type='radio'
+                  />
+                  <span>{priority}</span>
                 </div>
               ))}
             </div>
@@ -87,10 +74,9 @@ export default function Tasks() {
         </div>
         <div className={styles.tasks}>
           {!tasks.length && <span>No se han creado tareas</span>}
-          {groupByStatus(filterTasks(tasks)).map(([status, tasks]) => {
-            console.log(status, tasks);
-            return <TaskGroup key={status} status={status} tasks={tasks} setTasks={setTasks} />;
-          })}
+          {groupByStatus(filterTasks(tasks)).map(([status, tasks]) => (
+            <TaskGroup key={status} status={status} tasks={tasks} />
+          ))}
         </div>
       </section>
     </main>
