@@ -1,15 +1,19 @@
-import { useContext } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
-import { authContext } from 'components/auth-context/AuthContext';
+// import { useContext } from 'react';
+import {Outlet} from 'react-router-dom';
+// import { authContext } from 'components/auth-context/AuthContext';
+import {useDispatch} from 'react-redux';
+import {logout} from 'redux/actions/tasksActions';
 import styles from './Header.module.css';
 
 export default function Header() {
-  const { clearLogin } = useContext(authContext);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  /*   const { clearLogin } = useContext(authContext);
+  const navigate = useNavigate(); */
 
   function handleLogout() {
-    clearLogin();
-    navigate('/', { replace: true });
+    dispatch(logout());
+    // clearLogin();
+    // navigate('/', { replace: true });
   }
 
   return (

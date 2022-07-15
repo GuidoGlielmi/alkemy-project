@@ -9,7 +9,6 @@ import styles from './Card.module.css';
 
 const formatDate = (date) => new Date().toString(date).split('(')[0];
 export default function Card({
-  task,
   task: {
     _id,
     title,

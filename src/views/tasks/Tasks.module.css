@@ -29,15 +29,19 @@
   top: 0;
   border-top: 2px solid #4e005e;
 }
-.tasks,
+.tasks {
+  display: flex;
+  position: relative;
+  gap: 30px;
+  margin-top: 5vh;
+  padding-top: 40px;
+}
 .tasks > div {
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-top: 5vh;
-  padding-top: 40px;
 }
-.tasks > div:after {
+/* .tasks > div:after {
   content: '';
   position: absolute;
   width: 100%;
@@ -60,15 +64,15 @@
   border-top: none;
   border-radius: 0 0 20px 20px;
   z-index: -1;
-}
+} */
 
 .tasks > div > div {
   display: flex;
-  justify-content: space-evenly;
-  gap: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
+
 .tasks > div > h3 {
+  font-size: 2em;
   align-self: center;
 }
 .tasks span {
@@ -108,7 +112,6 @@
 
 @media (max-width: 768px) {
   .tasks {
-    align-self: stretch;
     flex-direction: column;
   }
 }
