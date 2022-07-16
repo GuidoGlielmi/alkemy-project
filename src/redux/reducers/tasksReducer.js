@@ -22,7 +22,6 @@ const initialState = {
   username: localStorage.getItem('username') || '',
   isTeamLeader: !!localStorage.getItem('isTeamLeader'),
   teamID: localStorage.getItem('teamID') || '',
-  isLoading: false,
   tasks: [],
   taskByCreator: 'ALL',
   roles: [],
@@ -43,7 +42,6 @@ export default (state = initialState, action) => {
       ...state,
       error: true,
       userFeedbackMsg: action.payload,
-      isLoading: false,
     },
     [LOGIN_SUCCESS]: {
       ...state,
@@ -51,41 +49,23 @@ export default (state = initialState, action) => {
       username: action.payload?.username,
       isTeamLeader: action.payload?.isTeamLeader,
       teamID: action.payload?.teamID,
-      isLoading: false,
     },
     [LOGOUT]: initialState,
-    [TASKS_SUCCESS]: {...state, tasks: action.payload, isLoading: false},
+    [TASKS_SUCCESS]: {
+      ...state,
+      tasks: action.payload?.tasks,
+      userFeedbackMsg: action.payload?.userFeedbackMsg,
+    },
     [TASK_DATA_SUCCESS]: {
       ...state,
       statuses: action.payload?.status,
       priorities: action.payload?.importance,
-      isLoading: false,
-    },
-    [ADD_TASK_SUCCESS]: {
-      ...state,
-      tasks: [...state.tasks, action.payload],
-      userFeedbackMsg: 'La tarea ha sido creada exitosamente',
-      isLoading: false,
-    },
-    [UPDATE_TASK_SUCCESS]: {
-      ...state,
-      tasks: state.tasks.map((t) =>
-        t._id === action.payload?.id ? {...t, ...action.payload?.task} : t,
-      ),
-      isLoading: false,
-    },
-    [DELETE_TASK_SUCCESS]: {
-      ...state,
-      tasks: state.tasks.filter((t) => t._id !== action.payload),
-      userFeedbackMsg: 'La tarea ha sido borrada exitosamente',
-      isLoading: false,
     },
     [FORM_INFO_SUCCESS]: {
       ...state,
       roles: action.payload?.roles,
       continents: action.payload?.continents,
       regions: action.payload?.regions,
-      isLoading: false,
     },
     [REGISTER_SUCCESS]: {
       ...initialState,

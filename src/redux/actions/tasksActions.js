@@ -89,73 +89,79 @@ export const register = (values) => async (dispatch) => {
 const registerSuccess = (payload) => ({type: REGISTER_SUCCESS, payload});
 export const clearJustRegistered = () => ({type: CLEAR_JUST_REGISTERED});
 
-export const getMyTasks = () => async (dispatch) => {
-  dispatch(requestPending());
-  const p1 = taskDataService();
-  p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) => errorHandler({err, dispatch}));
-  const p2 = getMyTasksService();
-  p2.then((tasks) => dispatch(tasksSuccess(tasks))).catch((err) => errorHandler({err, dispatch}));
-  Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
-};
+export const getMyTasks =
+  (userFeedbackMsg = '') =>
+  async (dispatch) => {
+    dispatch(requestPending());
+    const p1 = taskDataService();
+    p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) =>
+      errorHandler({err, dispatch}),
+    );
+    const p2 = getMyTasksService();
+    p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg}))).catch((err) =>
+      errorHandler({err, dispatch}),
+    );
+    Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
+  };
 
-export const getAllTasks = () => async (dispatch) => {
-  dispatch(requestPending());
-  // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
-  const p1 = taskDataService();
-  p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) => errorHandler({err, dispatch}));
-  const p2 = getAllTasksService();
-  p2.then((tasks) => dispatch(tasksSuccess(tasks))).catch((err) => errorHandler({err, dispatch}));
-  Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
-};
+export const getAllTasks =
+  (userFeedbackMsg = '') =>
+  async (dispatch) => {
+    dispatch(requestPending());
+    // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
+    const p1 = taskDataService();
+    p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) =>
+      errorHandler({err, dispatch}),
+    );
+    const p2 = getAllTasksService();
+    p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg}))).catch((err) =>
+      errorHandler({err, dispatch}),
+    );
+    Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
+  };
 
 const tasksSuccess = (payload) => ({type: TASKS_SUCCESS, payload});
 const taskDataSuccess = (payload) => ({type: TASK_DATA_SUCCESS, payload});
 export const addTask = (task, resetForm) => async (dispatch, getState) => {
   dispatch(requestPending());
   try {
-    /* const createdTask =  */ await addTaskService(task);
+    await addTaskService(task);
     resetForm();
-    getSelectedTasks(dispatch, getState);
-    // dispatch(addTaskSuccess(createdTask));
+    getSelectedTasks(dispatch, getState, 'La tarea ha sido creada exitosamente');
   } catch (err) {
     errorHandler({err, dispatch});
   } finally {
     dispatch(requestFinished());
   }
 };
-const addTaskSuccess = (payload) => ({type: ADD_TASK_SUCCESS, payload});
 export const updateTask = (id, task) => async (dispatch, getState) => {
   dispatch(requestPending());
   try {
     await updateTaskService(id, task);
-    getSelectedTasks(dispatch, getState);
-    // dispatch(updateTaskSuccess({id, task}));
+    getSelectedTasks(dispatch, getState, 'La tarea ha sido actualizada');
   } catch (err) {
     errorHandler({err, dispatch});
   } finally {
     dispatch(requestFinished());
   }
 };
-const updateTaskSuccess = (payload) => ({type: UPDATE_TASK_SUCCESS, payload});
 export const deleteTask = (id) => async (dispatch, getState) => {
   dispatch(requestPending());
   try {
     await deleteTaskService(id);
-    getSelectedTasks(dispatch, getState);
-    // dispatch(deleteTaskSuccess(id));
+    getSelectedTasks(dispatch, getState, 'La tarea ha sido borrada exitosamente');
   } catch (err) {
     errorHandler({err, dispatch});
   } finally {
     dispatch(requestFinished());
   }
 };
-const deleteTaskSuccess = (payload) => ({type: DELETE_TASK_SUCCESS, payload});
 export const clearUserFeedbackMsg = () => ({type: CLEAR_USER_FEEDBACK_MSG});
 export const setTaskCreator = (payload) => ({type: SET_TASK_CREATOR, payload});
 
-function getSelectedTasks(dispatch, getState) {
+function getSelectedTasks(dispatch, getState, userFeedbackMsg) {
   const {taskByCreator} = getState();
-  dispatch(taskByCreator === 'ALL' ? getAllTasks() : getMyTasks());
+  dispatch(taskByCreator === 'ALL' ? getAllTasks(userFeedbackMsg) : getMyTasks(userFeedbackMsg));
 }
 
 function errorHandler({err, dispatch, errMsg}) {
