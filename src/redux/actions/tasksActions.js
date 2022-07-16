@@ -11,6 +11,7 @@ import {
 
 import {
   REQUEST_PENDING,
+  REQUEST_FINISHED,
   REQUEST_ERROR,
   TASKS_SUCCESS,
   ADD_TASK_SUCCESS,
@@ -28,6 +29,7 @@ import {
 
 export const requestPending = () => ({type: REQUEST_PENDING});
 export const requestError = (payload) => ({type: REQUEST_ERROR, payload});
+export const requestFinished = (payload) => ({type: REQUEST_FINISHED, payload});
 
 export const login = (values) => async (dispatch) => {
   dispatch(requestPending());
@@ -46,6 +48,8 @@ export const login = (values) => async (dispatch) => {
         (err.response.status === 404 || err.response.status === 401) &&
         'Usuario o contraseña incorrectos',
     });
+  } finally {
+    dispatch(requestFinished());
   }
 };
 
@@ -63,6 +67,8 @@ export const getFormInfo = () => async (dispatch) => {
     dispatch(formInfoSuccess({roles, continents, regions}));
   } catch (err) {
     errorHandler({err, dispatch});
+  } finally {
+    dispatch(requestFinished());
   }
 };
 export const formInfoSuccess = (payload) => ({type: FORM_INFO_SUCCESS, payload});
@@ -74,6 +80,8 @@ export const register = (values) => async (dispatch) => {
     dispatch(registerSuccess(values.userName));
   } catch (err) {
     errorHandler({err, dispatch, errMsg: err.response.status === 409 && 'El email ya está en uso'});
+  } finally {
+    dispatch(requestFinished());
   }
 };
 export const registerSuccess = (payload) => ({type: REGISTER_SUCCESS, payload});
@@ -81,24 +89,21 @@ export const clearJustRegistered = () => ({type: CLEAR_JUST_REGISTERED});
 
 export const getMyTasks = () => async (dispatch) => {
   dispatch(requestPending());
-  // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
-  taskDataService()
-    .then((data) => dispatch(taskDataSuccess(data)))
-    .catch((err) => errorHandler({err, dispatch}));
-  getMyTasksService()
-    .then((tasks) => dispatch(tasksSuccess(tasks)))
-    .catch((err) => errorHandler({err, dispatch}));
+  const p1 = taskDataService();
+  p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) => errorHandler({err, dispatch}));
+  const p2 = getMyTasksService();
+  p2.then((tasks) => dispatch(tasksSuccess(tasks))).catch((err) => errorHandler({err, dispatch}));
+  Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
 };
 
 export const getAllTasks = () => async (dispatch) => {
   dispatch(requestPending());
   // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
-  taskDataService()
-    .then((data) => dispatch(taskDataSuccess(data)))
-    .catch((err) => errorHandler({err, dispatch}));
-  getAllTasksService()
-    .then((tasks) => dispatch(tasksSuccess(tasks)))
-    .catch((err) => errorHandler({err, dispatch}));
+  const p1 = taskDataService();
+  p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) => errorHandler({err, dispatch}));
+  const p2 = getAllTasksService();
+  p2.then((tasks) => dispatch(tasksSuccess(tasks))).catch((err) => errorHandler({err, dispatch}));
+  Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
 };
 
 export const tasksSuccess = (payload) => ({type: TASKS_SUCCESS, payload});
@@ -111,6 +116,8 @@ export const addTask = (task, resetForm) => async (dispatch) => {
     dispatch(addTaskSuccess(createdTask));
   } catch (err) {
     errorHandler({err, dispatch});
+  } finally {
+    dispatch(requestFinished());
   }
 };
 export const addTaskSuccess = (payload) => ({type: ADD_TASK_SUCCESS, payload});
@@ -121,6 +128,8 @@ export const updateTask = (id, task) => async (dispatch) => {
     dispatch(updateTaskSuccess({id, task}));
   } catch (err) {
     errorHandler({err, dispatch});
+  } finally {
+    dispatch(requestFinished());
   }
 };
 export const updateTaskSuccess = (payload) => ({type: UPDATE_TASK_SUCCESS, payload});
@@ -131,6 +140,8 @@ export const deleteTask = (id) => async (dispatch) => {
     dispatch(deleteTaskSuccess(id));
   } catch (err) {
     errorHandler({err, dispatch});
+  } finally {
+    dispatch(requestFinished());
   }
 };
 export const deleteTaskSuccess = (payload) => ({type: DELETE_TASK_SUCCESS, payload});

@@ -10,15 +10,15 @@ import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      {/* to use BrowserRouter in github pages, it is necessary to use HashRouter because on every refresh, it will try to access the exact path we are in, and given React builds SPA, it wont work  */}
-      <Provider store={store}>
-        <LoadingWrapper>
-          <App />
-        </LoadingWrapper>
-      </Provider>
-    </BrowserRouter>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <BrowserRouter>
+    {/* to use BrowserRouter in github pages, it is necessary to use HashRouter because on every refresh, it will try to access the exact path we are in, and given React builds SPA, it wont work  */}
+    <Provider store={store}>
+      <LoadingWrapper>
+        <App />
+      </LoadingWrapper>
+    </Provider>
+  </BrowserRouter>,
+  // </React.StrictMode>,
 );
 reportWebVitals();

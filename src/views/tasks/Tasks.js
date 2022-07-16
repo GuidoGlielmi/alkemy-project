@@ -12,9 +12,8 @@ export default function Tasks() {
 
   const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [searchKey, setSearchKey] = useState('');
-
   useEffect(() => {
-    console.log(loggedIn);
+    // using void appears to make it not work
     loggedIn && dispatch(isTeamLeader ? getAllTasks() : getMyTasks());
   }, [dispatch, isTeamLeader, loggedIn]);
 

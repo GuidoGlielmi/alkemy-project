@@ -1,5 +1,6 @@
 import {
   REQUEST_PENDING,
+  REQUEST_FINISHED,
   TASKS_SUCCESS,
   REQUEST_ERROR,
   LOGIN_SUCCESS,
@@ -35,6 +36,7 @@ const initialState = {
 export default (state = initialState, action) => {
   const cases = {
     [REQUEST_PENDING]: {...state, isLoading: true},
+    [REQUEST_FINISHED]: {...state, isLoading: false},
     [REQUEST_ERROR]: {
       ...state,
       error: true,
@@ -97,6 +99,6 @@ export default (state = initialState, action) => {
       error: false,
     },
   };
-  console.log(action.type);
+  console.log(action.type, cases[action.type]);
   return cases[action.type] || state;
 };

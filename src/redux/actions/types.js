@@ -1,4 +1,5 @@
 export const REQUEST_PENDING = 'REQUEST_PENDING';
+export const REQUEST_FINISHED = 'REQUEST_FINISHED';
 export const REQUEST_ERROR = 'REQUEST_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGOUT = 'LOGOUT';
