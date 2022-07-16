@@ -159,7 +159,7 @@ export const deleteTask = (id) => async (dispatch, getState) => {
 export const clearUserFeedbackMsg = () => ({type: CLEAR_USER_FEEDBACK_MSG});
 export const setTaskCreator = (payload) => (dispatch) => {
   dispatch(payload === 'ALL' ? getAllTasks() : getMyTasks());
-  return {type: SET_TASK_CREATOR, payload};
+  dispatch({type: SET_TASK_CREATOR, payload});
 };
 
 function getSelectedTasks(dispatch, getState, userFeedbackMsg) {
