@@ -1,7 +1,6 @@
-import {lazy, Suspense, useContext, useCallback} from 'react';
-import {Routes, Route, Navigate, useLocation, Outlet} from 'react-router-dom';
+import {lazy, Suspense} from 'react';
+import {Routes, Route, useLocation, Outlet} from 'react-router-dom';
 import {AnimatePresence, motion} from 'framer-motion';
-import {authContext} from 'components/auth-context/AuthContext';
 import Header from 'components/header/Header';
 import Login from 'views/login/Login';
 import Register from 'views/register/Register';
@@ -34,7 +33,6 @@ const SuspenseWrapper = () => (
 );
 
 export default function App() {
-  const {token} = useContext(authContext);
   const location = useLocation();
   return (
     <AnimatePresence>

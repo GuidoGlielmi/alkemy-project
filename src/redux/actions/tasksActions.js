@@ -1,5 +1,3 @@
-import {api} from 'components/auth-context/AuthContext';
-import {setToken} from 'services/apiSingleton';
 import loginService from 'services/login';
 import {formDataService, registerService} from 'services/register';
 import {
