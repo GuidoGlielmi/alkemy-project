@@ -54,7 +54,7 @@ export default function Card({
       <time dateTime={formattedModificationTime}>
         <u>Última modificación</u>: {formattedModificationTime}
       </time>
-      <h5>{user.username}</h5>
+      <h5>Created by: {user.userName}</h5>
       <div>
         <Button size='small' color={colors[statuses.indexOf(status)]} action={updateStatus}>
           {status}
@@ -79,8 +79,5 @@ export default function Card({
   );
 }
 
-function getColor(title) {
-  const titles = {
-    HIGH: '',
-  };
-}
+// /task -> everyone's tasks (team leader)
+// /task/me -> my tasks (team member)

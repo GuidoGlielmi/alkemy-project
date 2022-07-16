@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {Switch, FormControlLabel} from '@mui/material';
 import {Formik, Field} from 'formik';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import * as yup from 'yup';
 import {v4 as uuid} from 'uuid';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,12 +16,10 @@ const EMAIL_MSG = 'Ingrese un email válido';
 const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
 
 export default function Register() {
-  const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const {roles, continents, regions, justRegistered} = useSelector((state) => state);
 
-  useEffect(() => void (roles[0] || dispatch(getFormInfo())), []);
+  useEffect(() => void dispatch(getFormInfo()), [dispatch]);
   const initialValues = {
     userName: '',
     email: '',
@@ -56,6 +54,7 @@ export default function Register() {
   function onSubmit(values) {
     const user = {
       ...values,
+      teamID: values.teamID || uuid(),
       region: values.continent === 'America' ? values.region : 'Otro',
     };
     delete user.registered;
@@ -64,10 +63,7 @@ export default function Register() {
     // 0ea9502e-43af-4594-b2ea-396b6ea00638 guido1 123456
   }
 
-  if (justRegistered) {
-    navigate('/login');
-    dispatch(clearJustRegistered());
-  }
+  if (justRegistered) return <Navigate to='/login' />;
 
   return (
     <div className={styles.formContainer}>

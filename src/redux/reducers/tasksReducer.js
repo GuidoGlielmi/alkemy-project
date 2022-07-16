@@ -12,12 +12,13 @@ import {
   ADD_TASK_SUCCESS,
   UPDATE_TASK_SUCCESS,
   DELETE_TASK_SUCCESS,
-  SET_USER_FEEDBACK_MSG,
+  CLEAR_USER_FEEDBACK_MSG,
 } from '../actions/types';
 
 const initialState = {
   loggedIn: !!localStorage.getItem('token'),
   username: localStorage.getItem('username') || '',
+  isTeamLeader: !!localStorage.getItem('isTeamLeader'),
   isLoading: false,
   tasks: [],
   roles: [],
@@ -33,14 +34,20 @@ const initialState = {
 export default (state = initialState, action) => {
   const cases = {
     [REQUEST_PENDING]: {...state, isLoading: true},
-    [REQUEST_ERROR]: {...state, error: true, isLoading: false},
+    [REQUEST_ERROR]: {
+      ...state,
+      error: true,
+      userFeedbackMsg: action.payload,
+      isLoading: false,
+    },
     [LOGIN_SUCCESS]: {
       ...state,
       loggedIn: true,
       username: action.payload?.username,
+      isTeamLeader: action.payload?.isTeamLeader,
       isLoading: false,
     },
-    [LOGOUT]: {...state, loggedIn: false, username: ''},
+    [LOGOUT]: initialState,
     [TASKS_SUCCESS]: {...state, tasks: action.payload, isLoading: false},
     [TASK_DATA_SUCCESS]: {
       ...state,
@@ -81,11 +88,11 @@ export default (state = initialState, action) => {
       isLoading: false,
     },
     [CLEAR_JUST_REGISTERED]: {...state, justRegistered: false},
-    [UNAUTHORIZE]: {...state, loggedIn: false},
-    [SET_USER_FEEDBACK_MSG]: {
+    [UNAUTHORIZE]: {...state, loggedIn: false, isLoading: false},
+    [CLEAR_USER_FEEDBACK_MSG]: {
       ...state,
-      userFeedbackMsg: action.payload?.userFeedbackMsg || '',
-      error: action.payload?.error,
+      userFeedbackMsg: '',
+      error: false,
     },
   };
   return cases[action.type] || state;

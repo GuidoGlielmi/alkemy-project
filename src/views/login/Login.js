@@ -4,20 +4,18 @@ import {Link, Navigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import Button from 'components/button/Button';
 import InputContainer from 'components/input-container/InputContainer';
-import {loginRequest} from 'redux/actions/tasksActions';
+import {clearJustRegistered, login} from 'redux/actions/tasksActions';
 import styles from './Login.module.css';
+
+const required = (value) => (!value ? '* Campo requerido' : undefined);
 
 export default function Login() {
   const dispatch = useDispatch();
-  const {loggedIn, username} = useSelector((state) => state);
+  const {loggedIn, username, justRegistered} = useSelector((state) => state);
 
-  const [error, setError] = useState(false);
+  if (justRegistered) dispatch(clearJustRegistered());
 
-  const required = (value) => (!value ? '* Campo requerido' : undefined);
-
-  async function onSubmit(values) {
-    dispatch(loginRequest(values));
-  }
+  const onSubmit = async (values) => dispatch(login(values));
 
   if (loggedIn) return <Navigate to='/' />;
 
@@ -47,7 +45,6 @@ export default function Login() {
           >
             Contraseña
           </Field>
-          {error && <span className={styles.error}>El usuario o contraseña son incorrectos</span>}
           <Button type='submit'>Enviar</Button>
           <Link to='/register'>Cree una cuenta</Link>
         </Form>

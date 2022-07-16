@@ -15,7 +15,7 @@ export default function Header() {
       <header className={styles.header}>
         <span className={styles.logo}>Go Scrum</span>
         <button type='button' onClick={handleLogout}>
-          X
+          Log out
         </button>
       </header>
       <Outlet />

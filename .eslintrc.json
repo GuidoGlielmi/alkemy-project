@@ -3,7 +3,13 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["plugin:react/recommended", "airbnb", "prettier", "plugin:cypress/recommended"],
+  "extends": [
+    "plugin:react/recommended",
+    "react-app",
+    "airbnb",
+    "prettier",
+    "plugin:cypress/recommended"
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true

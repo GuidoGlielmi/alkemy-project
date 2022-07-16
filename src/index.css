@@ -10,6 +10,12 @@ h6 {
 :root {
   --global-primary-color: #ff452b;
   --global-bg-color-soft: #fafafa;
+  --global-form-color: linear-gradient(
+    to bottom right,
+    rgb(13, 25, 36),
+    rgb(52, 59, 66),
+    rgb(20, 20, 20)
+  );
   --global-radius: 5px;
   --global-border: 1px solid #e9e9e9;
   --global-font-small: 0.75rem;
