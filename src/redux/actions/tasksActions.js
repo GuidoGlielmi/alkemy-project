@@ -35,6 +35,7 @@ export const login = (values) => async (dispatch) => {
     const {token, username, isTeamLeader, teamID} = await loginService(values);
     localStorage.setItem('token', token);
     localStorage.setItem('username', username);
+    localStorage.setItem('teamID', teamID);
     isTeamLeader && localStorage.setItem('isTeamLeader', isTeamLeader);
     dispatch(loginSuccess({username, isTeamLeader, teamID}));
   } catch (err) {
@@ -50,9 +51,7 @@ export const login = (values) => async (dispatch) => {
 
 export const loginSuccess = (payload) => ({type: LOGIN_SUCCESS, payload});
 export const logout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('isTeamLeader');
-  localStorage.removeItem('username');
+  localStorage.clear();
   return {type: LOGOUT};
 };
 export const unauthorize = () => ({type: UNAUTHORIZE});

@@ -13,10 +13,10 @@ export default function Tasks() {
   const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [searchKey, setSearchKey] = useState('');
 
-  useEffect(
-    () => void dispatch(isTeamLeader ? getAllTasks() : getMyTasks()),
-    [dispatch, isTeamLeader],
-  );
+  useEffect(() => {
+    console.log(loggedIn);
+    loggedIn && dispatch(isTeamLeader ? getAllTasks() : getMyTasks());
+  }, [dispatch, isTeamLeader, loggedIn]);
 
   function filterTasks(tasks) {
     let filteredTasks = [...tasks];

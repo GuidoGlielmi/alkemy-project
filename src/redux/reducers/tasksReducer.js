@@ -19,7 +19,7 @@ const initialState = {
   loggedIn: !!localStorage.getItem('token'),
   username: localStorage.getItem('username') || '',
   isTeamLeader: !!localStorage.getItem('isTeamLeader'),
-  teamID: '',
+  teamID: localStorage.getItem('teamID') || '',
   isLoading: false,
   tasks: [],
   roles: [],
@@ -97,5 +97,6 @@ export default (state = initialState, action) => {
       error: false,
     },
   };
+  console.log(action.type);
   return cases[action.type] || state;
 };

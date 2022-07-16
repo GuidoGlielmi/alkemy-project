@@ -17,7 +17,7 @@ const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
 
 export default function Register() {
   const dispatch = useDispatch();
-  const {roles, continents, regions, justRegistered} = useSelector((state) => state);
+  const {roles, continents, regions, justRegistered, teamID} = useSelector((state) => state);
 
   useEffect(() => void dispatch(getFormInfo()), [dispatch]);
   const initialValues = {
@@ -25,7 +25,7 @@ export default function Register() {
     email: '',
     password: '',
     role: '',
-    teamID: '',
+    teamID,
     continent: '',
     region: '',
     registered: false,
@@ -54,7 +54,7 @@ export default function Register() {
   function onSubmit(values) {
     const user = {
       ...values,
-      teamID: values.teamID || uuid(),
+      teamID: values.registered ? values.teamID : uuid(),
       region: values.continent === 'America' ? values.region : 'Otro',
     };
     delete user.registered;
