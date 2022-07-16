@@ -32,11 +32,11 @@ export const requestError = (payload) => ({type: REQUEST_ERROR, payload});
 export const login = (values) => async (dispatch) => {
   dispatch(requestPending());
   try {
-    const {token, username, isTeamLeader} = await loginService(values);
+    const {token, username, isTeamLeader, teamID} = await loginService(values);
     localStorage.setItem('token', token);
     localStorage.setItem('username', username);
     isTeamLeader && localStorage.setItem('isTeamLeader', isTeamLeader);
-    dispatch(loginSuccess({username, isTeamLeader}));
+    dispatch(loginSuccess({username, isTeamLeader, teamID}));
   } catch (err) {
     errorHandler({
       err,

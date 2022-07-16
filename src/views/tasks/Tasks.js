@@ -8,7 +8,7 @@ import styles from './Tasks.module.css';
 
 export default function Tasks() {
   const dispatch = useDispatch();
-  const {loggedIn, tasks, priorities, isTeamLeader} = useSelector((state) => state);
+  const {loggedIn, tasks, priorities, isTeamLeader, teamID} = useSelector((state) => state);
 
   const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [searchKey, setSearchKey] = useState('');
@@ -31,7 +31,7 @@ export default function Tasks() {
 
   return (
     <main className={styles.tasksPage}>
-      <h3>Team id: {tasks[0]?.user?.teamId}</h3>
+      <h3>Team id: {teamID}</h3>
       <TaskForm />
       <section className={styles.tasksContainer}>
         <h2>Mis Tareas</h2>
