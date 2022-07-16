@@ -16,7 +16,7 @@
   padding: 5%;
   border-radius: 10px;
   color: white;
-  background: linear-gradient(to bottom right, rgb(24, 47, 68), rgb(57, 80, 102), rgb(20, 20, 20));
+  background: var(--global-form-color);
   box-shadow: 1px 1px 10px black;
 }
 .inputContainer {

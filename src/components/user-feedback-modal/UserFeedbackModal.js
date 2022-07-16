@@ -1,0 +1,21 @@
+import {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ToastContainer, toast} from 'react-toastify';
+import {clearUserFeedbackMsg} from 'redux/actions/tasksActions';
+
+export default function UserFeedbackModal({children}) {
+  const dispatch = useDispatch();
+  const {userFeedbackMsg, error} = useSelector((state) => state);
+  useEffect(() => {
+    const onClose = () => dispatch(clearUserFeedbackMsg());
+    if (error) toast.error(userFeedbackMsg || 'Ha ocurrido un error', {onClose});
+    else if (userFeedbackMsg) toast(userFeedbackMsg, {onClose});
+  }, [dispatch, userFeedbackMsg, error]);
+
+  return (
+    <>
+      {children}
+      <ToastContainer pauseOnHover />
+    </>
+  );
+}

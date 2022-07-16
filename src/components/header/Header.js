@@ -1,15 +1,13 @@
-import { useContext } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
-import { authContext } from 'components/auth-context/AuthContext';
+import {Outlet} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {logout} from 'redux/actions/tasksActions';
 import styles from './Header.module.css';
 
 export default function Header() {
-  const { clearLogin } = useContext(authContext);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function handleLogout() {
-    clearLogin();
-    navigate('/', { replace: true });
+    dispatch(logout());
   }
 
   return (
@@ -17,7 +15,7 @@ export default function Header() {
       <header className={styles.header}>
         <span className={styles.logo}>Go Scrum</span>
         <button type='button' onClick={handleLogout}>
-          X
+          Log out
         </button>
       </header>
       <Outlet />

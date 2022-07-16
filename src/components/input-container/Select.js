@@ -8,8 +8,8 @@ export default function Select({
   field, // { name, value, onChange, onBlur }
   form,
   form: {
-    touched: { [field.name]: touched },
-    errors: { [field.name]: errMsg },
+    touched: {[field.name]: touched},
+    errors: {[field.name]: errMsg},
   },
   options,
   placeholder,
@@ -23,15 +23,14 @@ export default function Select({
         {...field}
         {...props}
         id={field.name}
-        defaultValue=''
         className={touched && errMsg && styles.error}
       >
         <option value='' disabled>
           {placeholder || children}
         </option>
-        {options.map(({ title, value }) => (
-          <option key={value || title} value={value || title}>
-            {title}
+        {options.map((opt) => (
+          <option key={opt.title || opt} value={opt.value || opt}>
+            {opt.title || opt}
           </option>
         ))}
       </select>

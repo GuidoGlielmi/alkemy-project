@@ -1,34 +1,25 @@
-import {useState, useEffect, useContext} from 'react';
+import {useEffect} from 'react';
 import {Switch, FormControlLabel} from '@mui/material';
 import {Formik, Field} from 'formik';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import * as yup from 'yup';
 import {v4 as uuid} from 'uuid';
-import {authContext, api} from 'components/auth-context/AuthContext';
+import {useDispatch, useSelector} from 'react-redux';
 import InputContainer from 'components/input-container/InputContainer';
 import Button from 'components/button/Button';
 import Select from 'components/input-container/Select';
+import {getFormInfo, register, clearJustRegistered} from 'redux/actions/tasksActions';
 import styles from './Register.module.css';
 
+const REQUIRED_MSG = '* Campo obligatorio';
+const EMAIL_MSG = 'Ingrese un email válido';
+const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
+
 export default function Register() {
-  const {setPassword, setUserName} = useContext(authContext);
-  const navigate = useNavigate();
-  const [roles, setRoles] = useState([]);
-  const [continents, setContinents] = useState([]);
-  const [regions, setRegions] = useState([]);
-  useEffect(() => {
-    api.get('/auth/data').then(
-      ({
-        data: {
-          result: {Rol, continente, region},
-        },
-      }) => {
-        setRoles(Rol.map((r) => ({title: r})));
-        setContinents(continente.map((c) => ({title: c})));
-        setRegions(region.filter((r) => r !== 'Otro').map((r) => ({title: r})));
-      },
-    );
-  }, []);
+  const dispatch = useDispatch();
+  const {roles, continents, regions, justRegistered} = useSelector((state) => state);
+
+  useEffect(() => void dispatch(getFormInfo()), [dispatch]);
   const initialValues = {
     userName: '',
     email: '',
@@ -39,9 +30,7 @@ export default function Register() {
     region: '',
     registered: false,
   };
-  const REQUIRED_MSG = '* Campo obligatorio';
-  const EMAIL_MSG = 'Ingrese un email válido';
-  const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
+
   const validationSchema = () =>
     yup.object().shape({
       userName: yup.string().min(4, getMinLengthMsg(6)).required(REQUIRED_MSG),
@@ -62,32 +51,19 @@ export default function Register() {
       }),
     });
 
-  async function onSubmit(values) {
-    console.log(values);
-    const teamID = values.teamID || uuid();
+  function onSubmit(values) {
     const user = {
       ...values,
-      teamID,
+      teamID: values.teamID || uuid(),
       region: values.continent === 'America' ? values.region : 'Otro',
     };
     delete user.registered;
-    try {
-      const {
-        data: {
-          result: {insertedId, user: createdUser},
-        },
-      } = await api.post('/auth/register', {
-        user,
-      });
-      setPassword(values.password);
-      setUserName(values.username);
-      navigate('/login');
-      // 0ea9502e-43af-4594-b2ea-396b6ea00638 guido1 123456
-      console.log(insertedId, createdUser);
-    } catch (err) {
-      console.log(err);
-    }
+
+    dispatch(register(user));
+    // 0ea9502e-43af-4594-b2ea-396b6ea00638 guido1 123456
   }
+
+  if (justRegistered) return <Navigate to='/login' />;
 
   return (
     <div className={styles.formContainer}>

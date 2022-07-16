@@ -10,8 +10,6 @@
     linear-gradient(to right, rgb(223, 86, 139), #928dab) border-box;
   box-shadow: 1px 1px 3px black;
   color: white;
-  max-width: min(500px, 25%);
-  min-width: 210px;
 }
 .card > * {
   margin-bottom: 10px;

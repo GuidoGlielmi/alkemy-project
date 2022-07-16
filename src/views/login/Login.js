@@ -1,38 +1,31 @@
-import {useState, useContext} from 'react';
-import {authContext, api} from 'components/auth-context/AuthContext';
+import {useState} from 'react';
 import {Formik, Form, Field} from 'formik';
-import {useNavigate, Link} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
 import Button from 'components/button/Button';
 import InputContainer from 'components/input-container/InputContainer';
+import {clearJustRegistered, login} from 'redux/actions/tasksActions';
 import styles from './Login.module.css';
 
+const required = (value) => (!value ? '* Campo requerido' : undefined);
+
 export default function Login() {
-  const {setToken, setUserName, setPassword, password, userName} = useContext(authContext);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {loggedIn, username, justRegistered} = useSelector((state) => state);
 
-  const [error, setError] = useState(false);
+  if (justRegistered) dispatch(clearJustRegistered());
 
-  const required = (value) => (!value ? '* Campo requerido' : undefined);
+  const onSubmit = async (values) => dispatch(login(values));
 
-  async function onSubmit(values) {
-    setError(false);
-    try {
-      const {
-        data: {
-          result: {token},
-        },
-      } = await api.post('/auth/login', values);
-      setToken(token);
-      setUserName(values.userName);
-      setPassword(values.password);
-      navigate('/', {replace: true});
-    } catch ({response: {status}}) {
-      if (status === 404) setError(true);
-    }
-  }
+  if (loggedIn) return <Navigate to='/' />;
+
   return (
     <div className={styles.form}>
-      <Formik initialValues={{userName, password}} validateOnChange={false} onSubmit={onSubmit}>
+      <Formik
+        initialValues={{userName: username, password: ''}}
+        validateOnChange={false}
+        onSubmit={onSubmit}
+      >
         <Form>
           <h1>Iniciar sesión</h1>
           <Field
@@ -52,7 +45,6 @@ export default function Login() {
           >
             Contraseña
           </Field>
-          {error && <span className={styles.error}>El usuario o contraseña son incorrectos</span>}
           <Button type='submit'>Enviar</Button>
           <Link to='/register'>Cree una cuenta</Link>
         </Form>

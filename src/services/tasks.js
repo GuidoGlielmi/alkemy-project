@@ -1,0 +1,15 @@
+import api from './apiSingleton';
+
+export const taskDataService = async () => {
+  const res = (await api.get('/task/data'))?.data?.result;
+  return {status: res?.status, importance: res?.importance};
+};
+export const getMyTasksService = async () => (await api.get('/task/me'))?.data?.result;
+
+export const getAllTasksService = async () => (await api.get('/task'))?.data?.result;
+
+export const addTaskService = async (task) => (await api.post('/task', {task})).data?.result?.task;
+
+export const deleteTaskService = async (id) => api.delete(`/task/${id}`);
+
+export const updateTaskService = async (id, task) => api.patch(`/task/${id}`, {task});

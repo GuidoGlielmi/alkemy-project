@@ -1,0 +1,19 @@
+.group + .group {
+  border-left: solid 3px rgb(80, 80, 80);
+}
+.group {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.group > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.group > h3 {
+  font-size: 1.7em;
+  align-self: center;
+}
