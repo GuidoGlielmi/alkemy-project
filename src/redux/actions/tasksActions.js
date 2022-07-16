@@ -24,10 +24,11 @@ import {
   UNAUTHORIZE,
   CLEAR_JUST_REGISTERED,
   TASK_DATA_SUCCESS,
+  SET_USER_FEEDBACK_MSG,
 } from './types';
 
 export const requestPending = () => ({type: REQUEST_PENDING});
-export const requestError = (err) => ({type: REQUEST_ERROR, payload: err});
+export const requestError = (payload) => ({type: REQUEST_ERROR, payload});
 
 export const loginRequest = (values) => async (dispatch) => {
   dispatch(requestPending());
@@ -109,10 +110,11 @@ export const deleteTask = (id) => async (dispatch) => {
   }
 };
 export const deleteTaskSuccess = (payload) => ({type: DELETE_TASK_SUCCESS, payload});
+export const setUserFeedbackMsg = (payload) => ({type: SET_USER_FEEDBACK_MSG, payload});
 
-function errorHandler(err, dispatch, errMsg) {
+function errorHandler(err, dispatch) {
   if (err.response.status === 401) {
     localStorage.removeItem('token');
     dispatch(unauthorize());
-  } else dispatch(requestError(errMsg || 'Ha ocurrido un error'));
+  } else dispatch(requestError());
 }

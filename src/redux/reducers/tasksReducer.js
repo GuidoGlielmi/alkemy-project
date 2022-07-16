@@ -12,6 +12,7 @@ import {
   ADD_TASK_SUCCESS,
   UPDATE_TASK_SUCCESS,
   DELETE_TASK_SUCCESS,
+  SET_USER_FEEDBACK_MSG,
 } from '../actions/types';
 
 const initialState = {
@@ -24,14 +25,15 @@ const initialState = {
   regions: [],
   statuses: [],
   priorities: [],
-  error: '',
+  error: false,
   justRegistered: false,
+  userFeedbackMsg: '',
 };
 
 export default (state = initialState, action) => {
   const cases = {
     [REQUEST_PENDING]: {...state, isLoading: true},
-    [REQUEST_ERROR]: {...state, error: action.payload, isLoading: false},
+    [REQUEST_ERROR]: {...state, error: true, isLoading: false},
     [LOGIN_SUCCESS]: {
       ...state,
       loggedIn: true,
@@ -46,7 +48,12 @@ export default (state = initialState, action) => {
       priorities: action.payload?.importance,
       isLoading: false,
     },
-    [ADD_TASK_SUCCESS]: {...state, tasks: [...state.tasks, action.payload], isLoading: false},
+    [ADD_TASK_SUCCESS]: {
+      ...state,
+      tasks: [...state.tasks, action.payload],
+      userFeedbackMsg: 'La tarea ha sido creada exitosamente',
+      isLoading: false,
+    },
     [UPDATE_TASK_SUCCESS]: {
       ...state,
       tasks: state.tasks.map((t) =>
@@ -57,6 +64,7 @@ export default (state = initialState, action) => {
     [DELETE_TASK_SUCCESS]: {
       ...state,
       tasks: state.tasks.filter((t) => t._id !== action.payload),
+      userFeedbackMsg: 'La tarea ha sido borrada exitosamente',
       isLoading: false,
     },
     [FORM_INFO_SUCCESS]: {
@@ -74,6 +82,11 @@ export default (state = initialState, action) => {
     },
     [CLEAR_JUST_REGISTERED]: {...state, justRegistered: false},
     [UNAUTHORIZE]: {...state, loggedIn: false},
+    [SET_USER_FEEDBACK_MSG]: {
+      ...state,
+      userFeedbackMsg: action.payload?.userFeedbackMsg || '',
+      error: action.payload?.error,
+    },
   };
   return cases[action.type] || state;
 };

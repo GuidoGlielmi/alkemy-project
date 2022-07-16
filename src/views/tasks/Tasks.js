@@ -4,7 +4,6 @@ import {useSelector, useDispatch} from 'react-redux/es/exports';
 import {Navigate} from 'react-router-dom';
 import {getTasks} from 'redux/actions/tasksActions';
 import {loadingContext} from 'components/loading-context/LoadingContext';
-// import {toast} from 'react-toastify';
 import TaskGroup from 'components/task-group/TaskGroup';
 import styles from './Tasks.module.css';
 

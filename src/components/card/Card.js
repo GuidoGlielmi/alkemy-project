@@ -1,11 +1,10 @@
 import Button from 'components/button/Button';
-import {useState, useMemo, useContext} from 'react';
-// import {loadingContext} from 'components/loading-context/LoadingContext';
-// import {toast} from 'react-toastify';
+import {useState, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-// import {api} from 'components/auth-context/AuthContext';
 import {deleteTask, updateTask} from 'redux/actions/tasksActions';
 import styles from './Card.module.css';
+
+const colors = ['rgb(219, 0, 0)', 'rgb(200, 200, 0)', 'rgb(38, 0, 219)'];
 
 const formatDate = (date) => new Date().toString(date).split('(')[0];
 export default function Card({
@@ -57,10 +56,10 @@ export default function Card({
       </time>
       <h5>{user.username}</h5>
       <div>
-        <Button size='small' action={updateStatus}>
+        <Button size='small' color={colors[statuses.indexOf(status)]} action={updateStatus}>
           {status}
         </Button>
-        <Button size='small' action={updatePriority}>
+        <Button size='small' color={colors[priorities.indexOf(importance)]} action={updatePriority}>
           {importance}
         </Button>
       </div>
@@ -79,8 +78,9 @@ export default function Card({
     </div>
   );
 }
-// rgb(134, 246, 239)
-// rgb(223, 86, 139)
-/* background: `linear-gradient(rgb(59, 59, 59), rgb(29, 29, 29)) padding-box, linear-gradient(to right, #${Math.floor(
-          Math.random() * 16777215,
-        ).toString(16)}, #928dab) border-box`,  */
+
+function getColor(title) {
+  const titles = {
+    HIGH: '',
+  };
+}

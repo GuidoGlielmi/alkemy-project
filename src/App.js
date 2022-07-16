@@ -6,6 +6,7 @@ import Header from 'components/header/Header';
 import Login from 'views/login/Login';
 import Register from 'views/register/Register';
 import Tasks from 'views/tasks/Tasks';
+import UserFeedbackModal from 'components/user-feedback-modal/UserFeedbackModal';
 
 // import { validate } from 'uuid';
 
@@ -34,26 +35,25 @@ const SuspenseWrapper = () => (
 
 export default function App() {
   const {token} = useContext(authContext);
-  const RequireAuth = useCallback(() => (token ? <Outlet /> : <Navigate to='/login' />), []);
   const location = useLocation();
   return (
     <AnimatePresence>
-      <Routes location={location} key={location.pathname}>
-        <Route element={<MotionWrapper />}>
-          {/* <Route element={<RequireAuth />}> */}
-          <Route element={<SuspenseWrapper />}>
-            <Route element={<Header />}>
-              <Route path='/' element={<Tasks />} />
+      <UserFeedbackModal>
+        <Routes location={location} key={location.pathname}>
+          <Route element={<MotionWrapper />}>
+            <Route element={<SuspenseWrapper />}>
+              <Route element={<Header />}>
+                <Route path='/' element={<Tasks />} />
+              </Route>
+            </Route>
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route element={<SuspenseWrapper />}>
+              <Route path='*' element={<Error404 />} />
             </Route>
           </Route>
-          {/* </Route> */}
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route element={<SuspenseWrapper />}>
-            <Route path='*' element={<Error404 />} />
-          </Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </UserFeedbackModal>
     </AnimatePresence>
   );
 }

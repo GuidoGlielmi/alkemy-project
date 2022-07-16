@@ -1,11 +1,10 @@
-import {useState, useEffect, useContext} from 'react';
+import {useEffect} from 'react';
 import {Switch, FormControlLabel} from '@mui/material';
 import {Formik, Field} from 'formik';
 import {Link, useNavigate} from 'react-router-dom';
 import * as yup from 'yup';
 import {v4 as uuid} from 'uuid';
 import {useDispatch, useSelector} from 'react-redux';
-// import {authContext, api} from 'components/auth-context/AuthContext';
 import InputContainer from 'components/input-container/InputContainer';
 import Button from 'components/button/Button';
 import Select from 'components/input-container/Select';
@@ -21,8 +20,6 @@ export default function Register() {
 
   const dispatch = useDispatch();
   const {roles, continents, regions, justRegistered} = useSelector((state) => state);
-
-  // const {setPassword, setUserName} = useContext(authContext);
 
   useEffect(() => void (roles[0] || dispatch(getFormInfo())), []);
   const initialValues = {

@@ -6,7 +6,7 @@ export default function Button({
   type = 'button',
   size = 'medium',
   disabled = false,
-  background,
+  color,
   children,
 }) {
   return (
@@ -17,7 +17,7 @@ export default function Button({
       className={`${styles.button} ${styles[size]}`}
       style={{
         background: `linear-gradient(${
-          background || 'rgb(36, 36, 36)'
+          color || 'rgb(36, 36, 36)'
         }, rgb(46, 46, 46)) padding-box, linear-gradient(to right, #ae00ff, #928dab) border-box`,
       }}
     >
