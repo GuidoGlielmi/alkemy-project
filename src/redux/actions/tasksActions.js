@@ -73,15 +73,15 @@ export const getFormInfo = () => async (dispatch) => {
   }
 };
 const formInfoSuccess = (payload) => ({type: FORM_INFO_SUCCESS, payload});
-export const register = (values) => async (dispatch) => {
+export const register = (user) => async (dispatch) => {
   dispatch(requestPending());
   try {
-    await registerService(values);
+    await registerService(user);
     localStorage.clear();
-    localStorage.setItem('username', values.userName);
-    dispatch(registerSuccess(values.userName));
+    localStorage.setItem('username', user.userName);
+    dispatch(registerSuccess(user.userName));
   } catch (err) {
-    errorHandler({err, dispatch, errMsg: err.response.status === 409 && 'El email ya está en uso'});
+    errorHandler({err, dispatch});
   } finally {
     dispatch(requestFinished());
   }
@@ -157,7 +157,10 @@ export const deleteTask = (id) => async (dispatch, getState) => {
   }
 };
 export const clearUserFeedbackMsg = () => ({type: CLEAR_USER_FEEDBACK_MSG});
-export const setTaskCreator = (payload) => ({type: SET_TASK_CREATOR, payload});
+export const setTaskCreator = (payload) => (dispatch) => {
+  dispatch(payload === 'ALL' ? getAllTasks() : getMyTasks());
+  return {type: SET_TASK_CREATOR, payload};
+};
 
 function getSelectedTasks(dispatch, getState, userFeedbackMsg) {
   const {taskByCreator} = getState();
@@ -169,5 +172,6 @@ function errorHandler({err, dispatch, errMsg}) {
     localStorage.removeItem('token');
     localStorage.removeItem('isTeamLeader');
     dispatch(unauthorize());
-  } else dispatch(requestError(errMsg || ''));
+  } else if (err.response.status === 409) dispatch(requestError('El email ya está en uso'));
+  else dispatch(requestError(errMsg || ''));
 }

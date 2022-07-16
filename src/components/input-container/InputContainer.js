@@ -7,8 +7,8 @@ export default function InputContainer({
   className = styles.inputContainer,
   field, // { name, value, onChange, onBlur }
   form: {
-    touched: { [field.name]: touched },
-    errors: { [field.name]: errMsg },
+    touched: {[field.name]: touched},
+    errors: {[field.name]: errMsg},
   },
   ...props
 }) {
@@ -16,10 +16,10 @@ export default function InputContainer({
     <div className={className}>
       <label htmlFor={field.name}>{children}</label>
       <input
+        id={field.name}
         type={type}
         {...field}
         {...props}
-        id={field.name}
         className={`${styles.input} ${touched && errMsg && styles.error}`}
       />
       <span className={styles.errorMsg}>{touched && errMsg}&nbsp;</span>

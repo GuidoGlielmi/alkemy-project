@@ -12,10 +12,5 @@ export default function UserFeedbackModal({children}) {
     else if (userFeedbackMsg) toast(userFeedbackMsg, {onClose});
   }, [dispatch, userFeedbackMsg, error]);
 
-  return (
-    <>
-      {children}
-      <ToastContainer pauseOnHover />
-    </>
-  );
+  return <ToastContainer pauseOnHover />;
 }

@@ -12,16 +12,13 @@ const backgroundStyle = {
   background: 'rgba(0, 0, 0, 0.1)',
 };
 
-export default function LoadingWrapper({children}) {
+export default function LoadingScreen({children}) {
   const isLoading = useSelector(({isLoading}) => isLoading);
   return (
-    <>
-      {isLoading && (
-        <div style={backgroundStyle}>
-          <CircularProgress />
-        </div>
-      )}
-      {children}
-    </>
+    isLoading && (
+      <div style={backgroundStyle}>
+        <CircularProgress />
+      </div>
+    )
   );
 }

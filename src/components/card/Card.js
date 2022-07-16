@@ -64,6 +64,7 @@ export default function Card({
         </Button>
       </div>
       <button
+        className={styles.description}
         type='button'
         onClick={() => description.length > 100 && setIsLongDescriptionShown((ps) => !ps)}
         style={{cursor: description.length > 100 ? 'pointer' : 'default'}}

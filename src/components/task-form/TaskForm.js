@@ -30,9 +30,7 @@ export default function TaskForm() {
       description: yup.string().required(REQUIRED_MSG),
     });
 
-  async function onSubmit(values, {resetForm}) {
-    dispatch(addTask(values, resetForm));
-  }
+  const onSubmit = (values, {resetForm}) => dispatch(addTask(values, resetForm));
 
   return (
     <section className={styles.formContainer}>
@@ -44,9 +42,8 @@ export default function TaskForm() {
         // eslint-disable-next-line react/jsx-no-bind
         onSubmit={onSubmit}
       >
-        {({handleSubmit, errors}) => (
+        {({handleSubmit}) => (
           <form onSubmit={handleSubmit} className={styles.form}>
-            {/* {console.log(errors)} */}
             <div>
               <Field name='title' component={InputContainer} placeholder='Ingrese el título'>
                 Título

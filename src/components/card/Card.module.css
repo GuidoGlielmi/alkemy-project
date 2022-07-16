@@ -46,6 +46,9 @@
   transform: scale(0.95);
   opacity: 0.9;
 }
+.description:hover {
+  text-shadow: 0 0 2px rgb(153, 153, 153);
+}
 @media (max-width: 768px) {
   .card {
     max-width: unset;

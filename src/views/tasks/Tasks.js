@@ -1,12 +1,11 @@
 import TaskForm from 'components/task-form/TaskForm';
 import {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux/es/exports';
-import {Navigate} from 'react-router-dom';
 import {getAllTasks, setTaskCreator} from 'redux/actions/tasksActions';
 import TaskGroup from 'components/task-group/TaskGroup';
 import styles from './Tasks.module.css';
 
-const taskByCreator = ['ALL', 'MINE'];
+const taskByCreatorArray = ['ALL', 'MINE'];
 
 export default function Tasks() {
   const dispatch = useDispatch();
@@ -28,8 +27,6 @@ export default function Tasks() {
     return filteredTasks;
   }
 
-  if (!loggedIn) return <Navigate to='/login' />;
-
   return (
     <main className={styles.tasksPage}>
       <h3>Team id: {teamID}</h3>
@@ -38,6 +35,7 @@ export default function Tasks() {
         <h2>Mis Tareas</h2>
         <FilterBox
           priorities={priorities}
+          selectedPriority={selectedPriority}
           setSelectedPriority={setSelectedPriority}
           setSearchKey={setSearchKey}
         />
@@ -52,27 +50,35 @@ export default function Tasks() {
   );
 }
 
-function FilterBox({priorities, setSelectedPriority, setSearchKey}) {
+function FilterBox({priorities, selectedPriority, setSelectedPriority, setSearchKey}) {
   const dispatch = useDispatch();
+  const {taskByCreator} = useSelector((state) => state);
   return (
     <div className={styles.filterContainer}>
       <fieldset className={styles.selectPriority}>
         <legend>Seleccionar por creador:</legend>
         <div>
-          {taskByCreator.map((tc) => (
-            <RadioContainer tag={tc} name='creator' action={() => dispatch(setTaskCreator(tc))} />
+          {taskByCreatorArray.map((tc) => (
+            <RadioContainer
+              key={tc}
+              tag={tc}
+              name='creator'
+              action={() => dispatch(setTaskCreator(tc))}
+              checked={taskByCreator === tc}
+            />
           ))}
         </div>
       </fieldset>
       <fieldset className={styles.selectPriority}>
         <legend>Seleccionar por prioridad:</legend>
         <div>
-          {['ALL', ...priorities].map((priority) => (
+          {['ALL', ...priorities].map((p) => (
             <RadioContainer
-              key={priority}
-              tag={priority}
+              key={p}
+              tag={p}
               name='priority'
-              action={() => setSelectedPriority(priority)}
+              action={() => setSelectedPriority(p)}
+              checked={selectedPriority === p}
             />
           ))}
         </div>
@@ -85,10 +91,10 @@ function FilterBox({priorities, setSelectedPriority, setSearchKey}) {
   );
 }
 
-function RadioContainer({tag, action, name}) {
+function RadioContainer({tag, action, name, checked}) {
   return (
     <div>
-      <input onChange={action} name={name} type='radio' />
+      <input onChange={action} checked={checked} name={name} type='radio' />
       <span>{tag}</span>
     </div>
   );

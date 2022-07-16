@@ -2,10 +2,11 @@
   border-left: solid 3px rgb(80, 80, 80);
 }
 .group {
-  padding: 0 20px;
   display: flex;
   flex-direction: column;
+  flex: 1 1 0px; /* all items with equal width */
   position: relative;
+  padding: 0 20px;
 }
 
 .group > div {

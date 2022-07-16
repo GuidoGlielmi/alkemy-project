@@ -19,7 +19,10 @@ export default function Register() {
   const dispatch = useDispatch();
   const {roles, continents, regions, justRegistered, teamID} = useSelector((state) => state);
 
-  useEffect(() => void dispatch(getFormInfo()), [dispatch]);
+  useEffect(() => {
+    dispatch(getFormInfo());
+  }, [dispatch]);
+
   const initialValues = {
     userName: '',
     email: '',
@@ -58,9 +61,7 @@ export default function Register() {
       region: values.continent === 'America' ? values.region : 'Otro',
     };
     delete user.registered;
-
     dispatch(register(user));
-    // 0ea9502e-43af-4594-b2ea-396b6ea00638 guido1 123456
   }
 
   if (justRegistered) return <Navigate to='/login' />;
