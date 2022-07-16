@@ -69,6 +69,11 @@
   align-items: center;
   gap: 2vw;
 }
+.skeleton {
+  display: 'flex';
+  justify-content: 'space-between';
+  width: '100%';
+}
 
 @media (max-width: 768px) {
   .tasks {

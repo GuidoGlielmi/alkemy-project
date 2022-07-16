@@ -1,5 +1,7 @@
-import TaskForm from 'components/task-form/TaskForm';
 import {useState, useEffect} from 'react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import TaskForm from 'components/task-form/TaskForm';
 import {useSelector, useDispatch} from 'react-redux/es/exports';
 import {getAllTasks, setTaskCreator} from 'redux/actions/tasksActions';
 import TaskGroup from 'components/task-group/TaskGroup';
@@ -9,14 +11,16 @@ const taskByCreatorArray = ['ALL', 'MINE'];
 
 export default function Tasks() {
   const dispatch = useDispatch();
-  const {loggedIn, tasks, priorities, isTeamLeader, teamID} = useSelector((state) => state);
+  const {isLoggedIn, tasks, priorities, isTeamLeader, teamID, isLoading} = useSelector(
+    (state) => state,
+  );
 
   const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [searchKey, setSearchKey] = useState('');
   useEffect(() => {
     // using void appears to make it not work
-    loggedIn && dispatch(getAllTasks());
-  }, [dispatch, isTeamLeader, loggedIn]);
+    isLoggedIn && dispatch(getAllTasks());
+  }, [dispatch, isTeamLeader, isLoggedIn]);
 
   function filterTasks(tasks) {
     let filteredTasks = [...tasks];
@@ -40,10 +44,20 @@ export default function Tasks() {
           setSearchKey={setSearchKey}
         />
         <div className={styles.tasks}>
-          {!tasks.length && <span>No se han creado tareas</span>}
-          {groupByStatus(filterTasks(tasks)).map(([status, tasks]) => (
-            <TaskGroup key={status} status={status} tasks={tasks} />
-          ))}
+          {!isLoading ? (
+            <>
+              {!tasks.length && <span>No se han creado tareas</span>}
+              {groupByStatus(filterTasks(tasks)).map(([status, tasks]) => (
+                <TaskGroup key={status} status={status} tasks={tasks} />
+              ))}
+            </>
+          ) : (
+            <div className={styles.skeleton}>
+              <Skeleton height='50vh' width='30vw' />
+              <Skeleton height='50vh' width='30vw' />
+              <Skeleton height='50vh' width='30vw' />
+            </div>
+          )}
         </div>
       </section>
     </main>

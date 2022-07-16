@@ -10,15 +10,12 @@ import {
   UNAUTHORIZE,
   CLEAR_JUST_REGISTERED,
   TASK_DATA_SUCCESS,
-  ADD_TASK_SUCCESS,
-  UPDATE_TASK_SUCCESS,
-  DELETE_TASK_SUCCESS,
   CLEAR_USER_FEEDBACK_MSG,
   SET_TASK_CREATOR,
 } from '../actions/types';
 
 const initialState = {
-  loggedIn: !!localStorage.getItem('token'),
+  isLoggedIn: !!localStorage.getItem('token'),
   username: localStorage.getItem('username') || '',
   isTeamLeader: !!localStorage.getItem('isTeamLeader'),
   teamID: localStorage.getItem('teamID') || '',
@@ -32,6 +29,7 @@ const initialState = {
   error: false,
   justRegistered: false,
   userFeedbackMsg: '',
+  isLoading: true,
 };
 
 export default (state = initialState, action) => {
@@ -45,7 +43,7 @@ export default (state = initialState, action) => {
     },
     [LOGIN_SUCCESS]: {
       ...state,
-      loggedIn: true,
+      isLoggedIn: true,
       username: action.payload?.username,
       isTeamLeader: action.payload?.isTeamLeader,
       teamID: action.payload?.teamID,
@@ -74,7 +72,7 @@ export default (state = initialState, action) => {
       justRegistered: true,
     },
     [CLEAR_JUST_REGISTERED]: {...state, justRegistered: false},
-    [UNAUTHORIZE]: {...state, loggedIn: false, isLoading: false},
+    [UNAUTHORIZE]: {...state, isLoggedIn: false, isLoading: false},
     [CLEAR_USER_FEEDBACK_MSG]: {
       ...state,
       userFeedbackMsg: '',

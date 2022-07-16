@@ -10,13 +10,13 @@ const required = (value) => (!value ? '* Campo requerido' : undefined);
 
 export default function Login() {
   const dispatch = useDispatch();
-  const {loggedIn, username, justRegistered} = useSelector((state) => state);
+  const {isLoggedIn, username, justRegistered} = useSelector((state) => state);
 
   if (justRegistered) dispatch(clearJustRegistered());
 
   const onSubmit = async (values) => dispatch(login(values));
 
-  if (loggedIn) return <Navigate to='/' />;
+  if (isLoggedIn) return <Navigate to='/' />;
 
   return (
     <div className={styles.form}>

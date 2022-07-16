@@ -35,7 +35,7 @@ const SuspenseWrapper = () => (
 );
 
 export default function App() {
-  const loggedIn = useSelector(({loggedIn}) => loggedIn);
+  const isLoggedIn = useSelector(({isLoggedIn}) => isLoggedIn);
   const location = useLocation();
   return (
     <AnimatePresence>
@@ -44,7 +44,7 @@ export default function App() {
         <Route element={<MotionWrapper />}>
           <Route element={<SuspenseWrapper />}>
             <Route element={<Header />}>
-              <Route path='/' element={loggedIn ? <Tasks /> : <Login />} />
+              <Route path='/' element={isLoggedIn ? <Tasks /> : <Login />} />
             </Route>
           </Route>
           <Route path='/login' element={<Login />} />
