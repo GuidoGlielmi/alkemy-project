@@ -25,11 +25,12 @@ import {
   CLEAR_JUST_REGISTERED,
   TASK_DATA_SUCCESS,
   CLEAR_USER_FEEDBACK_MSG,
+  SET_TASK_CREATOR,
 } from './types';
 
-export const requestPending = () => ({type: REQUEST_PENDING});
-export const requestError = (payload) => ({type: REQUEST_ERROR, payload});
-export const requestFinished = (payload) => ({type: REQUEST_FINISHED, payload});
+const requestPending = () => ({type: REQUEST_PENDING});
+const requestError = (payload) => ({type: REQUEST_ERROR, payload});
+const requestFinished = (payload) => ({type: REQUEST_FINISHED, payload});
 
 export const login = (values) => async (dispatch) => {
   dispatch(requestPending());
@@ -53,12 +54,12 @@ export const login = (values) => async (dispatch) => {
   }
 };
 
-export const loginSuccess = (payload) => ({type: LOGIN_SUCCESS, payload});
+const loginSuccess = (payload) => ({type: LOGIN_SUCCESS, payload});
 export const logout = () => {
   localStorage.clear();
   return {type: LOGOUT};
 };
-export const unauthorize = () => ({type: UNAUTHORIZE});
+const unauthorize = () => ({type: UNAUTHORIZE});
 
 export const getFormInfo = () => async (dispatch) => {
   dispatch(requestPending());
@@ -71,11 +72,12 @@ export const getFormInfo = () => async (dispatch) => {
     dispatch(requestFinished());
   }
 };
-export const formInfoSuccess = (payload) => ({type: FORM_INFO_SUCCESS, payload});
+const formInfoSuccess = (payload) => ({type: FORM_INFO_SUCCESS, payload});
 export const register = (values) => async (dispatch) => {
   dispatch(requestPending());
   try {
-    // await registerService(values);
+    await registerService(values);
+    localStorage.clear();
     localStorage.setItem('username', values.userName);
     dispatch(registerSuccess(values.userName));
   } catch (err) {
@@ -84,7 +86,7 @@ export const register = (values) => async (dispatch) => {
     dispatch(requestFinished());
   }
 };
-export const registerSuccess = (payload) => ({type: REGISTER_SUCCESS, payload});
+const registerSuccess = (payload) => ({type: REGISTER_SUCCESS, payload});
 export const clearJustRegistered = () => ({type: CLEAR_JUST_REGISTERED});
 
 export const getMyTasks = () => async (dispatch) => {
@@ -106,46 +108,55 @@ export const getAllTasks = () => async (dispatch) => {
   Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
 };
 
-export const tasksSuccess = (payload) => ({type: TASKS_SUCCESS, payload});
-export const taskDataSuccess = (payload) => ({type: TASK_DATA_SUCCESS, payload});
-export const addTask = (task, resetForm) => async (dispatch) => {
+const tasksSuccess = (payload) => ({type: TASKS_SUCCESS, payload});
+const taskDataSuccess = (payload) => ({type: TASK_DATA_SUCCESS, payload});
+export const addTask = (task, resetForm) => async (dispatch, getState) => {
   dispatch(requestPending());
   try {
-    const createdTask = await addTaskService(task);
+    /* const createdTask =  */ await addTaskService(task);
     resetForm();
-    dispatch(addTaskSuccess(createdTask));
+    getSelectedTasks(dispatch, getState);
+    // dispatch(addTaskSuccess(createdTask));
   } catch (err) {
     errorHandler({err, dispatch});
   } finally {
     dispatch(requestFinished());
   }
 };
-export const addTaskSuccess = (payload) => ({type: ADD_TASK_SUCCESS, payload});
-export const updateTask = (id, task) => async (dispatch) => {
+const addTaskSuccess = (payload) => ({type: ADD_TASK_SUCCESS, payload});
+export const updateTask = (id, task) => async (dispatch, getState) => {
   dispatch(requestPending());
   try {
     await updateTaskService(id, task);
-    dispatch(updateTaskSuccess({id, task}));
+    getSelectedTasks(dispatch, getState);
+    // dispatch(updateTaskSuccess({id, task}));
   } catch (err) {
     errorHandler({err, dispatch});
   } finally {
     dispatch(requestFinished());
   }
 };
-export const updateTaskSuccess = (payload) => ({type: UPDATE_TASK_SUCCESS, payload});
-export const deleteTask = (id) => async (dispatch) => {
+const updateTaskSuccess = (payload) => ({type: UPDATE_TASK_SUCCESS, payload});
+export const deleteTask = (id) => async (dispatch, getState) => {
   dispatch(requestPending());
   try {
     await deleteTaskService(id);
-    dispatch(deleteTaskSuccess(id));
+    getSelectedTasks(dispatch, getState);
+    // dispatch(deleteTaskSuccess(id));
   } catch (err) {
     errorHandler({err, dispatch});
   } finally {
     dispatch(requestFinished());
   }
 };
-export const deleteTaskSuccess = (payload) => ({type: DELETE_TASK_SUCCESS, payload});
+const deleteTaskSuccess = (payload) => ({type: DELETE_TASK_SUCCESS, payload});
 export const clearUserFeedbackMsg = () => ({type: CLEAR_USER_FEEDBACK_MSG});
+export const setTaskCreator = (payload) => ({type: SET_TASK_CREATOR, payload});
+
+function getSelectedTasks(dispatch, getState) {
+  const {taskByCreator} = getState();
+  dispatch(taskByCreator === 'ALL' ? getAllTasks() : getMyTasks());
+}
 
 function errorHandler({err, dispatch, errMsg}) {
   if (!errMsg && err.response.status === 401) {

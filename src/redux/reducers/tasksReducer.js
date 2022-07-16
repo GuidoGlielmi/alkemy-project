@@ -14,6 +14,7 @@ import {
   UPDATE_TASK_SUCCESS,
   DELETE_TASK_SUCCESS,
   CLEAR_USER_FEEDBACK_MSG,
+  SET_TASK_CREATOR,
 } from '../actions/types';
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
   teamID: localStorage.getItem('teamID') || '',
   isLoading: false,
   tasks: [],
+  taskByCreator: 'ALL',
   roles: [],
   continents: [],
   regions: [],
@@ -86,10 +88,10 @@ export default (state = initialState, action) => {
       isLoading: false,
     },
     [REGISTER_SUCCESS]: {
-      ...state,
+      ...initialState,
+      teamID: state.teamID || '',
       username: action.payload,
       justRegistered: true,
-      isLoading: false,
     },
     [CLEAR_JUST_REGISTERED]: {...state, justRegistered: false},
     [UNAUTHORIZE]: {...state, loggedIn: false, isLoading: false},
@@ -98,6 +100,7 @@ export default (state = initialState, action) => {
       userFeedbackMsg: '',
       error: false,
     },
+    [SET_TASK_CREATOR]: {...state, taskByCreator: action.payload},
   };
   console.log(action.type, cases[action.type]);
   return cases[action.type] || state;

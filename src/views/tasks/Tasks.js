@@ -2,9 +2,11 @@ import TaskForm from 'components/task-form/TaskForm';
 import {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux/es/exports';
 import {Navigate} from 'react-router-dom';
-import {getMyTasks, getAllTasks} from 'redux/actions/tasksActions';
+import {getAllTasks, setTaskCreator} from 'redux/actions/tasksActions';
 import TaskGroup from 'components/task-group/TaskGroup';
 import styles from './Tasks.module.css';
+
+const taskByCreator = ['ALL', 'MINE'];
 
 export default function Tasks() {
   const dispatch = useDispatch();
@@ -14,7 +16,7 @@ export default function Tasks() {
   const [searchKey, setSearchKey] = useState('');
   useEffect(() => {
     // using void appears to make it not work
-    loggedIn && dispatch(isTeamLeader ? getAllTasks() : getMyTasks());
+    loggedIn && dispatch(getAllTasks());
   }, [dispatch, isTeamLeader, loggedIn]);
 
   function filterTasks(tasks) {
@@ -51,16 +53,26 @@ export default function Tasks() {
 }
 
 function FilterBox({priorities, setSelectedPriority, setSearchKey}) {
+  const dispatch = useDispatch();
   return (
     <div className={styles.filterContainer}>
+      <fieldset className={styles.selectPriority}>
+        <legend>Seleccionar por creador:</legend>
+        <div>
+          {taskByCreator.map((tc) => (
+            <RadioContainer tag={tc} name='creator' action={() => dispatch(setTaskCreator(tc))} />
+          ))}
+        </div>
+      </fieldset>
       <fieldset className={styles.selectPriority}>
         <legend>Seleccionar por prioridad:</legend>
         <div>
           {['ALL', ...priorities].map((priority) => (
-            <Priority
+            <RadioContainer
               key={priority}
-              priority={priority}
-              setSelectedPriority={setSelectedPriority}
+              tag={priority}
+              name='priority'
+              action={() => setSelectedPriority(priority)}
             />
           ))}
         </div>
@@ -73,11 +85,11 @@ function FilterBox({priorities, setSelectedPriority, setSearchKey}) {
   );
 }
 
-function Priority({priority, setSelectedPriority}) {
+function RadioContainer({tag, action, name}) {
   return (
     <div>
-      <input onChange={() => setSelectedPriority(priority)} name='priority' type='radio' />
-      <span>{priority}</span>
+      <input onChange={action} name={name} type='radio' />
+      <span>{tag}</span>
     </div>
   );
 }
