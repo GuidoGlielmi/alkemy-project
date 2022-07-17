@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, Fragment} from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import TaskForm from 'components/task-form/TaskForm';
@@ -8,6 +8,7 @@ import TaskGroup from 'components/task-group/TaskGroup';
 import styles from './Tasks.module.css';
 
 const taskByCreatorArray = ['ALL', 'MINE'];
+const device = window.innerWidth < 768;
 
 export default function Tasks() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ export default function Tasks() {
 
   const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [searchKey, setSearchKey] = useState('');
+
   useEffect(() => {
     // using void appears to make it not work
     isLoggedIn && dispatch(getAllTasks());
@@ -52,10 +54,8 @@ export default function Tasks() {
               ))}
             </>
           ) : (
-            <div className={styles.skeleton}>
-              <Skeleton height='50vh' width='30vw' />
-              <Skeleton height='50vh' width='30vw' />
-              <Skeleton height='50vh' width='30vw' />
+            <div className={styles[device ? 'skeletonDevice' : 'skeleton']}>
+              {createSkeletons(3)}
             </div>
           )}
         </div>
@@ -99,7 +99,7 @@ function FilterBox({priorities, selectedPriority, setSelectedPriority, setSearch
       </fieldset>
       <div>
         <span>Buscar por título</span>
-        <input onChange={({target: {value}}) => debounce(() => setSearchKey(value), 100)()} />
+        <input onChange={(e) => debounce(() => setSearchKey(e.target.value), 100)()} />
       </div>
     </div>
   );
@@ -113,6 +113,12 @@ function RadioContainer({tag, action, name, checked}) {
     </div>
   );
 }
+
+const createSkeletons = (n) =>
+  Array(n)
+    .fill(<Skeleton height='50vh' width={device ? '90vw' : '30vw'} />)
+    // eslint-disable-next-line react/no-array-index-key
+    .map((s, i) => <Fragment key={i}>{s}</Fragment>);
 
 function groupByStatus(arr) {
   const groupedTasks = arr.reduce((p, c) => ({...p, [c.status]: [...(p[c.status] || []), c]}), {}); // if empty, returns the initial value

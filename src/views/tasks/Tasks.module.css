@@ -70,9 +70,17 @@
   gap: 2vw;
 }
 .skeleton {
-  display: 'flex';
-  justify-content: 'space-between';
-  width: '100%';
+  display: flex;
+  justify-content: space-between;
+  gap: 1vw;
+  width: 100%;
+}
+.skeletonDevice {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1vh;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
