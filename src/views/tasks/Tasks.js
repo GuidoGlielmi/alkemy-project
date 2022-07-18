@@ -12,10 +12,9 @@ const device = window.innerWidth < 768;
 
 export default function Tasks() {
   const dispatch = useDispatch();
-  const {isLoggedIn, tasks, priorities, isTeamLeader, teamID, isLoading} = useSelector(
-    (state) => state,
-  );
+  const {isLoggedIn, tasks, priorities, isTeamLeader, teamID} = useSelector((state) => state);
 
+  const isFirstload = useIsFirstLoad(tasks.length);
   const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [searchKey, setSearchKey] = useState('');
 
@@ -24,7 +23,7 @@ export default function Tasks() {
     isLoggedIn && dispatch(getAllTasks());
   }, [dispatch, isTeamLeader, isLoggedIn]);
 
-  function filterTasks(tasks) {
+  function filterTasks() {
     let filteredTasks = [...tasks];
     if (selectedPriority !== 'ALL') {
       filteredTasks = filteredTasks.filter((t) => t.importance === selectedPriority);
@@ -46,12 +45,12 @@ export default function Tasks() {
           setSearchKey={setSearchKey}
         />
         <div className={styles.tasks}>
-          {!isLoading ? (
+          {!isFirstload ? (
             <>
               {!tasks.length && <span>No se han creado tareas</span>}
-              {groupByStatus(filterTasks(tasks)).map(([status, tasks]) => (
-                <TaskGroup key={status} status={status} tasks={tasks} />
-              ))}
+              {groupByStatus(filterTasks()).map(([status, tasks]) =>
+                tasks ? <TaskGroup key={status} status={status} tasks={tasks} /> : status,
+              )}
             </>
           ) : (
             <div className={styles[device ? 'skeletonDevice' : 'skeleton']}>
@@ -114,6 +113,16 @@ function RadioContainer({tag, action, name, checked}) {
   );
 }
 
+function useIsFirstLoad(condition = true) {
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+  useEffect(() => {
+    condition && isFirstLoad && setIsFirstLoad(false);
+  }, [condition, isFirstLoad]);
+
+  return isFirstLoad;
+}
+
 const createSkeletons = (n) =>
   Array(n)
     .fill(<Skeleton height='50vh' width={device ? '90vw' : '30vw'} />)
@@ -121,7 +130,8 @@ const createSkeletons = (n) =>
     .map((s, i) => <Fragment key={i}>{s}</Fragment>);
 
 function groupByStatus(arr) {
-  const groupedTasks = arr.reduce((p, c) => ({...p, [c.status]: [...(p[c.status] || []), c]}), {}); // if empty, returns the initial value
+  if (!arr.length) return [[<p style={{margin: '5vh auto 15vh'}}>No se han encontrado tareas</p>]];
+  const groupedTasks = arr.reduce((p, c) => ({...p, [c.status]: [...(p[c.status] || []), c]}), {});
   return Object.entries(groupedTasks).sort(([[status1]], [[status2]]) => status1 < status2);
 }
 

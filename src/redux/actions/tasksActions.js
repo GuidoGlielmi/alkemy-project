@@ -27,7 +27,7 @@ import {
 
 const requestPending = () => ({type: REQUEST_PENDING});
 const requestError = (payload) => ({type: REQUEST_ERROR, payload});
-const requestFinished = (payload) => ({type: REQUEST_FINISHED, payload});
+const requestFinished = () => ({type: REQUEST_FINISHED});
 
 export const login = (values) => async (dispatch) => {
   dispatch(requestPending());
