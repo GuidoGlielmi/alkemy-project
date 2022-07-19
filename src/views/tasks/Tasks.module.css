@@ -29,16 +29,6 @@
   top: 0;
   border-top: 2px solid #4e005e;
 }
-.tasks {
-  display: flex;
-  position: relative;
-  margin-top: 5vh;
-  padding-top: 40px;
-}
-.tasks span {
-  line-height: 50vh;
-  font-size: 1.2em;
-}
 .filterContainer {
   display: flex;
   flex-direction: column;
@@ -68,23 +58,4 @@
   display: flex;
   align-items: center;
   gap: 2vw;
-}
-.skeleton {
-  display: flex;
-  justify-content: space-between;
-  gap: 1vw;
-  width: 100%;
-}
-.skeletonDevice {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1vh;
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .tasks {
-    flex-direction: column;
-  }
 }
