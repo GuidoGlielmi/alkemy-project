@@ -6,9 +6,7 @@ import styles from './Header.module.css';
 export default function Header() {
   const dispatch = useDispatch();
 
-  function handleLogout() {
-    dispatch(logout());
-  }
+  const handleLogout = () => dispatch(logout());
 
   return (
     <>

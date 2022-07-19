@@ -1,10 +1,9 @@
 import {lazy, Suspense} from 'react';
-import {Routes, Route, useLocation, Outlet} from 'react-router-dom';
+import {Routes, Route, useLocation, Outlet, Navigate} from 'react-router-dom';
 import {AnimatePresence, motion} from 'framer-motion';
 import Header from 'components/header/Header';
 import Login from 'views/login/Login';
 import Register from 'views/register/Register';
-// import Tasks from 'views/tasks/Tasks';
 import UserFeedbackModal from 'components/user-feedback-modal/UserFeedbackModal';
 import {useSelector} from 'react-redux';
 
@@ -44,7 +43,7 @@ export default function App() {
         <Route element={<MotionWrapper />}>
           <Route element={<SuspenseWrapper />}>
             <Route element={<Header />}>
-              <Route path='/' element={isLoggedIn ? <Tasks /> : <Login />} />
+              <Route path='/' element={isLoggedIn ? <Tasks /> : <Navigate to='/Login' />} />
             </Route>
           </Route>
           <Route path='/login' element={<Login />} />

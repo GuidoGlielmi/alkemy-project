@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ToastContainer, toast} from 'react-toastify';
 import {clearUserFeedbackMsg} from 'redux/actions/tasksActions';
 
-export default function UserFeedbackModal({children}) {
+export default function UserFeedbackModal() {
   const dispatch = useDispatch();
   const {userFeedbackMsg, error} = useSelector((state) => state);
   useEffect(() => {

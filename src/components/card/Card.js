@@ -28,14 +28,14 @@ export default function Card({
   const formattedCreationTime = useMemo(() => formatDate(createdAt), [createdAt]);
   const formattedModificationTime = useMemo(() => formatDate(modifiedAt), [modifiedAt]);
 
-  async function updatePriority() {
+  function updatePriority() {
     const currentIndex = priorities.indexOf(importance);
     const newPriority =
       currentIndex + 1 === priorities.length ? priorities[0] : priorities[currentIndex + 1];
     dispatch(updateTask(_id, {importance: newPriority}));
   }
 
-  async function updateStatus() {
+  function updateStatus() {
     const currentIndex = statuses.indexOf(status);
     const newStatus =
       currentIndex + 1 === statuses.length ? statuses[0] : statuses[currentIndex + 1];
@@ -54,7 +54,7 @@ export default function Card({
       <time dateTime={formattedModificationTime}>
         <u>Última modificación</u>: {formattedModificationTime}
       </time>
-      <h5>Created by: {user.userName}</h5>
+      <h5>Creado por: {user.userName}</h5>
       <div>
         <Button size='small' color={colors[statuses.indexOf(status)]} action={updateStatus}>
           {status}
@@ -64,6 +64,7 @@ export default function Card({
         </Button>
       </div>
       <button
+        title={description.length > 100 && (isLongDescriptionShown ? 'Ver menos' : 'Ver más')}
         className={styles.description}
         type='button'
         onClick={() => description.length > 100 && setIsLongDescriptionShown((ps) => !ps)}

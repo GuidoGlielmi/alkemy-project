@@ -8,12 +8,31 @@ import {useDispatch, useSelector} from 'react-redux';
 import InputContainer from 'components/input-container/InputContainer';
 import Button from 'components/button/Button';
 import Select from 'components/input-container/Select';
-import {getFormInfo, register, clearJustRegistered} from 'redux/actions/tasksActions';
+import {getFormInfo, register} from 'redux/actions/tasksActions';
 import styles from './Register.module.css';
 
 const REQUIRED_MSG = '* Campo obligatorio';
 const EMAIL_MSG = 'Ingrese un email válido';
 const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
+const validationSchema = () =>
+  yup.object().shape({
+    userName: yup.string().min(4, getMinLengthMsg(6)).required(REQUIRED_MSG),
+    password: yup.string().min(6, getMinLengthMsg(6)).required(REQUIRED_MSG),
+    email: yup.string().email(EMAIL_MSG).required(REQUIRED_MSG),
+    role: yup.string().required(REQUIRED_MSG),
+    continent: yup.string().required(REQUIRED_MSG),
+    registered: yup.boolean(),
+    teamID: yup.string().when('registered', {
+      is: (registered) => registered,
+      then: yup.string().required(REQUIRED_MSG),
+      otherwise: yup.string(),
+    }),
+    region: yup.string().when('continent', {
+      is: (continent) => continent === 'America',
+      then: yup.string().required(REQUIRED_MSG),
+      otherwise: yup.string(),
+    }),
+  });
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -33,26 +52,6 @@ export default function Register() {
     region: '',
     registered: false,
   };
-
-  const validationSchema = () =>
-    yup.object().shape({
-      userName: yup.string().min(4, getMinLengthMsg(6)).required(REQUIRED_MSG),
-      password: yup.string().min(6, getMinLengthMsg(6)).required(REQUIRED_MSG),
-      email: yup.string().email(EMAIL_MSG).required(REQUIRED_MSG),
-      role: yup.string().required(REQUIRED_MSG),
-      continent: yup.string().required(REQUIRED_MSG),
-      registered: yup.boolean(),
-      teamID: yup.string().when('registered', {
-        is: (registered) => registered,
-        then: yup.string().required(REQUIRED_MSG),
-        otherwise: yup.string(),
-      }),
-      region: yup.string().when('continent', {
-        is: (continent) => continent === 'America',
-        then: yup.string().required(REQUIRED_MSG),
-        otherwise: yup.string(),
-      }),
-    });
 
   function onSubmit(values) {
     const user = {
@@ -153,62 +152,3 @@ export default function Register() {
     </div>
   );
 }
-
-/* 
-dirty: true
-​
-errors: Object { userName: "* Campo obligatorio", password: "* Campo obligatorio", email: "* Campo obligatorio", … }
-​
-getFieldHelpers: function getFieldHelpers(name)​
-getFieldMeta: function getFieldMeta(name)​
-getFieldProps: function getFieldProps(nameOrOptions)​
-handleBlur: function useEventCallback()​
-handleChange: function useEventCallback()​
-handleReset: function useEventCallback()​
-handleSubmit: function useEventCallback()​
-initialErrors: Object {  }
-​
-initialStatus: undefined
-​
-initialTouched: Object {  }
-​
-initialValues: Object { username: "", email: "", password: "", … }
-​
-isSubmitting: false
-​
-isValid: false
-​
-isValidating: false
-​
-registerField: function registerField(name, _ref3)​
-resetForm: function resetForm(nextState)​
-setErrors: function setErrors(errors)​
-setFieldError: function setFieldError(field, value)​
-setFieldTouched: function useEventCallback()​
-setFieldValue: function useEventCallback()​
-setFormikState: function setFormikState(stateOrCb)​
-setStatus: function setStatus(status)​
-setSubmitting: function setSubmitting(isSubmitting)​
-setTouched: function useEventCallback()​
-setValues: function useEventCallback()
-​
-status: undefined
-​
-submitCount: 0
-​
-submitForm: function useEventCallback()​
-touched: Object { continent: true, region: true }
-​
-unregisterField: function unregisterField(name)​
-validateField: function useEventCallback()​
-validateForm: function useEventCallback()
-​
-validateOnBlur: true
-​
-validateOnChange: false
-​
-validateOnMount: false
-​
-values: Object { username: "", email: "", continent: "America", … }
-
-*/

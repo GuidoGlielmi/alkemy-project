@@ -45,6 +45,7 @@
         "no-void": "off",
         "no-unused-expressions": "off",
         "default-param-last": "off",
+        "no-plusplus": "off",
         "no-unused-vars": "off"
       }
     }

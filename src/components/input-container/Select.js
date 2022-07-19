@@ -2,28 +2,27 @@ import React from 'react';
 import styles from './InputContainer.module.css';
 
 export default function Select({
-  children,
-  type = 'text',
-  className = styles.inputContainer,
   field, // { name, value, onChange, onBlur }
-  form,
   form: {
     touched: {[field.name]: touched},
     errors: {[field.name]: errMsg},
   },
   options,
   placeholder,
+  type = 'text',
+  className = styles.inputContainer,
+  children,
   ...props
 }) {
   return (
     <div className={className}>
       <label htmlFor={field.name}>{children}</label>
       <select
+        id={field.name}
         type={type}
+        className={touched && errMsg && styles.error}
         {...field}
         {...props}
-        id={field.name}
-        className={touched && errMsg && styles.error}
       >
         <option value='' disabled>
           {placeholder || children}

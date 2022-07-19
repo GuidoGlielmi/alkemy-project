@@ -29,7 +29,7 @@ const initialState = {
   error: false,
   justRegistered: false,
   userFeedbackMsg: '',
-  isLoading: true,
+  isLoading: false,
 };
 
 export default (state = initialState, action) => {

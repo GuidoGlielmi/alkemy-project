@@ -12,9 +12,9 @@ export default function Login() {
   const dispatch = useDispatch();
   const {isLoggedIn, username, justRegistered} = useSelector((state) => state);
 
-  if (justRegistered) dispatch(clearJustRegistered());
-
   const onSubmit = async (values) => dispatch(login(values));
+
+  if (justRegistered) dispatch(clearJustRegistered());
 
   if (isLoggedIn) return <Navigate to='/' />;
 

@@ -2,14 +2,14 @@ import React from 'react';
 import styles from './InputContainer.module.css';
 
 export default function InputContainer({
-  children,
-  type = 'text',
-  className = styles.inputContainer,
   field, // { name, value, onChange, onBlur }
   form: {
     touched: {[field.name]: touched},
     errors: {[field.name]: errMsg},
   },
+  className = styles.inputContainer,
+  type = 'text',
+  children,
   ...props
 }) {
   return (
@@ -18,9 +18,9 @@ export default function InputContainer({
       <input
         id={field.name}
         type={type}
+        className={`${styles.input} ${touched && errMsg && styles.error}`}
         {...field}
         {...props}
-        className={`${styles.input} ${touched && errMsg && styles.error}`}
       />
       <span className={styles.errorMsg}>{touched && errMsg}&nbsp;</span>
     </div>

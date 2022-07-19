@@ -12,7 +12,7 @@ const device = window.innerWidth < 768;
 
 export default function Tasks() {
   const dispatch = useDispatch();
-  const {isLoggedIn, tasks, priorities, isTeamLeader, teamID} = useSelector((state) => state);
+  const {isLoggedIn, tasks, priorities, teamID} = useSelector((state) => state);
 
   const isFirstload = useIsFirstLoad(tasks.length);
   const [selectedPriority, setSelectedPriority] = useState('ALL');
@@ -21,7 +21,7 @@ export default function Tasks() {
   useEffect(() => {
     // using void appears to make it not work
     isLoggedIn && dispatch(getAllTasks());
-  }, [dispatch, isTeamLeader, isLoggedIn]);
+  }, [dispatch, isLoggedIn]);
 
   function filterTasks() {
     let filteredTasks = [...tasks];
@@ -53,9 +53,7 @@ export default function Tasks() {
               )}
             </>
           ) : (
-            <div className={styles[device ? 'skeletonDevice' : 'skeleton']}>
-              {createSkeletons(3)}
-            </div>
+            <Skeletons amount={3} />
           )}
         </div>
       </section>
@@ -68,34 +66,20 @@ function FilterBox({priorities, selectedPriority, setSelectedPriority, setSearch
   const {taskByCreator} = useSelector((state) => state);
   return (
     <div className={styles.filterContainer}>
-      <fieldset className={styles.selectPriority}>
-        <legend>Seleccionar por creador:</legend>
-        <div>
-          {taskByCreatorArray.map((tc) => (
-            <RadioContainer
-              key={tc}
-              tag={tc}
-              name='creator'
-              action={() => dispatch(setTaskCreator(tc))}
-              checked={taskByCreator === tc}
-            />
-          ))}
-        </div>
-      </fieldset>
-      <fieldset className={styles.selectPriority}>
-        <legend>Seleccionar por prioridad:</legend>
-        <div>
-          {['ALL', ...priorities].map((p) => (
-            <RadioContainer
-              key={p}
-              tag={p}
-              name='priority'
-              action={() => setSelectedPriority(p)}
-              checked={selectedPriority === p}
-            />
-          ))}
-        </div>
-      </fieldset>
+      <RadioSet
+        title='Seleccionar por creador:'
+        elements={taskByCreatorArray}
+        action={(taskCreator) => dispatch(setTaskCreator(taskCreator))}
+        comparator={taskByCreator}
+        name='creator'
+      />
+      <RadioSet
+        title='Seleccionar por prioridad:'
+        elements={['ALL', ...priorities]}
+        action={(priority) => setSelectedPriority(priority)}
+        comparator={selectedPriority}
+        name='priorities'
+      />
       <div>
         <span>Buscar por título</span>
         <input onChange={(e) => debounce(() => setSearchKey(e.target.value), 100)()} />
@@ -104,14 +88,29 @@ function FilterBox({priorities, selectedPriority, setSelectedPriority, setSearch
   );
 }
 
-function RadioContainer({tag, action, name, checked}) {
-  return (
+const RadioSet = ({title, elements, action, comparator, name}) => (
+  <fieldset className={styles.selectPriority}>
+    <legend>{title}</legend>
     <div>
-      <input onChange={action} checked={checked} name={name} type='radio' />
-      <span>{tag}</span>
+      {elements.map((e) => (
+        <RadioContainer
+          key={e}
+          tag={e}
+          name={name}
+          action={() => action(e)}
+          checked={comparator === e}
+        />
+      ))}
     </div>
-  );
-}
+  </fieldset>
+);
+
+const RadioContainer = ({tag, action, name, checked}) => (
+  <div>
+    <input onChange={action} checked={checked} name={name} type='radio' />
+    <span>{tag}</span>
+  </div>
+);
 
 function useIsFirstLoad(condition = true) {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -123,11 +122,16 @@ function useIsFirstLoad(condition = true) {
   return isFirstLoad;
 }
 
-const createSkeletons = (n) =>
-  Array(n)
-    .fill(<Skeleton height='50vh' width={device ? '90vw' : '30vw'} />)
-    // eslint-disable-next-line react/no-array-index-key
-    .map((s, i) => <Fragment key={i}>{s}</Fragment>);
+const Skeletons = ({amount}) => (
+  <div className={styles[device ? 'skeletonDevice' : 'skeleton']}>
+    {Array(amount)
+      .fill(<Skeleton height='50vh' width={device ? '90vw' : '30vw'} />)
+      .map((s, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Fragment key={i}>{s}</Fragment>
+      ))}
+  </div>
+);
 
 function groupByStatus(arr) {
   if (!arr.length) return [[<p style={{margin: '5vh auto 15vh'}}>No se han encontrado tareas</p>]];
