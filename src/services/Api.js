@@ -12,11 +12,11 @@ class Requests {
 
   constructor(apiConfig) {
     this.#api = apiConfig;
-    methodsNames.forEach((methodName) =>
-      Object.defineProperty(Requests.prototype, methodName.toLowerCase(), {
-        value: async (url, body) => this.#makeRequest(url, body, methodName),
-      }),
-    );
+    methodsNames.forEach((methodName) => {
+      // Requests.prototype === this.__proto__
+      Requests.prototype[methodName.toLowerCase()] = async (url, body) =>
+        this.#makeRequest(url, body, methodName);
+    });
   }
 
   async #makeRequest(url, body, method) {
