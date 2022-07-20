@@ -43,7 +43,7 @@ export default function App() {
         <Route element={<MotionWrapper />}>
           <Route element={<SuspenseWrapper />}>
             <Route element={<Header />}>
-              <Route path='/' element={isLoggedIn ? <Tasks /> : <Navigate to='/Login' />} />
+              <Route path='/' element={isLoggedIn ? <Tasks /> : <Navigate to='/login' />} />
             </Route>
           </Route>
           <Route path='/login' element={<Login />} />

@@ -40,6 +40,7 @@ export default (state = initialState, action) => {
       ...state,
       error: true,
       userFeedbackMsg: action.payload,
+      isLoading: false,
     },
     [LOGIN_SUCCESS]: {
       ...state,

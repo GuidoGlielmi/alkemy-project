@@ -12,7 +12,7 @@ const backgroundStyle = {
   background: 'rgba(0, 0, 0, 0.1)',
 };
 
-export default function LoadingScreen({children}) {
+export default function LoadingScreen() {
   const isLoading = useSelector(({isLoading}) => isLoading);
   return (
     isLoading && (

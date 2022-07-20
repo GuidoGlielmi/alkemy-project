@@ -10,9 +10,9 @@
 .header img {
   width: 90px;
 }
-.header > div {
-  cursor: pointer;
-}
+/* .header > div {
+  display: 
+} */
 .header button {
   padding: 5px 10px;
   border: 1px solid white;

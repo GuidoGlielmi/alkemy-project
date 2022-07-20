@@ -50,7 +50,7 @@ export default function Register() {
     teamID,
     continent: '',
     region: '',
-    registered: false,
+    registered: !!teamID,
   };
 
   function onSubmit(values) {
@@ -128,7 +128,7 @@ export default function Register() {
             <FormControlLabel
               control={
                 <Switch
-                  value={values.registered}
+                  checked={values.registered}
                   onChange={() => setFieldValue('registered', !values.registered)}
                   name='registered'
                 />

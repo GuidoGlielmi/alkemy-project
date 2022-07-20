@@ -1,7 +1,7 @@
-import api from './apiSingleton';
+import api from './Api';
 
 const loginService = async (values) => {
-  const res = (await api.post('/auth/login', values))?.data?.result;
+  const res = await api.post('/auth/login', values);
   return {
     token: res?.token,
     username: res?.user?.userName,

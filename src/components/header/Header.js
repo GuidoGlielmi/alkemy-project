@@ -1,4 +1,4 @@
-import {Outlet} from 'react-router-dom';
+import {Link, Outlet} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {logout} from 'redux/actions/tasksActions';
 import styles from './Header.module.css';
@@ -12,9 +12,12 @@ export default function Header() {
     <>
       <header className={styles.header}>
         <span className={styles.logo}>Go Scrum</span>
-        <button type='button' onClick={handleLogout}>
-          Log out
-        </button>
+        <div>
+          <button type='button' onClick={handleLogout}>
+            Log out
+          </button>
+          <Link to='/register'>Registrar a un nuevo miembro</Link>
+        </div>
       </header>
       <Outlet />
     </>
