@@ -13,10 +13,10 @@ export default function Header() {
       <header className={styles.header}>
         <span className={styles.logo}>Go Scrum</span>
         <div>
-          <button type='button' onClick={handleLogout}>
-            Log out
-          </button>
           <Link to='/register'>Registrar a un nuevo miembro</Link>
+          <button type='button' onClick={handleLogout} className='buttonSecondary'>
+            Cerrar sesión
+          </button>
         </div>
       </header>
       <Outlet />

@@ -39,7 +39,6 @@ export const login = (values) => async (dispatch) => {
     isTeamLeader && localStorage.setItem('isTeamLeader', isTeamLeader);
     dispatch(loginSuccess({username, isTeamLeader, teamID}));
   } catch (err) {
-    console.log(err);
     errorHandler({
       err,
       dispatch,
@@ -108,7 +107,6 @@ export const getAllTasks =
     dispatch(requestPending());
     // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
     const p1 = taskDataService();
-    console.log('getAllTasks');
     p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) =>
       errorHandler({err, dispatch}),
     );
@@ -167,7 +165,6 @@ function getSelectedTasks(dispatch, getState, userFeedbackMsg) {
 }
 
 function errorHandler({err, dispatch, errMsg}) {
-  console.log(err.status);
   if (!errMsg && err.status === 401) {
     localStorage.removeItem('token');
     localStorage.removeItem('isTeamLeader');

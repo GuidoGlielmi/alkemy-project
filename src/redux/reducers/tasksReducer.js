@@ -14,25 +14,27 @@ import {
   SET_TASK_CREATOR,
 } from '../actions/types';
 
-const initialState = {
-  isLoggedIn: !!localStorage.getItem('token'),
-  username: localStorage.getItem('username') || '',
-  isTeamLeader: !!localStorage.getItem('isTeamLeader'),
-  teamID: localStorage.getItem('teamID') || '',
-  tasks: [],
-  taskByCreator: 'ALL',
-  roles: [],
-  continents: [],
-  regions: [],
-  statuses: [],
-  priorities: [],
-  error: false,
-  justRegistered: false,
-  userFeedbackMsg: '',
-  isLoading: false,
-};
+function getInitialState() {
+  return {
+    isLoggedIn: !!localStorage.getItem('token'),
+    username: localStorage.getItem('username') || '',
+    isTeamLeader: !!localStorage.getItem('isTeamLeader'),
+    teamID: localStorage.getItem('teamID') || '',
+    tasks: [],
+    taskByCreator: 'ALL',
+    roles: [],
+    continents: [],
+    regions: [],
+    statuses: [],
+    priorities: [],
+    error: false,
+    justRegistered: false,
+    userFeedbackMsg: '',
+    isLoading: false,
+  };
+}
 
-export default (state = initialState, action) => {
+export default (state = getInitialState(), action) => {
   const cases = {
     [REQUEST_PENDING]: {...state, isLoading: true},
     [REQUEST_FINISHED]: {...state, isLoading: false},
@@ -49,7 +51,7 @@ export default (state = initialState, action) => {
       isTeamLeader: action.payload?.isTeamLeader,
       teamID: action.payload?.teamID,
     },
-    [LOGOUT]: initialState,
+    [LOGOUT]: getInitialState(),
     [TASKS_SUCCESS]: {
       ...state,
       tasks: action.payload?.tasks,
@@ -67,7 +69,7 @@ export default (state = initialState, action) => {
       regions: action.payload?.regions,
     },
     [REGISTER_SUCCESS]: {
-      ...initialState,
+      ...getInitialState(),
       teamID: state.teamID || '',
       username: action.payload,
       justRegistered: true,

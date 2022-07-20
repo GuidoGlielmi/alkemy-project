@@ -10,10 +10,12 @@
 .header img {
   width: 90px;
 }
-/* .header > div {
-  display: 
-} */
-.header button {
+.header > div {
+  display: flex;
+  margin: 0 1vw;
+  gap: 1vw;
+}
+/* .header button {
   padding: 5px 10px;
   border: 1px solid white;
   border-radius: 10px;
@@ -22,4 +24,4 @@
 .header button:hover {
   box-shadow: 0 0 2px;
   opacity: 0.9;
-}
+} */
