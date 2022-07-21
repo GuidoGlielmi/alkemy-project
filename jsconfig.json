@@ -2,5 +2,5 @@
   "compilerOptions": {
     "baseUrl": "src"
   },
-  "include": ["src", "cypress/integration/Test1.test.jsx"]
+  "include": ["src", "src/tests/Test1.test.jsx"]
 }
