@@ -1,6 +1,12 @@
 import loginService from 'services/login';
 import {formDataService, registerService} from 'services/register';
 import {
+  saveSessionService,
+  clearSessionService,
+  registerSessionService,
+  unauthorizeSessionService,
+} from 'services/session';
+import {
   addTaskService,
   deleteTaskService,
   getMyTasksService,
@@ -33,19 +39,13 @@ export const login = (values) => async (dispatch) => {
   dispatch(requestPending());
   try {
     const {token, username, isTeamLeader, teamID} = await loginService(values);
-    localStorage.setItem('token', token);
-    localStorage.setItem('username', username);
-    localStorage.setItem('teamID', teamID);
-    isTeamLeader && localStorage.setItem('isTeamLeader', isTeamLeader);
+    saveSessionService({token, username, isTeamLeader, teamID});
     dispatch(loginSuccess({username, isTeamLeader, teamID}));
   } catch (err) {
-    errorHandler({
-      err,
-      dispatch,
-      errMsg:
-        (err.response.status === 404 || err.response.status === 401) &&
-        'Usuario o contraseña incorrectos',
-    });
+    let errMsg;
+    if (err.response.status === 404 || err.response.status === 401)
+      errMsg = 'Usuario o contraseña incorrectos';
+    dispatch(errorHandler(err, errMsg));
   } finally {
     dispatch(requestFinished());
   }
@@ -53,7 +53,7 @@ export const login = (values) => async (dispatch) => {
 
 const loginSuccess = (payload) => ({type: LOGIN_SUCCESS, payload});
 export const logout = () => {
-  localStorage.clear();
+  clearSessionService();
   return {type: LOGOUT};
 };
 const unauthorize = () => ({type: UNAUTHORIZE});
@@ -64,7 +64,7 @@ export const getFormInfo = () => async (dispatch) => {
     const {Rol: roles, continente: continents, region: regions} = await formDataService();
     dispatch(formInfoSuccess({roles, continents, regions}));
   } catch (err) {
-    errorHandler({err, dispatch});
+    dispatch(errorHandler(err));
   } finally {
     dispatch(requestFinished());
   }
@@ -74,11 +74,10 @@ export const register = (user) => async (dispatch) => {
   dispatch(requestPending());
   try {
     await registerService(user);
-    localStorage.clear();
-    localStorage.setItem('username', user.userName);
+    registerSessionService(user.userName);
     dispatch(registerSuccess(user.userName));
   } catch (err) {
-    errorHandler({err, dispatch});
+    dispatch(errorHandler(err));
   } finally {
     dispatch(requestFinished());
   }
@@ -91,12 +90,10 @@ export const getMyTasks =
   async (dispatch) => {
     dispatch(requestPending());
     const p1 = taskDataService();
-    p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) =>
-      errorHandler({err, dispatch}),
-    );
+    p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) => dispatch(errorHandler(err)));
     const p2 = getMyTasksService();
     p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg}))).catch((err) =>
-      errorHandler({err, dispatch}),
+      dispatch(errorHandler(err)),
     );
     Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
   };
@@ -107,12 +104,10 @@ export const getAllTasks =
     dispatch(requestPending());
     // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
     const p1 = taskDataService();
-    p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) =>
-      errorHandler({err, dispatch}),
-    );
+    p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) => dispatch(errorHandler(err)));
     const p2 = getAllTasksService();
     p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg}))).catch((err) =>
-      errorHandler({err, dispatch}),
+      dispatch(errorHandler(err)),
     );
     Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
   };
@@ -126,7 +121,7 @@ export const addTask = (task, resetForm) => async (dispatch, getState) => {
     resetForm();
     getSelectedTasks(dispatch, getState, 'La tarea ha sido creada exitosamente');
   } catch (err) {
-    errorHandler({err, dispatch});
+    dispatch(errorHandler(err));
   } finally {
     dispatch(requestFinished());
   }
@@ -137,7 +132,7 @@ export const updateTask = (id, task) => async (dispatch, getState) => {
     await updateTaskService(id, task);
     getSelectedTasks(dispatch, getState, 'La tarea ha sido actualizada');
   } catch (err) {
-    errorHandler({err, dispatch});
+    dispatch(errorHandler(err));
   } finally {
     dispatch(requestFinished());
   }
@@ -148,7 +143,7 @@ export const deleteTask = (id) => async (dispatch, getState) => {
     await deleteTaskService(id);
     getSelectedTasks(dispatch, getState, 'La tarea ha sido borrada exitosamente');
   } catch (err) {
-    errorHandler({err, dispatch});
+    dispatch(errorHandler(err));
   } finally {
     dispatch(requestFinished());
   }
@@ -164,11 +159,12 @@ function getSelectedTasks(dispatch, getState, userFeedbackMsg) {
   dispatch(taskByCreator === 'ALL' ? getAllTasks(userFeedbackMsg) : getMyTasks(userFeedbackMsg));
 }
 
-function errorHandler({err, dispatch, errMsg}) {
-  if (!errMsg && err.status === 401) {
-    localStorage.removeItem('token');
-    localStorage.removeItem('isTeamLeader');
-    dispatch(unauthorize());
-  } else if (err.status === 409) dispatch(requestError('El email ya está en uso'));
-  else dispatch(requestError(errMsg || ''));
-}
+const errorHandler =
+  (err, errMsg = '') =>
+  async (dispatch) => {
+    if (!errMsg && err.status === 401) {
+      unauthorizeSessionService();
+      dispatch(unauthorize());
+    } else if (err.status === 409) dispatch(requestError('El email ya está en uso'));
+    else dispatch(requestError(errMsg));
+  };

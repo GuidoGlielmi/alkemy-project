@@ -2,6 +2,7 @@ import Button from 'components/button/Button';
 import {useState, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {deleteTask, updateTask} from 'redux/actions/tasksActions';
+import {when} from 'components/tasks/Tasks';
 import styles from './Card.module.css';
 
 const colors = ['rgb(219, 0, 0)', 'rgb(200, 200, 0)', 'rgb(38, 0, 219)'];
@@ -64,7 +65,11 @@ export default function Card({
         </Button>
       </div>
       <button
-        title={description.length > 100 && (isLongDescriptionShown ? 'Ver menos' : 'Ver más')}
+        title={when(description.length < 100)
+          .return('')
+          .elseWhen(isLongDescriptionShown)
+          .return('Ver menos')
+          .else('Ver más')}
         className={styles.description}
         type='button'
         onClick={() => description.length > 100 && setIsLongDescriptionShown((ps) => !ps)}

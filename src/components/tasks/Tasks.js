@@ -22,9 +22,9 @@ export default function Tasks({selectedPriority, searchKey}) {
   return (
     <div className={styles.tasks}>
       {when(isFirstload)
-        .render(<Skeletons amount={3} />)
+        .return(<Skeletons amount={3} />)
         .elseWhen(!tasks.length)
-        .render(<span>No se han creado tareas</span>)
+        .return(<span>No se han creado tareas</span>)
         .else(
           groupByStatus(filterTasks()).map(([status, tasks]) =>
             tasks ? <TaskGroup key={status} status={status} tasks={tasks} /> : status,
@@ -61,9 +61,9 @@ function groupByStatus(arr) {
   return Object.entries(groupedTasks).sort(([[status1]], [[status2]]) => status1 < status2);
 }
 
-const when = (condition, value) => ({
+export const when = (condition, value) => ({
   elseWhen: (newCondition) => when(condition || newCondition, value),
-  render: (v) => when(condition, condition && (value || v)),
-  else: (v) => value || v,
-  get: value || null,
+  return: (v) => when(condition, condition === true ? value ?? v : null),
+  else: (v) => value ?? v,
+  get: value,
 });

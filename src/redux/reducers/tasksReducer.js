@@ -1,3 +1,4 @@
+import {getSessionService} from 'services/session';
 import {
   REQUEST_PENDING,
   REQUEST_FINISHED,
@@ -14,27 +15,22 @@ import {
   SET_TASK_CREATOR,
 } from '../actions/types';
 
-function getInitialState() {
-  return {
-    isLoggedIn: !!localStorage.getItem('token'),
-    username: localStorage.getItem('username') || '',
-    isTeamLeader: !!localStorage.getItem('isTeamLeader'),
-    teamID: localStorage.getItem('teamID') || '',
-    tasks: [],
-    taskByCreator: 'ALL',
-    roles: [],
-    continents: [],
-    regions: [],
-    statuses: [],
-    priorities: [],
-    error: false,
-    justRegistered: false,
-    userFeedbackMsg: '',
-    isLoading: false,
-  };
-}
+const initialState = {
+  ...getSessionService(),
+  tasks: [],
+  taskByCreator: 'ALL',
+  roles: [],
+  continents: [],
+  regions: [],
+  statuses: [],
+  priorities: [],
+  error: false,
+  justRegistered: false,
+  userFeedbackMsg: '',
+  isLoading: false,
+};
 
-export default (state = getInitialState(), action) => {
+export default (state = initialState, action) => {
   const cases = {
     [REQUEST_PENDING]: {...state, isLoading: true},
     [REQUEST_FINISHED]: {...state, isLoading: false},
@@ -51,7 +47,7 @@ export default (state = getInitialState(), action) => {
       isTeamLeader: action.payload?.isTeamLeader,
       teamID: action.payload?.teamID,
     },
-    [LOGOUT]: getInitialState(),
+    [LOGOUT]: {...initialState, ...getSessionService()},
     [TASKS_SUCCESS]: {
       ...state,
       tasks: action.payload?.tasks,
@@ -69,7 +65,8 @@ export default (state = getInitialState(), action) => {
       regions: action.payload?.regions,
     },
     [REGISTER_SUCCESS]: {
-      ...getInitialState(),
+      ...initialState,
+      ...getSessionService(),
       teamID: state.teamID || '',
       username: action.payload,
       justRegistered: true,
@@ -83,6 +80,6 @@ export default (state = getInitialState(), action) => {
     },
     [SET_TASK_CREATOR]: {...state, taskByCreator: action.payload},
   };
-  console.log(action.type, cases[action.type]);
+  // console.log(action.type, cases[action.type]);
   return cases[action.type] || state;
 };

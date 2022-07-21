@@ -35,13 +35,13 @@ class Requests {
       throw new RequestError({status: null, message: 'No hay internet'});
     }
     const res = await rawRes.json();
-    if (res[this.#api.status] < 200 || res[this.#api.status] >= 300) {
+    if (res?.[this.#api.status] < 200 || res?.[this.#api.status] >= 300) {
       throw new RequestError({
-        status: res[this.#api.status],
-        message: res[this.#api.message],
+        status: res?.[this.#api.status],
+        message: res?.[this.#api.message],
       });
     }
-    return res[this.#api.data];
+    return res?.[this.#api.data];
   }
 }
 
