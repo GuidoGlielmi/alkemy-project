@@ -90,12 +90,12 @@ export const getMyTasks =
   async (dispatch) => {
     dispatch(requestPending());
     const p1 = taskDataService();
-    p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) => dispatch(errorHandler(err)));
+    p1.then((data) => dispatch(taskDataSuccess(data)));
     const p2 = getMyTasksService();
-    p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg}))).catch((err) =>
-      dispatch(errorHandler(err)),
-    );
-    Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
+    p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg})));
+    Promise.all([p1, p2])
+      .then(() => dispatch(requestFinished()))
+      .catch((err) => dispatch(errorHandler(err)));
   };
 
 export const getAllTasks =
@@ -104,44 +104,44 @@ export const getAllTasks =
     dispatch(requestPending());
     // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
     const p1 = taskDataService();
-    p1.then((data) => dispatch(taskDataSuccess(data))).catch((err) => dispatch(errorHandler(err)));
+    p1.then((data) => dispatch(taskDataSuccess(data)));
     const p2 = getAllTasksService();
-    p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg}))).catch((err) =>
-      dispatch(errorHandler(err)),
-    );
-    Promise.all([p1, p2]).then(() => dispatch(requestFinished()));
+    p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg})));
+    Promise.all([p1, p2])
+      .then(() => dispatch(requestFinished()))
+      .catch((err) => dispatch(errorHandler(err)));
   };
 
 const tasksSuccess = (payload) => ({type: TASKS_SUCCESS, payload});
 const taskDataSuccess = (payload) => ({type: TASK_DATA_SUCCESS, payload});
-export const addTask = (task, resetForm) => async (dispatch, getState) => {
+export const addTask = (task, resetForm) => async (dispatch) => {
   dispatch(requestPending());
   try {
     await addTaskService(task);
     resetForm();
-    getSelectedTasks(dispatch, getState, 'La tarea ha sido creada exitosamente');
+    dispatch(getSelectedTasks('La tarea ha sido creada exitosamente'));
   } catch (err) {
     dispatch(errorHandler(err));
   } finally {
     dispatch(requestFinished());
   }
 };
-export const updateTask = (id, task) => async (dispatch, getState) => {
+export const updateTask = (id, task) => async (dispatch) => {
   dispatch(requestPending());
   try {
     await updateTaskService(id, task);
-    getSelectedTasks(dispatch, getState, 'La tarea ha sido actualizada');
+    dispatch(getSelectedTasks('La tarea ha sido actualizada'));
   } catch (err) {
     dispatch(errorHandler(err));
   } finally {
     dispatch(requestFinished());
   }
 };
-export const deleteTask = (id) => async (dispatch, getState) => {
+export const deleteTask = (id) => async (dispatch) => {
   dispatch(requestPending());
   try {
     await deleteTaskService(id);
-    getSelectedTasks(dispatch, getState, 'La tarea ha sido borrada exitosamente');
+    dispatch(getSelectedTasks('La tarea ha sido borrada exitosamente'));
   } catch (err) {
     dispatch(errorHandler(err));
   } finally {
@@ -154,10 +154,10 @@ export const setTaskCreator = (payload) => (dispatch) => {
   dispatch({type: SET_TASK_CREATOR, payload});
 };
 
-function getSelectedTasks(dispatch, getState, userFeedbackMsg) {
+const getSelectedTasks = (userFeedbackMsg) => (dispatch, getState) => {
   const {taskByCreator} = getState();
   dispatch(taskByCreator === 'ALL' ? getAllTasks(userFeedbackMsg) : getMyTasks(userFeedbackMsg));
-}
+};
 
 const errorHandler =
   (err, errMsg = '') =>
