@@ -6,6 +6,7 @@ export default function Select({
   form: {
     touched: {[field.name]: touched},
     errors: {[field.name]: errMsg},
+    setFieldError,
   },
   options,
   placeholder,
@@ -21,6 +22,7 @@ export default function Select({
         id={field.name}
         type={type}
         className={touched && errMsg && styles.error}
+        onFocus={() => setFieldError(field.name, false)}
         {...field}
         {...props}
       >
