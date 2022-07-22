@@ -2,8 +2,7 @@ import React from 'react';
 import styles from './InputContainer.module.css';
 
 export default function Select({
-  // field, // { name, value, onChange, onBlur }
-  field: {name, value, onChange, onBlur}, // { name, value, onChange, onBlur }
+  field: {name, value, onChange, onBlur},
   form: {
     touched: {[name]: touched},
     errors: {[name]: errMsg},
