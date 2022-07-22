@@ -1,0 +1,6 @@
+1) Change BrowserRouter to HashRouter
+2) run "npm install gh-pages --save-dev"
+3) add to package.json -> "homepage": "https://<user>.github.io/<proyect>"
+4) add "deploy": "gh-pages -d build" and "predeploy": "npm run build" to scripts
+5) run "npm run deploy"
+6) select "gh-pages" as branch for the github page

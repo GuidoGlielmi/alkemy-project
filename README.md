@@ -2,6 +2,10 @@
 
 GoScrum is an app for developer teams, created to help visualize, organize and implement the SCRUM methodology, providing team registration, functionalities to create tasks, and a visual tasks board.
 
+## Live demo
+
+[GoScrum](https://guidoglielmi.github.io/alkemy-project/#/login)
+
 ## Available Scripts
 
 In the project directory, you can run:
