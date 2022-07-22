@@ -2,10 +2,11 @@ import React from 'react';
 import styles from './InputContainer.module.css';
 
 export default function Select({
-  field, // { name, value, onChange, onBlur }
+  // field, // { name, value, onChange, onBlur }
+  field: {name, value, onChange, onBlur}, // { name, value, onChange, onBlur }
   form: {
-    touched: {[field.name]: touched},
-    errors: {[field.name]: errMsg},
+    touched: {[name]: touched},
+    errors: {[name]: errMsg},
     setFieldError,
   },
   options,
@@ -13,18 +14,19 @@ export default function Select({
   type = 'text',
   className = styles.inputContainer,
   children,
-  ...props
 }) {
   return (
     <div className={className}>
-      <label htmlFor={field.name}>{children}</label>
+      <label htmlFor={name}>{children}</label>
       <select
-        id={field.name}
+        id={name}
         type={type}
         className={touched && errMsg && styles.error}
-        onFocus={() => setFieldError(field.name, false)}
-        {...field}
-        {...props}
+        onFocus={() => setFieldError(name, false)}
+        name={name}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
       >
         <option value='' disabled>
           {placeholder || children}
