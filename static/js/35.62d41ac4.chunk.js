@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkskill_up_react_ii=self.webpackChunkskill_up_react_ii||[]).push([[35],{5035:function(e,n,t){t.r(n),t.d(n,{default:function(){return r}});t(2791);var i=t(184);function r(){return(0,i.jsx)("div",{style:{display:"flex",justifyContent:"center",alignItems:"center",height:"100vh"},children:"P\xe1gina no encontrada"})}}}]);
+//# sourceMappingURL=35.62d41ac4.chunk.js.map
