@@ -4,16 +4,17 @@ import {Formik, Field} from 'formik';
 import {Link, Navigate} from 'react-router-dom';
 import * as yup from 'yup';
 import {v4 as uuid} from 'uuid';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import InputContainer from 'components/input-container/InputContainer';
 import Button from 'components/button/Button';
 import Select from 'components/input-container/Select';
 import {getFormInfo, register} from 'redux/actions/tasksActions';
+import {IUser} from 'services/goScrum';
 import styles from './Register.module.css';
 
+export const getMinLengthMsg = (n: number) => `Ingrese más de ${n - 1} caracteres`;
 const REQUIRED_MSG = '* Campo obligatorio';
 const EMAIL_MSG = 'Ingrese un email válido';
-const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
 const validationSchema = () =>
   yup.object().shape({
     userName: yup.string().min(4, getMinLengthMsg(6)).required(REQUIRED_MSG),
@@ -23,20 +24,20 @@ const validationSchema = () =>
     continent: yup.string().required(REQUIRED_MSG),
     registered: yup.boolean(),
     teamID: yup.string().when('registered', {
-      is: (registered) => registered,
+      is: (registered: boolean) => registered,
       then: yup.string().required(REQUIRED_MSG),
       otherwise: yup.string(),
     }),
     region: yup.string().when('continent', {
-      is: (continent) => continent === 'America',
+      is: (continent: string) => continent === 'America',
       then: yup.string().required(REQUIRED_MSG),
       otherwise: yup.string(),
     }),
   });
 
 export default function Register() {
-  const dispatch = useDispatch();
-  const {roles, continents, regions, justRegistered, teamID} = useSelector((state) => state);
+  const dispatch = useAppDispatch();
+  const {Rol, continente, region, justRegistered, teamID} = useAppSelector((state) => state);
 
   useEffect(() => {
     dispatch(getFormInfo());
@@ -53,7 +54,7 @@ export default function Register() {
     registered: !!teamID,
   };
 
-  function onSubmit(values) {
+  function onSubmit(values: IUser) {
     const user = {
       ...values,
       teamID: values.registered ? values.teamID : uuid(),
@@ -103,7 +104,7 @@ export default function Register() {
               name='role'
               placeholder='Seleccione qué miembro es'
               component={Select}
-              options={roles}
+              options={Rol}
             >
               Tipo de miembro
             </Field>
@@ -111,7 +112,7 @@ export default function Register() {
               name='continent'
               placeholder='Seleccione su continente'
               component={Select}
-              options={continents}
+              options={continente}
             >
               Continente
             </Field>
@@ -120,7 +121,7 @@ export default function Register() {
                 name='region'
                 placeholder='Seleccione su región'
                 component={Select}
-                options={regions}
+                options={region}
               >
                 Región
               </Field>

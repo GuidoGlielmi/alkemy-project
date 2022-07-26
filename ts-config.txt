@@ -1,0 +1,37 @@
+.eslint.json ->
+{
+  ...
+  "parserOptions": {
+    ...
+    "project": ["tsconfig.json"],
+    ...
+  },
+  "overrides": [
+      {
+        ...
+        "files": ["*.ts", "*.tsx"],
+        ...
+      }
+    ]
+  },
+  "extends": [
+    ...
+    "airbnb-typescript",
+    ...
+  ],
+  ...
+}
+
+tsconfig.json -> {
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "target": "ES2015"
+    "moduleResolution": "node",
+    "module": "ES2020"
+  },
+  "include": ["src", "src/tests/Test1.test.jsx", "typings.d.ts"]
+}
+
+
+typings.d.ts -> declare module '*.module.css';

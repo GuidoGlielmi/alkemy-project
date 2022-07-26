@@ -1,10 +1,10 @@
 import {Link, Outlet} from 'react-router-dom';
-import {useDispatch} from 'react-redux';
 import {logout} from 'redux/actions/tasksActions';
+import {useAppDispatch} from 'redux/hooks';
 import styles from './Header.module.css';
 
 export default function Header() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => dispatch(logout());
 

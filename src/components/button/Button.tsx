@@ -1,5 +1,13 @@
-import React from 'react';
 import styles from './Button.module.css';
+
+interface IButton {
+  action?: () => any;
+  type?: 'button' | 'submit' | 'reset';
+  size?: string;
+  disabled?: boolean;
+  color?: string;
+  children: string;
+}
 
 export default function Button({
   action = () => {},
@@ -8,7 +16,7 @@ export default function Button({
   disabled = false,
   color = 'rgb(36, 36, 36)',
   children,
-}) {
+}: IButton) {
   return (
     <button
       onClick={action}

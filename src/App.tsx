@@ -5,7 +5,7 @@ import Header from 'components/header/Header';
 import Login from 'views/login/Login';
 import Register from 'views/register/Register';
 import UserFeedbackModal from 'components/user-feedback-modal/UserFeedbackModal';
-import {useSelector} from 'react-redux';
+import {useAppSelector} from 'redux/hooks';
 
 // import { validate } from 'uuid';
 
@@ -34,7 +34,7 @@ const SuspenseWrapper = () => (
 );
 
 export default function App() {
-  const isLoggedIn = useSelector(({isLoggedIn}) => isLoggedIn);
+  const {isLoggedIn} = useAppSelector((state) => state);
   const location = useLocation();
   return (
     <AnimatePresence>

@@ -1,5 +1,5 @@
 import Card from 'components/card/Card';
-import React from 'react';
+import {ITask} from 'services/goScrum';
 import styles from './TaskGroup.module.css';
 
 export default function TaskGroup({status, tasks}) {
@@ -7,7 +7,7 @@ export default function TaskGroup({status, tasks}) {
     <div className={styles.group}>
       <h3>{status}</h3>
       <div>
-        {tasks.map((t) => (
+        {tasks.map((t: ITask) => (
           <Card key={t._id} task={t} />
         ))}
       </div>

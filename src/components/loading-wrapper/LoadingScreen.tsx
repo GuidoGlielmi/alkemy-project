@@ -1,7 +1,7 @@
 import {CircularProgress} from '@mui/material';
-import {useSelector} from 'react-redux';
+import {useAppSelector} from 'redux/hooks';
 
-const backgroundStyle = {
+const backgroundStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -13,7 +13,7 @@ const backgroundStyle = {
 };
 
 export default function LoadingScreen() {
-  const isLoading = useSelector(({isLoading}) => isLoading);
+  const isLoading = useAppSelector(({isLoading: loading}) => loading);
   return (
     isLoading && (
       <div style={backgroundStyle}>

@@ -1,4 +1,5 @@
-import {getSessionService} from 'services/session';
+import {IRegisterData, ITask, ITaskData} from 'services/goScrum';
+import {getSessionService, Session} from 'services/session';
 import {
   REQUEST_PENDING,
   REQUEST_FINISHED,
@@ -15,22 +16,32 @@ import {
   SET_TASK_CREATOR,
 } from '../actions/types';
 
-const initialState = {
+export interface State extends Session, IRegisterData, ITaskData {
+  tasks: ITask[];
+  taskByCreator: string;
+  error: boolean;
+  justRegistered: boolean;
+  userFeedbackMsg: string;
+  isLoading: boolean;
+}
+
+const initialState: State = {
   ...getSessionService(),
   tasks: [],
   taskByCreator: 'ALL',
-  roles: [],
-  continents: [],
-  regions: [],
-  statuses: [],
-  priorities: [],
+  Rol: [],
+  continente: [],
+  region: [],
+  status: [],
+  importance: [],
   error: false,
   justRegistered: false,
   userFeedbackMsg: '',
   isLoading: false,
 };
 
-export default (state = initialState, action) => {
+// eslint-disable-next-line @typescript-eslint/default-param-last
+export default (state = initialState, action: any): State => {
   const cases = {
     [REQUEST_PENDING]: {...state, isLoading: true},
     [REQUEST_FINISHED]: {...state, isLoading: false},
@@ -55,14 +66,14 @@ export default (state = initialState, action) => {
     },
     [TASK_DATA_SUCCESS]: {
       ...state,
-      statuses: action.payload?.status,
-      priorities: action.payload?.importance,
+      status: action.payload?.status,
+      importance: action.payload?.importance,
     },
     [FORM_INFO_SUCCESS]: {
       ...state,
-      roles: action.payload?.roles,
-      continents: action.payload?.continents,
-      regions: action.payload?.regions,
+      Rol: action.payload?.Rol,
+      continente: action.payload?.continente,
+      region: action.payload?.region,
     },
     [REGISTER_SUCCESS]: {
       ...initialState,

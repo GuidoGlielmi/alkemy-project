@@ -1,15 +1,16 @@
-import InputContainer from 'components/input-container/InputContainer';
-import Select from 'components/input-container/Select';
-import {Formik, Field, Form} from 'formik';
+import {Formik, Field, Form, FormikHelpers} from 'formik';
 import * as yup from 'yup';
-import Button from 'components/button/Button';
 import 'react-toastify/dist/ReactToastify.css';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'redux/hooks';
+import {ITask} from 'services/goScrum';
 import {addTask} from 'redux/actions/tasksActions';
+import Select from 'components/input-container/Select';
+import InputContainer from 'components/input-container/InputContainer';
+import Button from 'components/button/Button';
+import {getMinLengthMsg} from 'views/register/Register';
 import styles from './TaskForm.module.css';
 
 const REQUIRED_MSG = '* Campo obligatorio';
-const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
 const validationSchema = () =>
   yup.object().shape({
     title: yup.string().min(6, getMinLengthMsg(6)).required(REQUIRED_MSG),
@@ -18,7 +19,7 @@ const validationSchema = () =>
     description: yup.string().required(REQUIRED_MSG),
   });
 
-const initialValues = {
+const initialValues: ITask = {
   title: '',
   status: '',
   importance: '',
@@ -26,10 +27,10 @@ const initialValues = {
 };
 
 export default function TaskForm() {
-  const dispatch = useDispatch();
-  const {statuses, priorities} = useSelector((state) => state);
-
-  const onSubmit = (values, {resetForm}) => dispatch(addTask(values, resetForm));
+  const dispatch = useAppDispatch();
+  const {status: statuses, importance: priorities} = useAppSelector((state) => state);
+  const onSubmit = (values: ITask, {resetForm}: FormikHelpers<ITask>) =>
+    dispatch(addTask(values, resetForm));
 
   return (
     <section className={styles.formContainer}>

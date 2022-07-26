@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "target": "ES2015",
+    "moduleResolution": "node",
+    "module": "ES2020",
+    "esModuleInterop": true
+  },
+  "include": ["src", "src/tests/Test1.test.jsx", "typings.d.ts"],
+  "exclude": ["node_modules"]
+}

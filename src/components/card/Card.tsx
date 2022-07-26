@@ -1,14 +1,16 @@
 import Button from 'components/button/Button';
 import {useState, useMemo} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {deleteTask, updateTask} from 'redux/actions/tasksActions';
 import {when} from 'components/tasks/Tasks';
+import {ITask} from 'services/goScrum';
+import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import styles from './Card.module.css';
 
 const colors = ['rgb(219, 0, 0)', 'rgb(200, 200, 0)', 'rgb(38, 0, 219)'];
 
-const formatDate = (date) => new Date().toString(date).split('(')[0];
+const formatDate = (date: string) => new Date(date).toString().split('(')[0];
 export default function Card({
+  task,
   task: {
     _id,
     title,
@@ -21,9 +23,11 @@ export default function Card({
     description,
     user,
   },
+}: {
+  task: ITask;
 }) {
-  const dispatch = useDispatch();
-  const {statuses, priorities} = useSelector((state) => state);
+  const dispatch = useAppDispatch();
+  const {status: statuses, importance: priorities} = useAppSelector((state) => state);
 
   const [isLongDescriptionShown, setIsLongDescriptionShown] = useState(false);
   const formattedCreationTime = useMemo(() => formatDate(createdAt), [createdAt]);
@@ -33,14 +37,14 @@ export default function Card({
     const currentIndex = priorities.indexOf(importance);
     const newPriority =
       currentIndex + 1 === priorities.length ? priorities[0] : priorities[currentIndex + 1];
-    dispatch(updateTask(_id, {importance: newPriority}));
+    dispatch(updateTask({...task, importance: newPriority}));
   }
 
   function updateStatus() {
     const currentIndex = statuses.indexOf(status);
     const newStatus =
       currentIndex + 1 === statuses.length ? statuses[0] : statuses[currentIndex + 1];
-    dispatch(updateTask(_id, {status: newStatus}));
+    dispatch(updateTask({...task, importance: newStatus}));
     /*
     seems like strictMode doesn't like impure functions directly modifying state, so methods like splice or push are discouraged. This is checked by running the setState's callback argument twice. 
     */
