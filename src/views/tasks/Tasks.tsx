@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import TaskForm from 'components/task-form/TaskForm';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
-import {getAllTasks, setTaskCreator} from 'redux/actions/tasksActions';
+import {getAllTasks, setTaskCreator} from 'redux/tasksSlice';
 import TasksComponent from 'components/tasks/Tasks';
 import styles from './Tasks.module.css';
 
@@ -77,7 +77,7 @@ export default function Tasks() {
 
   useEffect(() => {
     // using void appears to make it not work
-    if (isLoggedIn) dispatch(getAllTasks());
+    if (isLoggedIn) dispatch(getAllTasks(''));
   }, [dispatch, isLoggedIn]);
 
   return (

@@ -27,8 +27,8 @@ export interface IUser {
   password?: string;
   email: string;
   teamID: string;
-  Rol: string;
-  continente: string;
+  role: string;
+  continent: string;
   region: string;
   registered?: boolean;
 }
@@ -87,7 +87,7 @@ class GoScrum {
   }
 
   async register(user: IUser): Promise<IRegistered> {
-    return this.#responseHandler({url: 'auth/register', method: 'post', body: user});
+    return this.#responseHandler({url: 'auth/register', method: 'post', body: {user}});
   }
 
   async registerFormData(): Promise<IRegisterData> {
@@ -114,8 +114,8 @@ class GoScrum {
     });
   }
 
-  async updateTask(task: ITask): Promise<IGoScrum> {
-    return this.#responseHandler({url: `task/${task._id}`, method: 'patch', body: {task}});
+  async updateTask(id: string, task: ITask): Promise<IGoScrum> {
+    return this.#responseHandler({url: `task/${id}`, method: 'patch', body: {task}});
   }
 
   async deleteTask(id: string): Promise<IGoScrum> {

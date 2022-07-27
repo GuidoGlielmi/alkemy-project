@@ -2,7 +2,7 @@ import {Formik, Form, Field} from 'formik';
 import {Link, Navigate} from 'react-router-dom';
 import Button from 'components/button/Button';
 import InputContainer from 'components/input-container/InputContainer';
-import {clearJustRegistered, login} from 'redux/actions/tasksActions';
+import {clearJustRegistered, login} from 'redux/tasksSlice';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import styles from './Login.module.css';
 

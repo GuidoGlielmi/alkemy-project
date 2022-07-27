@@ -46,9 +46,9 @@ export const login = (values: {userName: string; password: string}) => async (di
   try {
     const {
       token,
-      user: {userName, Rol, teamID},
+      user: {userName, role, teamID},
     } = await GoScrum.login(values);
-    const isTeamLeader = Rol === 'Team Leader';
+    const isTeamLeader = role === 'Team Leader';
     saveSessionService({token, userName, isTeamLeader, teamID});
     dispatch(loginSuccess({userName, isTeamLeader, teamID}));
   } catch (err) {
@@ -143,10 +143,10 @@ export const addTask =
       dispatch(requestFinished());
     }
   };
-export const updateTask = (task: ITask) => async (dispatch: any) => {
+export const updateTask = (id: string, task: ITask) => async (dispatch: any) => {
   dispatch(requestPending());
   try {
-    await GoScrum.updateTask(task);
+    await GoScrum.updateTask(id, task);
     dispatch(getSelectedTasks('La tarea ha sido actualizada'));
   } catch (err) {
     dispatch(errorHandler(err));

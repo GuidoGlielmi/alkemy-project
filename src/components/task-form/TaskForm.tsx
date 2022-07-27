@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import 'react-toastify/dist/ReactToastify.css';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import {ITask} from 'services/goScrum';
-import {addTask} from 'redux/actions/tasksActions';
+import {addTask} from 'redux/tasksSlice';
 import Select from 'components/input-container/Select';
 import InputContainer from 'components/input-container/InputContainer';
 import Button from 'components/button/Button';
@@ -29,8 +29,8 @@ const initialValues: ITask = {
 export default function TaskForm() {
   const dispatch = useAppDispatch();
   const {status: statuses, importance: priorities} = useAppSelector(state => state);
-  const onSubmit = (values: ITask, {resetForm}: FormikHelpers<ITask>) =>
-    dispatch(addTask(values, resetForm));
+  const onSubmit = (task: ITask, {resetForm}: FormikHelpers<ITask>) =>
+    dispatch(addTask({task, resetForm}));
 
   return (
     <section className={styles.formContainer}>

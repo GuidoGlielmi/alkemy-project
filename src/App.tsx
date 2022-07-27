@@ -34,7 +34,7 @@ const SuspenseWrapper = () => (
 );
 
 export default function App() {
-  const {isLoggedIn} = useAppSelector((state) => state);
+  const {isLoggedIn} = useAppSelector(state => state);
   const location = useLocation();
   return (
     <AnimatePresence>

@@ -1,4 +1,9 @@
-export default class RequestError {
+export interface IRequestError {
+  status: number;
+  message: string;
+}
+
+export default class RequestError implements IRequestError {
   status: number;
 
   message: string;

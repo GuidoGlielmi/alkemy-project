@@ -39,20 +39,20 @@ function groupByStatus(arr: ITask[]) {
   if (!arr.length) return [[<p style={{margin: '5vh auto 15vh'}}>No se han encontrado tareas</p>]];
   const groupedTasks = arr.reduce((p, c) => ({...p, [c.status]: [...(p[c.status] || []), c]}), {});
   return Object.entries(groupedTasks).sort(([[status1]], [[status2]]) =>
-    status1 < status2 ? -1 : 1,
+    status1 < status2 ? 1 : -1,
   );
 }
 
 export default function Tasks({selectedPriority, searchKey}) {
-  const {tasks} = useAppSelector((state) => state);
+  const {tasks} = useAppSelector(state => state);
   const isFirstload = useIsFirstLoad(!!tasks.length);
 
   function filterTasks() {
     let filteredTasks = [...tasks];
     if (selectedPriority !== 'ALL') {
-      filteredTasks = filteredTasks.filter((t) => t.importance === selectedPriority);
+      filteredTasks = filteredTasks.filter(t => t.importance === selectedPriority);
     }
-    if (searchKey) filteredTasks = filteredTasks.filter((t) => t.title.includes(searchKey));
+    if (searchKey) filteredTasks = filteredTasks.filter(t => t.title.includes(searchKey));
     return filteredTasks;
   }
 

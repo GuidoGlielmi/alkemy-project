@@ -8,7 +8,7 @@ import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import InputContainer from 'components/input-container/InputContainer';
 import Button from 'components/button/Button';
 import Select from 'components/input-container/Select';
-import {getFormInfo, register} from 'redux/actions/tasksActions';
+import {getFormInfo, register} from 'redux/tasksSlice';
 import {IUser} from 'services/goScrum';
 import styles from './Register.module.css';
 
@@ -47,9 +47,9 @@ export default function Register() {
     userName: '',
     email: '',
     password: '',
-    Rol: '',
+    role: '',
     teamID,
-    continente: '',
+    continent: '',
     region: '',
     registered: !!teamID,
   };
@@ -58,7 +58,7 @@ export default function Register() {
     const user = {
       ...values,
       teamID: values.registered ? values.teamID : uuid(),
-      region: values.continente === 'America' ? values.region : 'Otro',
+      region: values.continent === 'America' ? values.region : 'Otro',
     };
     delete user.registered;
     dispatch(register(user));
@@ -116,7 +116,7 @@ export default function Register() {
             >
               Continente
             </Field>
-            {values.continente === 'America' && (
+            {values.continent === 'America' && (
               <Field
                 name='region'
                 placeholder='Seleccione su región'

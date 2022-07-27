@@ -1,16 +1,17 @@
 import {useEffect} from 'react';
-import {clearUserFeedbackMsg} from 'redux/actions/tasksActions';
+import {clearUserFeedbackMsg} from 'redux/tasksSlice';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function UserFeedbackModal() {
   const dispatch = useAppDispatch();
-  const {userFeedbackMsg, error} = useAppSelector(state => state);
+  const {feedbackMsg, errorFeedbackMsg} = useAppSelector(state => state);
   useEffect(() => {
     const onClose = () => dispatch(clearUserFeedbackMsg());
-    if (error) toast.error(userFeedbackMsg || 'Ha ocurrido un error', {onClose});
-    else if (userFeedbackMsg) toast(userFeedbackMsg, {onClose});
-  }, [dispatch, userFeedbackMsg, error]);
+    if (errorFeedbackMsg) toast.error(errorFeedbackMsg, {onClose});
+    else if (feedbackMsg) toast(feedbackMsg, {onClose});
+  }, [dispatch, feedbackMsg, errorFeedbackMsg]);
 
   return <ToastContainer pauseOnHover />;
 }

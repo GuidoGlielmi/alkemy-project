@@ -1,5 +1,5 @@
 import {Link, Outlet} from 'react-router-dom';
-import {logout} from 'redux/actions/tasksActions';
+import {logout} from 'redux/tasksSlice';
 import {useAppDispatch} from 'redux/hooks';
 import styles from './Header.module.css';
 
