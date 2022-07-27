@@ -6,12 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function UserFeedbackModal() {
   const dispatch = useDispatch();
-  const {userFeedbackMsg, error} = useSelector(state => state);
+  const {feedbackMsg, errorFeedbackMsg} = useSelector(state => state);
   useEffect(() => {
     const onClose = () => dispatch(clearUserFeedbackMsg());
-    if (error) toast.error(userFeedbackMsg || 'Ha ocurrido un error', {onClose});
-    else if (userFeedbackMsg) toast(userFeedbackMsg, {onClose});
-  }, [dispatch, userFeedbackMsg, error]);
+    if (errorFeedbackMsg) toast.error(errorFeedbackMsg, {onClose});
+    else if (feedbackMsg) toast(feedbackMsg, {onClose});
+  }, [dispatch, feedbackMsg, errorFeedbackMsg]);
 
   return <ToastContainer pauseOnHover />;
 }

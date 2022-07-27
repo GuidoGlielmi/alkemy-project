@@ -26,7 +26,8 @@ const initialState = {
   priorities: [],
   error: false,
   justRegistered: false,
-  userFeedbackMsg: '',
+  feedbackMsg: '',
+  errorFeedbackMsg: '',
   isLoading: false,
 };
 
@@ -37,7 +38,7 @@ export default (state = initialState, action) => {
     [REQUEST_ERROR]: {
       ...state,
       error: true,
-      userFeedbackMsg: action.payload,
+      errorFeedbackMsg: action.payload,
       isLoading: false,
     },
     [LOGIN_SUCCESS]: {
@@ -51,7 +52,7 @@ export default (state = initialState, action) => {
     [TASKS_SUCCESS]: {
       ...state,
       tasks: action.payload?.tasks,
-      userFeedbackMsg: action.payload?.userFeedbackMsg,
+      feedbackMsg: action.payload?.feedbackMsg,
     },
     [TASK_DATA_SUCCESS]: {
       ...state,
@@ -75,7 +76,8 @@ export default (state = initialState, action) => {
     [UNAUTHORIZE]: {...state, isLoggedIn: false, isLoading: false},
     [CLEAR_USER_FEEDBACK_MSG]: {
       ...state,
-      userFeedbackMsg: '',
+      feedbackMsg: '',
+      errorFeedbackMsg: '',
       error: false,
     },
     [SET_TASK_CREATOR]: {...state, taskByCreator: action.payload},

@@ -42,8 +42,14 @@ export const login = values => async dispatch => {
     saveSessionService({token, username, isTeamLeader, teamID});
     dispatch(loginSuccess({username, isTeamLeader, teamID}));
   } catch (err) {
-    if (err.status === 404 || err.status === 401) err.message = 'Usuario o contraseña incorrectos';
-    dispatch(errorHandler(err));
+    dispatch(
+      errorHandler(
+        err.status,
+        err.status === 404 || err.status === 401
+          ? 'Usuario o contraseña incorrectos'
+          : 'Ha ocurrido un error',
+      ),
+    );
   } finally {
     dispatch(requestFinished());
   }
@@ -62,7 +68,7 @@ export const getFormInfo = () => async dispatch => {
     const {Rol: roles, continente: continents, region: regions} = await formDataService();
     dispatch(formInfoSuccess({roles, continents, regions}));
   } catch (err) {
-    dispatch(errorHandler(err));
+    dispatch(errorHandler(err.status));
   } finally {
     dispatch(requestFinished());
   }
@@ -75,7 +81,7 @@ export const register = user => async dispatch => {
     registerSessionService(user.userName);
     dispatch(registerSuccess(user.userName));
   } catch (err) {
-    dispatch(errorHandler(err));
+    dispatch(errorHandler(err.status, err.status === 409 && 'El email ya está en uso'));
   } finally {
     dispatch(requestFinished());
   }
@@ -84,30 +90,30 @@ const registerSuccess = payload => ({type: REGISTER_SUCCESS, payload});
 export const clearJustRegistered = () => ({type: CLEAR_JUST_REGISTERED});
 
 export const getMyTasks =
-  (userFeedbackMsg = '') =>
+  (feedbackMsg = '') =>
   async dispatch => {
     dispatch(requestPending());
     const p1 = taskDataService();
     p1.then(data => dispatch(taskDataSuccess(data)));
     const p2 = getMyTasksService();
-    p2.then(tasks => dispatch(tasksSuccess({tasks, userFeedbackMsg})));
+    p2.then(tasks => dispatch(tasksSuccess({tasks, feedbackMsg})));
     Promise.all([p1, p2])
       .then(() => dispatch(requestFinished()))
-      .catch(err => dispatch(errorHandler(err)));
+      .catch(err => dispatch(errorHandler(err.status)));
   };
 
 export const getAllTasks =
-  (userFeedbackMsg = '') =>
+  (feedbackMsg = '') =>
   async dispatch => {
     dispatch(requestPending());
     // avoid using async await with several independent (from eachother) api calls, because there is no need to wait for each of them to complete before calling the next one
     const p1 = taskDataService();
     p1.then(data => dispatch(taskDataSuccess(data)));
     const p2 = getAllTasksService();
-    p2.then(tasks => dispatch(tasksSuccess({tasks, userFeedbackMsg})));
+    p2.then(tasks => dispatch(tasksSuccess({tasks, feedbackMsg})));
     Promise.all([p1, p2])
       .then(() => dispatch(requestFinished()))
-      .catch(err => dispatch(errorHandler(err)));
+      .catch(err => dispatch(errorHandler(err.status)));
   };
 
 const tasksSuccess = payload => ({type: TASKS_SUCCESS, payload});
@@ -119,7 +125,7 @@ export const addTask = (task, resetForm) => async dispatch => {
     resetForm();
     dispatch(getSelectedTasks('La tarea ha sido creada exitosamente'));
   } catch (err) {
-    dispatch(errorHandler(err));
+    dispatch(errorHandler(err.status));
   } finally {
     dispatch(requestFinished());
   }
@@ -130,7 +136,7 @@ export const updateTask = (id, task) => async dispatch => {
     await updateTaskService(id, task);
     dispatch(getSelectedTasks('La tarea ha sido actualizada'));
   } catch (err) {
-    dispatch(errorHandler(err));
+    dispatch(errorHandler(err.status));
   } finally {
     dispatch(requestFinished());
   }
@@ -141,7 +147,7 @@ export const deleteTask = id => async dispatch => {
     await deleteTaskService(id);
     dispatch(getSelectedTasks('La tarea ha sido borrada exitosamente'));
   } catch (err) {
-    dispatch(errorHandler(err));
+    dispatch(errorHandler(err.status));
   } finally {
     dispatch(requestFinished());
   }
@@ -152,17 +158,16 @@ export const setTaskCreator = payload => dispatch => {
   dispatch({type: SET_TASK_CREATOR, payload});
 };
 
-const getSelectedTasks = userFeedbackMsg => (dispatch, getState) => {
+const getSelectedTasks = feedbackMsg => (dispatch, getState) => {
   const {taskByCreator} = getState();
-  dispatch(taskByCreator === 'ALL' ? getAllTasks(userFeedbackMsg) : getMyTasks(userFeedbackMsg));
+  dispatch(taskByCreator === 'ALL' ? getAllTasks(feedbackMsg) : getMyTasks(feedbackMsg));
 };
 
 const errorHandler =
-  ({message, status}) =>
+  (status, errMsg = '') =>
   async dispatch => {
-    if (!message && status === 401) {
+    if (!errMsg && status === 401) {
       unauthorizeSessionService();
       dispatch(unauthorize());
-    } else if (status === 409) dispatch(requestError('El email ya está en uso'));
-    else dispatch(requestError(message));
+    } else dispatch(requestError(errMsg || 'Ha ocurrido un error'));
   };
