@@ -28,7 +28,7 @@ const initialValues: ITask = {
 
 export default function TaskForm() {
   const dispatch = useAppDispatch();
-  const {status: statuses, importance: priorities} = useAppSelector((state) => state);
+  const {status: statuses, importance: priorities} = useAppSelector(state => state);
   const onSubmit = (values: ITask, {resetForm}: FormikHelpers<ITask>) =>
     dispatch(addTask(values, resetForm));
 

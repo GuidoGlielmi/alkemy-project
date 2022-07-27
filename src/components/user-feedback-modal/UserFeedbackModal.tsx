@@ -5,7 +5,7 @@ import {ToastContainer, toast} from 'react-toastify';
 
 export default function UserFeedbackModal() {
   const dispatch = useAppDispatch();
-  const {userFeedbackMsg, error} = useAppSelector((state) => state);
+  const {userFeedbackMsg, error} = useAppSelector(state => state);
   useEffect(() => {
     const onClose = () => dispatch(clearUserFeedbackMsg());
     if (error) toast.error(userFeedbackMsg || 'Ha ocurrido un error', {onClose});

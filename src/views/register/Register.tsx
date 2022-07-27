@@ -37,19 +37,19 @@ const validationSchema = () =>
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const {Rol, continente, region, justRegistered, teamID} = useAppSelector((state) => state);
+  const {Rol, continente, region, justRegistered, teamID} = useAppSelector(state => state);
 
   useEffect(() => {
     dispatch(getFormInfo());
   }, [dispatch]);
 
-  const initialValues = {
+  const initialValues: IUser = {
     userName: '',
     email: '',
     password: '',
-    role: '',
+    Rol: '',
     teamID,
-    continent: '',
+    continente: '',
     region: '',
     registered: !!teamID,
   };
@@ -58,7 +58,7 @@ export default function Register() {
     const user = {
       ...values,
       teamID: values.registered ? values.teamID : uuid(),
-      region: values.continent === 'America' ? values.region : 'Otro',
+      region: values.continente === 'America' ? values.region : 'Otro',
     };
     delete user.registered;
     dispatch(register(user));
@@ -116,7 +116,7 @@ export default function Register() {
             >
               Continente
             </Field>
-            {values.continent === 'America' && (
+            {values.continente === 'America' && (
               <Field
                 name='region'
                 placeholder='Seleccione su región'

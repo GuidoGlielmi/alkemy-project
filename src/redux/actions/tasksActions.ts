@@ -1,3 +1,4 @@
+import {FormikState} from 'formik';
 import {
   saveSessionService,
   clearSessionService,
@@ -45,9 +46,9 @@ export const login = (values: {userName: string; password: string}) => async (di
   try {
     const {
       token,
-      user: {userName, role, teamID},
+      user: {userName, Rol, teamID},
     } = await GoScrum.login(values);
-    const isTeamLeader = role === 'Team Leader';
+    const isTeamLeader = Rol === 'Team Leader';
     saveSessionService({token, userName, isTeamLeader, teamID});
     dispatch(loginSuccess({userName, isTeamLeader, teamID}));
   } catch (err) {
@@ -102,12 +103,12 @@ export const getMyTasks =
   async (dispatch: any) => {
     dispatch(requestPending());
     const p1 = GoScrum.getTaskData();
-    p1.then((data) => dispatch(taskDataSuccess(data)));
+    p1.then(data => dispatch(taskDataSuccess(data)));
     const p2 = GoScrum.getMyTasks();
-    p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg})));
+    p2.then(tasks => dispatch(tasksSuccess({tasks, userFeedbackMsg})));
     Promise.all([p1, p2])
       .then(() => dispatch(requestFinished()))
-      .catch((err) => dispatch(errorHandler(err)));
+      .catch(err => dispatch(errorHandler(err)));
   };
 
 export const getAllTasks =
@@ -115,12 +116,12 @@ export const getAllTasks =
   async (dispatch: any) => {
     dispatch(requestPending());
     const p1 = GoScrum.getTaskData();
-    p1.then((data) => dispatch(taskDataSuccess(data)));
+    p1.then(data => dispatch(taskDataSuccess(data)));
     const p2 = GoScrum.getAllTasks();
-    p2.then((tasks) => dispatch(tasksSuccess({tasks, userFeedbackMsg})));
+    p2.then(tasks => dispatch(tasksSuccess({tasks, userFeedbackMsg})));
     Promise.all([p1, p2])
       .then(() => dispatch(requestFinished()))
-      .catch((err) => dispatch(errorHandler(err)));
+      .catch(err => dispatch(errorHandler(err)));
   };
 
 const getSelectedTasks = (userFeedbackMsg: string) => (dispatch: any, getState: any) => {
@@ -128,18 +129,20 @@ const getSelectedTasks = (userFeedbackMsg: string) => (dispatch: any, getState: 
   dispatch(taskByCreator === 'ALL' ? getAllTasks(userFeedbackMsg) : getMyTasks(userFeedbackMsg));
 };
 
-export const addTask = (task: ITask, resetForm: any) => async (dispatch: any) => {
-  dispatch(requestPending());
-  try {
-    await GoScrum.addTask(task);
-    resetForm();
-    dispatch(getSelectedTasks('La tarea ha sido creada exitosamente'));
-  } catch (err) {
-    dispatch(errorHandler(err));
-  } finally {
-    dispatch(requestFinished());
-  }
-};
+export const addTask =
+  (task: ITask, resetForm: (nextState?: Partial<FormikState<any>>) => void) =>
+  async (dispatch: any) => {
+    dispatch(requestPending());
+    try {
+      await GoScrum.addTask(task);
+      resetForm();
+      dispatch(getSelectedTasks('La tarea ha sido creada exitosamente'));
+    } catch (err) {
+      dispatch(errorHandler(err));
+    } finally {
+      dispatch(requestFinished());
+    }
+  };
 export const updateTask = (task: ITask) => async (dispatch: any) => {
   dispatch(requestPending());
   try {

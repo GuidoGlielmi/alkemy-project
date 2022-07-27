@@ -6,11 +6,11 @@ import {clearJustRegistered, login} from 'redux/actions/tasksActions';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import styles from './Login.module.css';
 
-const required = (value) => (!value ? '* Campo requerido' : undefined);
+const required = (value: string) => (!value ? '* Campo requerido' : undefined);
 
 export default function Login() {
   const dispatch = useAppDispatch();
-  const {isLoggedIn, userName, justRegistered} = useAppSelector((state) => state);
+  const {isLoggedIn, userName, justRegistered} = useAppSelector(state => state);
 
   const onSubmit = async (values: {userName: string; password: string}) => dispatch(login(values));
 

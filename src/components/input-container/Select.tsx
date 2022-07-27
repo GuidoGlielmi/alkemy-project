@@ -44,10 +44,10 @@ export default function Select({
           </option>
         ))}
       </select>
-      {touched && (
-        <>
-          <span className={styles.errorMsg}>{errMsg as string}</span>&nbsp;
-        </>
+      {touched && errMsg ? (
+        <span className={styles.errorMsg}>{errMsg as string}</span>
+      ) : (
+        <span>&nbsp;</span>
       )}
     </div>
   );

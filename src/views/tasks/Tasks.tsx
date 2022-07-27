@@ -43,7 +43,7 @@ function debounce(fn: () => any, delay: number) {
 }
 function FilterBox({selectedPriority, setSelectedPriority, setSearchKey}) {
   const dispatch = useAppDispatch();
-  const {taskByCreator, importance: priorities} = useAppSelector((state) => state);
+  const {taskByCreator, importance: priorities} = useAppSelector(state => state);
   return (
     <div className={styles.filterContainer}>
       <RadioSet
@@ -62,7 +62,7 @@ function FilterBox({selectedPriority, setSelectedPriority, setSearchKey}) {
       />
       <div>
         <span>Buscar por título</span>
-        <input onChange={(e) => debounce(() => setSearchKey(e.target.value), 100)()} />
+        <input onChange={e => debounce(() => setSearchKey(e.target.value), 100)()} />
       </div>
     </div>
   );
@@ -70,7 +70,7 @@ function FilterBox({selectedPriority, setSelectedPriority, setSearchKey}) {
 
 export default function Tasks() {
   const dispatch = useAppDispatch();
-  const {isLoggedIn, teamID} = useAppSelector((state) => state);
+  const {isLoggedIn, teamID} = useAppSelector(state => state);
 
   const [selectedPriority, setSelectedPriority] = useState('ALL');
   const [searchKey, setSearchKey] = useState('');

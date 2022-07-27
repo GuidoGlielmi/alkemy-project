@@ -27,7 +27,7 @@ export default function Card({
   task: ITask;
 }) {
   const dispatch = useAppDispatch();
-  const {status: statuses, importance: priorities} = useAppSelector((state) => state);
+  const {status: statuses, importance: priorities} = useAppSelector(state => state);
 
   const [isLongDescriptionShown, setIsLongDescriptionShown] = useState(false);
   const formattedCreationTime = useMemo(() => formatDate(createdAt), [createdAt]);
@@ -76,7 +76,7 @@ export default function Card({
           .else('Ver más')}
         className={styles.description}
         type='button'
-        onClick={() => description.length > 100 && setIsLongDescriptionShown((ps) => !ps)}
+        onClick={() => description.length > 100 && setIsLongDescriptionShown(ps => !ps)}
         style={{cursor: description.length > 100 ? 'pointer' : 'default'}}
       >
         {description.length < 100 || isLongDescriptionShown

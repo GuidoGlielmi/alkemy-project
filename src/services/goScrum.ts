@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-throw-literal */
-import Requests from './Api';
+import Requests, {HttpReq} from './Api';
 import RequestError from './RequestError';
 
-interface IGoScrum {
+export interface IGoScrum {
   status_code: number;
   message: string;
   result: any;
@@ -27,8 +27,8 @@ export interface IUser {
   password?: string;
   email: string;
   teamID: string;
-  role: string;
-  continent: string;
+  Rol: string;
+  continente: string;
   region: string;
   registered?: boolean;
 }
@@ -71,28 +71,15 @@ class GoScrum {
     this.#fetch = request;
   }
 
-  async #responseHandler({
-    url = '',
-    method = 'get',
-    body,
-  }: {
-    url?: string;
-    method?: string;
-    body?: any;
-  }) {
-    let res: IGoScrum;
-    try {
-      res = (await this.#fetch[method](url, body)) as IGoScrum;
-      if (res?.status_code < 200 || res?.status_code >= 300) {
-        throw new RequestError({
-          status: res?.status_code,
-          message: res?.message,
-        });
-      }
-    } catch ({status, message}) {
-      console.log(status, message);
+  async #responseHandler({url, method, body}: HttpReq) {
+    const res = (await this.#fetch.makeRequest({url, body, method})) as IGoScrum;
+    if (res.status_code < 200 || res.status_code >= 300) {
+      throw new RequestError({
+        status: res.status_code,
+        message: res.message,
+      });
     }
-    return res?.result;
+    return res.result;
   }
 
   async login({userName, password}: {userName: string; password: string}): Promise<ILogin> {
