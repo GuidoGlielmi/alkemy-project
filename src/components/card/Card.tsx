@@ -88,6 +88,3 @@ export default function Card({
     </div>
   );
 }
-
-// /task -> everyone's tasks (team leader)
-// /task/me -> my tasks (team member)

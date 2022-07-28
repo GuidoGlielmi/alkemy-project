@@ -2,8 +2,8 @@ import {FieldProps} from 'formik';
 import styles from './InputContainer.module.css';
 
 export interface IInput extends FieldProps {
-  className: string;
-  type: string;
+  className?: string;
+  type?: string;
   children: string;
 }
 

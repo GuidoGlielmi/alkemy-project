@@ -2,7 +2,7 @@ import Card from 'components/card/Card';
 import {ITask} from 'services/goScrum';
 import styles from './TaskGroup.module.css';
 
-export default function TaskGroup({status, tasks}) {
+export default function TaskGroup({status, tasks}: {status: string; tasks: ITask[]}) {
   return (
     <div className={styles.group}>
       <h3>{status}</h3>

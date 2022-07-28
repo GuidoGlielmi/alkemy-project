@@ -13,7 +13,7 @@ const backgroundStyle: React.CSSProperties = {
 };
 
 export default function LoadingScreen() {
-  const isLoading = useAppSelector(({isLoading: loading}) => loading);
+  const {isLoading} = useAppSelector(state => state);
   return (
     isLoading && (
       <div style={backgroundStyle}>

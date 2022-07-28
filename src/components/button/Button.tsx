@@ -1,9 +1,9 @@
 import styles from './Button.module.css';
 
 interface IButton {
-  action?: () => any;
+  action?: (...args: any[]) => any;
   type?: 'button' | 'submit' | 'reset';
-  size?: string;
+  size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   color?: string;
   children: string;

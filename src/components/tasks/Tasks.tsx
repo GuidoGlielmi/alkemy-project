@@ -1,4 +1,4 @@
-import {useState, useEffect, Fragment} from 'react';
+import {useState, useEffect, Fragment, useMemo} from 'react';
 import Skeleton from 'react-loading-skeleton';
 import TaskGroup from 'components/task-group/TaskGroup';
 import {useAppSelector} from 'redux/hooks';
@@ -14,7 +14,7 @@ export const when = (condition: boolean, value?: any) => ({
   get: value,
 });
 
-const Skeletons = ({amount}) => (
+const Skeletons = ({amount}: {amount: number}) => (
   <div className={styles[device ? 'skeletonDevice' : 'skeleton']}>
     {Array(amount)
       .fill(<Skeleton height='50vh' width={device ? '90vw' : '30vw'} />)
@@ -43,18 +43,24 @@ function groupByStatus(arr: ITask[]) {
   );
 }
 
-export default function Tasks({selectedPriority, searchKey}) {
+export default function Tasks({
+  selectedPriority,
+  searchKey,
+}: {
+  selectedPriority: string;
+  searchKey: string;
+}) {
   const {tasks} = useAppSelector(state => state);
   const isFirstload = useIsFirstLoad(!!tasks.length);
 
-  function filterTasks() {
-    let filteredTasks = [...tasks];
+  const filteredTasks = useMemo(() => {
+    let ft = [...tasks];
     if (selectedPriority !== 'ALL') {
-      filteredTasks = filteredTasks.filter(t => t.importance === selectedPriority);
+      ft = ft.filter(t => t.importance === selectedPriority);
     }
-    if (searchKey) filteredTasks = filteredTasks.filter(t => t.title.includes(searchKey));
-    return filteredTasks;
-  }
+    if (searchKey) ft = ft.filter(t => t.title.toLowerCase().includes(searchKey.toLowerCase()));
+    return ft.length ? groupByStatus(ft) : [];
+  }, [tasks, selectedPriority, searchKey]);
 
   return (
     <div className={styles.tasks}>
@@ -62,11 +68,13 @@ export default function Tasks({selectedPriority, searchKey}) {
         .return(<Skeletons amount={3} />)
         .elseWhen(!tasks.length)
         .return(<span>No se han creado tareas</span>)
-        .else(
-          groupByStatus(filterTasks()).map(([status, ts]) =>
-            ts ? <TaskGroup key={status} status={status} tasks={ts} /> : status,
-          ),
-        )}
+        .elseWhen(!!filteredTasks.length)
+        .return(
+          filteredTasks.map(([status, ts]) => (
+            <TaskGroup key={status} status={status} tasks={ts} />
+          )),
+        )
+        .else(<p style={{margin: '5vh auto 15vh'}}>No se han encontrado tareas</p>)}
     </div>
   );
 }

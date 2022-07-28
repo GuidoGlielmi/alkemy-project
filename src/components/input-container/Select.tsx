@@ -8,7 +8,7 @@ interface Option {
 
 interface ISelect extends IInput {
   options: string[] | Option[];
-  placeholder: string;
+  placeholder?: string;
 }
 
 export default function Select({
