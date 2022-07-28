@@ -24,7 +24,6 @@ const initialState = {
   regions: [],
   statuses: [],
   priorities: [],
-  error: false,
   justRegistered: false,
   feedbackMsg: '',
   errorFeedbackMsg: '',
@@ -37,7 +36,6 @@ export default (state = initialState, action) => {
     [REQUEST_FINISHED]: {...state, isLoading: false},
     [REQUEST_ERROR]: {
       ...state,
-      error: true,
       errorFeedbackMsg: action.payload,
       isLoading: false,
     },
@@ -78,7 +76,6 @@ export default (state = initialState, action) => {
       ...state,
       feedbackMsg: '',
       errorFeedbackMsg: '',
-      error: false,
     },
     [SET_TASK_CREATOR]: {...state, taskByCreator: action.payload},
   };
