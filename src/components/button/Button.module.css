@@ -19,11 +19,11 @@
   transform: scale(0.98);
 }
 .small {
-  font-size: var(--global-font-small);
+  font-size: 0.75em;
 }
 .medium {
-  font-size: var(--global-font-medium);
+  font-size: 1em;
 }
 .large {
-  font-size: var(--global-font-large);
+  font-size: 1.5em;
 }

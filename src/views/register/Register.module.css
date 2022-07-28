@@ -2,10 +2,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: var(--global-font-medium);
 }
 .formContainer h1 {
   margin: 10px 0;
   text-align: center;
+  font-size: 1.8em;
 }
 .formContainer form {
   display: flex;
@@ -26,4 +28,9 @@
 .formContainer button {
   margin-top: 30px;
   align-self: center;
+}
+@media (max-width: 768px) {
+  .formContainer form {
+    width: 90%;
+  }
 }

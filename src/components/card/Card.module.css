@@ -19,6 +19,8 @@
 }
 .card > div {
   display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
   gap: 20px;
 }
 .card > :last-child {

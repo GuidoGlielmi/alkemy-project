@@ -13,7 +13,7 @@ import styles from './Register.module.css';
 
 const REQUIRED_MSG = '* Campo obligatorio';
 const EMAIL_MSG = 'Ingrese un email válido';
-const getMinLengthMsg = (n) => `Ingrese más de ${n - 1} caracteres`;
+const getMinLengthMsg = n => `Ingrese más de ${n - 1} caracteres`;
 const validationSchema = () =>
   yup.object().shape({
     userName: yup.string().min(4, getMinLengthMsg(6)).required(REQUIRED_MSG),
@@ -23,12 +23,12 @@ const validationSchema = () =>
     continent: yup.string().required(REQUIRED_MSG),
     registered: yup.boolean(),
     teamID: yup.string().when('registered', {
-      is: (registered) => registered,
+      is: registered => registered,
       then: yup.string().required(REQUIRED_MSG),
       otherwise: yup.string(),
     }),
     region: yup.string().when('continent', {
-      is: (continent) => continent === 'America',
+      is: continent => continent === 'America',
       then: yup.string().required(REQUIRED_MSG),
       otherwise: yup.string(),
     }),
@@ -36,7 +36,9 @@ const validationSchema = () =>
 
 export default function Register() {
   const dispatch = useDispatch();
-  const {roles, continents, regions, justRegistered, teamID} = useSelector((state) => state);
+  const {roles, continents, regions, justRegistered, teamID, isLoggedIn} = useSelector(
+    state => state,
+  );
 
   useEffect(() => {
     dispatch(getFormInfo());
@@ -144,7 +146,10 @@ export default function Register() {
                 Identificador de equipo
               </Field>
             )}
-            <Link to='/login'>Ya tiene una cuenta?</Link>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <Link to='/login'>Ya tiene una cuenta?</Link>
+              {isLoggedIn && <Link to='/'>Volver a tareas</Link>}
+            </div>
             <Button type='submit'>Enviar</Button>
           </form>
         )}
