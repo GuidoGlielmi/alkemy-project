@@ -37,7 +37,9 @@ const validationSchema = () =>
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const {Rol, continente, region, justRegistered, teamID} = useAppSelector(state => state);
+  const {Rol, continente, region, justRegistered, teamID, isLoggedIn} = useAppSelector(
+    state => state,
+  );
 
   useEffect(() => {
     dispatch(getFormInfo());
@@ -145,7 +147,10 @@ export default function Register() {
                 Identificador de equipo
               </Field>
             )}
-            <Link to='/login'>Ya tiene una cuenta?</Link>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <Link to='/login'>Ya tiene una cuenta?</Link>
+              {isLoggedIn && <Link to='/'>Volver a tareas</Link>}
+            </div>
             <Button type='submit'>Enviar</Button>
           </form>
         )}

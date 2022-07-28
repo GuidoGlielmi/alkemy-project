@@ -1,8 +1,7 @@
 .tasks {
   display: flex;
   position: relative;
-  margin-top: 5vh;
-  padding-top: 40px;
+  margin-top: max(5vw, 5vh);
 }
 
 .tasks span {

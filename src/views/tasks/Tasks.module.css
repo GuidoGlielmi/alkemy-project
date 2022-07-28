@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3%;
+  padding: min(7vw, 7vh);
   border-radius: 20px 9px 20px 9px;
   border: 4px solid transparent;
   background: linear-gradient(rgb(59, 59, 59), rgb(29, 29, 29)) padding-box,
@@ -51,7 +51,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10vh;
+  margin-bottom: min(10vw, 10vh);
   text-align: center;
 }
 .selectPriority div {
