@@ -1,6 +1,6 @@
 import Button from 'components/button/Button';
 import {useState, useMemo} from 'react';
-import {deleteTask, updateTask} from 'redux/tasksSlice';
+import {deleteTask, updateTask} from 'redux/slices/tasksSlice';
 import {when} from 'components/tasks/Tasks';
 import {ITask} from 'services/goScrum';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';

@@ -8,7 +8,7 @@ import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import InputContainer from 'components/input-container/InputContainer';
 import Button from 'components/button/Button';
 import Select from 'components/input-container/Select';
-import {getFormInfo, register} from 'redux/tasksSlice';
+import {getFormInfo, register} from 'redux/slices/tasksSlice';
 import {IUser} from 'services/goScrum';
 import styles from './Register.module.css';
 
@@ -48,9 +48,9 @@ export default function Register() {
     email: '',
     password: '',
     role: '',
-    teamID,
     continent: '',
     region: '',
+    teamID,
     registered: !!teamID,
   };
 

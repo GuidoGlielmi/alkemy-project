@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {clearUserFeedbackMsg} from 'redux/tasksSlice';
+import {clearUserFeedbackMsg} from 'redux/slices/tasksSlice';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

@@ -2,9 +2,14 @@ import {Formik, Form, Field} from 'formik';
 import {Link, Navigate} from 'react-router-dom';
 import Button from 'components/button/Button';
 import InputContainer from 'components/input-container/InputContainer';
-import {clearJustRegistered, login} from 'redux/tasksSlice';
+import {clearJustRegistered, login} from 'redux/slices/tasksSlice';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import styles from './Login.module.css';
+
+export interface ILogin {
+  userName: string;
+  password: string;
+}
 
 const required = (value: string) => (!value ? '* Campo requerido' : undefined);
 
@@ -12,7 +17,7 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const {isLoggedIn, userName, justRegistered} = useAppSelector(state => state);
 
-  const onSubmit = async (values: {userName: string; password: string}) => dispatch(login(values));
+  const onSubmit = async (values: ILogin) => dispatch(login(values));
 
   if (justRegistered) dispatch(clearJustRegistered());
 
@@ -47,15 +52,3 @@ export default function Login() {
     </div>
   );
 }
-
-/* 
-const user = {
-  userName: '',
-  passowrd: '',
-  email: '',
-  teamID: '', // -> ["Team Member", "Team Leader"]
-  role: '', // -> ["America", "Europa", "Otro"]
-  continent: '', // -> ["Otro", "Latam", "Brasil", "America del Norte"]
-  region: '',
-};
- */

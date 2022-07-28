@@ -2,18 +2,46 @@ import {useState, useEffect} from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import TaskForm from 'components/task-form/TaskForm';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
-import {getAllTasks, setTaskCreator} from 'redux/tasksSlice';
+import {getAllTasks, setTaskCreator} from 'redux/slices/tasksSlice';
 import TasksComponent from 'components/tasks/Tasks';
 import styles from './Tasks.module.css';
 
 const taskByCreatorArray = ['ALL', 'MINE'];
-const RadioContainer = ({tag, action, name, checked}) => (
+
+function debounce(fn: (...args: any[]) => any, delay: number) {
+  let timer: NodeJS.Timeout;
+  let active = false;
+  return () => {
+    if (active) clearTimeout(timer);
+    timer = setTimeout(() => {
+      active = false;
+      fn();
+    }, delay);
+    active = true;
+  };
+}
+
+interface IRadioContainer {
+  action: (...args: any[]) => any;
+  tag: string;
+  name: string;
+  checked: boolean;
+}
+const RadioContainer = ({tag, action, name, checked}: IRadioContainer) => (
   <div>
     <input onChange={action} checked={checked} name={name} type='radio' />
     <span>{tag}</span>
   </div>
 );
-const RadioSet = ({title, elements, action, comparator, name}) => (
+
+interface IRadioSet {
+  title: string;
+  elements: string[];
+  action: (...args: any[]) => any;
+  comparator: string;
+  name: string;
+}
+const RadioSet = ({title, elements, action, comparator, name}: IRadioSet) => (
   <fieldset className={styles.selectPriority}>
     <legend>{title}</legend>
     <div>
@@ -29,18 +57,7 @@ const RadioSet = ({title, elements, action, comparator, name}) => (
     </div>
   </fieldset>
 );
-function debounce(fn: () => any, delay: number) {
-  let timer: NodeJS.Timeout;
-  let active = false;
-  return () => {
-    if (active) clearTimeout(timer);
-    timer = setTimeout(() => {
-      active = false;
-      fn();
-    }, delay);
-    active = true;
-  };
-}
+
 function FilterBox({selectedPriority, setSelectedPriority, setSearchKey}) {
   const dispatch = useAppDispatch();
   const {taskByCreator, importance: priorities} = useAppSelector(state => state);

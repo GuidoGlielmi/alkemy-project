@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import 'react-toastify/dist/ReactToastify.css';
 import {useAppDispatch, useAppSelector} from 'redux/hooks';
 import {ITask} from 'services/goScrum';
-import {addTask} from 'redux/tasksSlice';
+import {addTask} from 'redux/slices/tasksSlice';
 import Select from 'components/input-container/Select';
 import InputContainer from 'components/input-container/InputContainer';
 import Button from 'components/button/Button';

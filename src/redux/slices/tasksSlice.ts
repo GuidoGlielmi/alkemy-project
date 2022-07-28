@@ -16,6 +16,7 @@ import {
   Session,
   unauthorizeSessionService,
 } from 'services/session';
+import {ILogin} from 'views/login/Login';
 
 const genericErrorMsg = 'Ha ocurrido un error';
 
@@ -133,10 +134,7 @@ const tasksSlice = createSlice({
 export default tasksSlice;
 const {actions} = tasksSlice;
 
-const login = createAsyncThunk(
-  'tasks/login',
-  async (values: {userName: string; password: string}) => goScrum.login(values),
-);
+const login = createAsyncThunk('tasks/login', async (values: ILogin) => goScrum.login(values));
 const getFormInfo = createAsyncThunk('tasks/formInfo', async () => goScrum.registerFormData());
 
 const register = createAsyncThunk('tasks/register', async (user: IUser) => {

@@ -6,6 +6,7 @@ import Login from 'views/login/Login';
 import Register from 'views/register/Register';
 import UserFeedbackModal from 'components/user-feedback-modal/UserFeedbackModal';
 import {useAppSelector} from 'redux/hooks';
+import LoadingScreen from 'components/loading-wrapper/LoadingScreen';
 
 // import { validate } from 'uuid';
 
@@ -39,6 +40,7 @@ export default function App() {
   return (
     <AnimatePresence>
       <UserFeedbackModal />
+      <LoadingScreen />
       <Routes location={location} key={location.pathname}>
         <Route element={<MotionWrapper />}>
           <Route element={<SuspenseWrapper />}>

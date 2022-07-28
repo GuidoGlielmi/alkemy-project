@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-throw-literal */
+import {ILogin} from 'views/login/Login';
 import Requests, {HttpReq} from './Api';
 import RequestError from './RequestError';
 
@@ -7,7 +8,7 @@ export interface IGoScrum {
   message: string;
   result: any;
 }
-interface ILogin {
+interface ILoginData {
   token: string;
   user: IUser;
 }
@@ -82,8 +83,8 @@ class GoScrum {
     return res.result;
   }
 
-  async login({userName, password}: {userName: string; password: string}): Promise<ILogin> {
-    return this.#responseHandler({url: 'auth/login', method: 'post', body: {userName, password}});
+  async login(values: ILogin): Promise<ILoginData> {
+    return this.#responseHandler({url: 'auth/login', method: 'post', body: values});
   }
 
   async register(user: IUser): Promise<IRegistered> {
