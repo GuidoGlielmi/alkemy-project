@@ -1,12 +1,12 @@
 const hasToken = () => !!localStorage.getItem('token');
 const setToken = (token: string): void => localStorage.setItem('token', token);
-const deleteToken = (): void => localStorage.deleteItem('token');
+const deleteToken = (): void => localStorage.removeItem('token');
 const getUsername = () => localStorage.getItem('username') || '';
 const setUsername = (username: string): void => localStorage.setItem('username', username);
 const isTeamLeader = () => !!localStorage.getItem('isTeamLeader');
 const setIsTeamLeader = (teamLeaderStatus: boolean): void =>
   localStorage.setItem('isTeamLeader', teamLeaderStatus.toString());
-const deleteIsTeamLeader = (): void => localStorage.deleteItem('isTeamLeader');
+const deleteIsTeamLeader = (): void => localStorage.removeItem('isTeamLeader');
 const getTeamId = () => localStorage.getItem('teamID') || '';
 const setTeamId = (teamId: string): void => localStorage.setItem('teamID', teamId);
 const clear = (): void => localStorage.clear();
